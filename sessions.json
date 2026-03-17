@@ -1,0 +1,286 @@
+{
+  "meta": {
+    "title": "M몰 AI 활용 세션",
+    "total": 18,
+    "updated": "2025-06"
+  },
+  "phases": [
+    {
+      "id": "common",
+      "title": "1단계 — 함께 시작하기",
+      "sub": "입문 · 전 파트 공통 · 1–5주차",
+      "sessions": [
+        {
+          "id": "01",
+          "part": "common",
+          "partLabel": "공통",
+          "title": "AI 도구 비교 체험 — 나에게 맞는 AI 찾기",
+          "desc": "ChatGPT·Claude·Gemini·NotebookLM을 같은 질문으로 비교. 파트별 활용 포인트 공유",
+          "file": "session_01_common.html",
+          "status": "done",
+          "duration": "30분",
+          "cost": "무료"
+        },
+        {
+          "id": "02",
+          "part": "common",
+          "partLabel": "공통",
+          "title": "프롬프트 기초 — 잘 물어보는 법",
+          "desc": "역할·맥락·형식 지정 3요소. 파트별 실제 업무 예시로 실습 — 기획서 / 상품설명 / 카피 / 민원답변",
+          "file": "",
+          "status": "upcoming",
+          "duration": "30분",
+          "cost": "무료"
+        },
+        {
+          "id": "03",
+          "part": "common",
+          "partLabel": "공통",
+          "title": "회의록·보고서·이메일 AI 자동화",
+          "desc": "NotebookLM으로 회의 녹취·요약. 파트별 맞춤 문서 초안 자동 생성 실습",
+          "file": "",
+          "status": "upcoming",
+          "duration": "30분",
+          "cost": "무료"
+        },
+        {
+          "id": "04",
+          "part": "common",
+          "partLabel": "공통",
+          "title": "이미지 생성 AI — 산출물 비주얼화",
+          "desc": "Canva AI·Stitch로 기획전 배너·레퍼런스 이미지 생성. 저작권 이슈 주의점",
+          "file": "",
+          "status": "upcoming",
+          "duration": "30분",
+          "cost": "무료"
+        },
+        {
+          "id": "05",
+          "part": "common",
+          "partLabel": "공통",
+          "title": "AI 트렌드·경쟁사 리서치",
+          "desc": "Perplexity + NotebookLM으로 포인트몰·커머스 트렌드 10분 조사. 파트별 인사이트 리포트 작성",
+          "file": "",
+          "status": "upcoming",
+          "duration": "30분",
+          "cost": "무료"
+        }
+      ]
+    },
+    {
+      "id": "md",
+      "title": "MD 파트 특화",
+      "sub": "소싱·기획전·콘텐츠",
+      "sessions": [
+        {
+          "id": "M1",
+          "part": "md",
+          "partLabel": "MD",
+          "title": "상품 소싱 리서치 & 트렌드 분석",
+          "desc": "Perplexity + NotebookLM으로 카테고리별 인기 상품·브랜드 빠르게 조사. 소싱 제안서 초안 자동 생성",
+          "file": "",
+          "status": "upcoming",
+          "duration": "30분",
+          "cost": "무료"
+        },
+        {
+          "id": "M2",
+          "part": "md",
+          "partLabel": "MD",
+          "title": "기획전 테마·구성 AI로 기획",
+          "desc": "시즌·이슈 기반 기획전 테마 아이디어 대량 생성. 상품 카테고리 구성안 자동 제안",
+          "file": "",
+          "status": "upcoming",
+          "duration": "30분",
+          "cost": "무료"
+        },
+        {
+          "id": "M3",
+          "part": "md",
+          "partLabel": "MD",
+          "title": "상품 상세페이지 카피 자동 작성",
+          "desc": "상품 스펙 입력 → M몰 톤앤매너 맞춤 카피 자동 생성. Stitch로 비주얼 레퍼런스까지",
+          "file": "",
+          "status": "upcoming",
+          "duration": "30분",
+          "cost": "무료"
+        },
+        {
+          "id": "M4",
+          "part": "md",
+          "partLabel": "MD",
+          "title": "기획전 레퍼런스 비주얼 AI 제작",
+          "desc": "Stitch·Canva AI로 기획전 배너·분위기 컷 레퍼런스 제작. 디자인팀 협업 효율화",
+          "file": "",
+          "status": "upcoming",
+          "duration": "30분",
+          "cost": "무료"
+        }
+      ]
+    },
+    {
+      "id": "mkt",
+      "title": "마케팅 파트 특화",
+      "sub": "프로모션·콘텐츠·분석",
+      "sessions": [
+        {
+          "id": "K1",
+          "part": "mkt",
+          "partLabel": "마케팅",
+          "title": "프로모션 카피 대량 생성",
+          "desc": "현대카드 앱 푸시·배너·SMS 문구 AI 대량 제작. A/B 테스트용 변형 카피 자동 생성",
+          "file": "",
+          "status": "upcoming",
+          "duration": "30분",
+          "cost": "무료"
+        },
+        {
+          "id": "K2",
+          "part": "mkt",
+          "partLabel": "마케팅",
+          "title": "SNS·콘텐츠 마케팅 자동화",
+          "desc": "기획전·상품 정보 → 인스타·카카오채널 포스팅 자동 생성. Stitch로 비주얼 소재 제작",
+          "file": "",
+          "status": "upcoming",
+          "duration": "30분",
+          "cost": "무료"
+        },
+        {
+          "id": "K3",
+          "part": "mkt",
+          "partLabel": "마케팅",
+          "title": "M포인트 타겟 세그먼트 기획",
+          "desc": "포인트 보유량·사용 패턴별 고객 세그먼트 설계. NotebookLM으로 자료 정리 후 시나리오 작성",
+          "file": "",
+          "status": "upcoming",
+          "duration": "30분",
+          "cost": "무료"
+        },
+        {
+          "id": "K4",
+          "part": "mkt",
+          "partLabel": "마케팅",
+          "title": "캠페인 성과 분석 & 리포트 자동화",
+          "desc": "성과 데이터 CSV → AI 자동 분석·인사이트. NotebookLM으로 보고용 요약 리포트 생성",
+          "file": "",
+          "status": "upcoming",
+          "duration": "30분",
+          "cost": "무료"
+        }
+      ]
+    },
+    {
+      "id": "ops",
+      "title": "운영 파트 특화",
+      "sub": "CS 분석·운영 효율화",
+      "sessions": [
+        {
+          "id": "O1",
+          "part": "ops",
+          "partLabel": "운영",
+          "title": "민원·VOC 데이터 AI 분석 & 이슈 분류",
+          "desc": "CS 로그 업로드 → NotebookLM으로 이슈 유형 자동 분류·빈도 분석. 개선 포인트 도출",
+          "file": "",
+          "status": "upcoming",
+          "duration": "30분",
+          "cost": "무료"
+        },
+        {
+          "id": "O2",
+          "part": "ops",
+          "partLabel": "운영",
+          "title": "외주 CS 모니터링 & QA 체크리스트 자동화",
+          "desc": "고객센터 응대 품질 평가 기준 AI 작성. 이슈 에스컬레이션 판단 기준 문서화",
+          "file": "",
+          "status": "upcoming",
+          "duration": "30분",
+          "cost": "무료"
+        },
+        {
+          "id": "O3",
+          "part": "ops",
+          "partLabel": "운영",
+          "title": "운영 FAQ·가이드 문서 AI 자동 작성",
+          "desc": "자주 발생 이슈로 FAQ·CS 가이드 자동 생성. NotebookLM으로 고객센터 전달용 매뉴얼 제작",
+          "file": "",
+          "status": "upcoming",
+          "duration": "30분",
+          "cost": "무료"
+        },
+        {
+          "id": "O4",
+          "part": "ops",
+          "partLabel": "운영",
+          "title": "운영 이슈 원인분석 & 재발방지 보고서",
+          "desc": "장애·이슈 발생 시 원인분석 보고서 AI 초안 작성. 5Why 분석·재발방지책 자동 구조화",
+          "file": "",
+          "status": "upcoming",
+          "duration": "30분",
+          "cost": "무료"
+        }
+      ]
+    },
+    {
+      "id": "dev",
+      "title": "개발·기획 파트 특화",
+      "sub": "기획 생산성·UX·데이터",
+      "sessions": [
+        {
+          "id": "D1",
+          "part": "dev",
+          "partLabel": "개발·기획",
+          "title": "PRD·기능명세서 AI 자동 초안",
+          "desc": "M몰 신기능 PRD 작성 프롬프트 템플릿. 요구사항→유저스토리→AC 자동 구조화",
+          "file": "",
+          "status": "upcoming",
+          "duration": "30분",
+          "cost": "무료"
+        },
+        {
+          "id": "D2",
+          "part": "dev",
+          "partLabel": "개발·기획",
+          "title": "UX 리서치 & 페르소나 자동 생성",
+          "desc": "앱스토어 리뷰·VOC를 NotebookLM에 업로드 → 사용자 인사이트 추출. 페르소나·유저저니맵 생성",
+          "file": "",
+          "status": "upcoming",
+          "duration": "30분",
+          "cost": "무료"
+        },
+        {
+          "id": "D3",
+          "part": "dev",
+          "partLabel": "개발·기획",
+          "title": "AI 와이어프레임 & 화면 목업 생성",
+          "desc": "텍스트로 M몰 화면 목업 자동 생성. Stitch·v0 실습, 개발팀 전달용 산출물 제작",
+          "file": "",
+          "status": "upcoming",
+          "duration": "30분",
+          "cost": "무료"
+        },
+        {
+          "id": "D4",
+          "part": "dev",
+          "partLabel": "개발·기획",
+          "title": "AI 개인화 추천 서비스 기획",
+          "desc": "M포인트 소비 패턴 기반 추천 로직 설계. AI 추천엔진 도입 기획서 초안 작성",
+          "file": "",
+          "status": "upcoming",
+          "duration": "30분",
+          "cost": "무료"
+        },
+        {
+          "id": "D5",
+          "part": "dev",
+          "partLabel": "개발·기획",
+          "title": "데이터 분석 & 인사이트 도출",
+          "desc": "CSV 업로드로 M몰 거래·사용 데이터 패턴 분석. NotebookLM으로 인사이트 자동 요약",
+          "file": "",
+          "status": "upcoming",
+          "duration": "30분",
+          "cost": "무료"
+        }
+      ]
+    }
+  ]
+}

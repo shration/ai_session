@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M몰 AI 활용 세션 — 전체 커리큘럼</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--black:#0a0a0a;--white:#f5f5f0;--gray-100:#e8e8e3;--gray-200:#d0d0cb;--gray-400:#9a9a95;--gray-600:#5a5a57;--mono:"DM Mono",monospace;--sans:"Noto Sans KR",sans-serif;--green:#1a4a30;--green-l:#e8f2ec;--blue:#1a3a5c;--blue-l:#e8f0f8;--amber:#5c3a00;--amber-l:#fdf3e3;--purple:#3a2a6e;--purple-l:#f0edf8;--coral:#5c1e1e;--coral-l:#fdeaea}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--white);color:var(--black);font-family:var(--sans);font-weight:300;line-height:1.7;font-size:15px;-webkit-font-smoothing:antialiased}
+  .topnav{background:var(--black);padding:0 48px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+  .nav-logo{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--white);text-decoration:none}
+  .nav-logo span{color:var(--gray-600)}
+  .nav-right{font-family:var(--mono);font-size:10px;color:var(--gray-600);letter-spacing:.08em}
+  .hero{background:var(--black);color:var(--white);padding:72px 48px 60px;position:relative;overflow:hidden}
+  .hero::before{content:"";position:absolute;top:-100px;right:-60px;width:400px;height:400px;border:1px solid rgba(245,245,240,.05);border-radius:50%}
+  .hero::after{content:"";position:absolute;bottom:-120px;right:140px;width:260px;height:260px;border:1px solid rgba(245,245,240,.04);border-radius:50%}
+  .hero-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gray-600);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+  .hero-eyebrow::before{content:"";width:20px;height:1px;background:var(--gray-600)}
+  .hero h1{font-size:clamp(30px,5.5vw,52px);font-weight:700;line-height:1.12;letter-spacing:-.025em;margin-bottom:14px;max-width:640px}
+  .hero-sub{font-size:15px;color:var(--gray-400);max-width:500px;line-height:1.65}
+  .hero-stats{display:flex;gap:32px;flex-wrap:wrap;margin-top:44px;padding-top:32px;border-top:1px solid rgba(245,245,240,.1)}
+  .stat{display:flex;flex-direction:column;gap:4px}
+  .stat-key{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gray-600)}
+  .stat-val{font-size:20px;font-weight:700;color:var(--white);letter-spacing:-.02em}
+  .gh-banner{background:#161b22;border-bottom:1px solid #30363d;padding:14px 48px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .gh-icon{width:20px;height:20px;flex-shrink:0;opacity:.7}
+  .gh-text{font-family:var(--mono);font-size:12px;color:#8b949e;flex:1}
+  .gh-text strong{color:#e6edf3;font-weight:500}
+  .gh-steps{display:flex;gap:8px;flex-wrap:wrap}
+  .gh-step{font-family:var(--mono);font-size:10px;background:#21262d;border:1px solid #30363d;border-radius:4px;padding:4px 10px;color:#8b949e;letter-spacing:.04em}
+  .gh-step.hl{border-color:#388bfd;color:#388bfd}
+  .filter-bar{background:var(--white);border-bottom:1px solid var(--gray-100);padding:0 48px;display:flex;gap:0;align-items:center;position:sticky;top:52px;z-index:90}
+  .filter-btn{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:14px 18px;border:none;background:none;cursor:pointer;color:var(--gray-400);border-bottom:2px solid transparent;transition:color .15s,border-color .15s}
+  .filter-btn:hover{color:var(--black)}
+  .filter-btn.active{color:var(--black);border-bottom-color:var(--black);font-weight:500}
+  .container{max-width:900px;margin:0 auto;padding:0 48px}
+  .phase{padding:52px 0 12px}
+  .phase-head{display:flex;align-items:baseline;gap:14px;margin-bottom:20px}
+  .phase-title{font-size:18px;font-weight:700;letter-spacing:-.015em}
+  .phase-sub{font-size:13px;color:var(--gray-400)}
+  .phase-divider{border:none;border-top:1px solid var(--gray-100);margin-bottom:16px}
+  .session-grid{display:flex;flex-direction:column;gap:10px}
+  .session-card{display:flex;align-items:stretch;border:1px solid var(--gray-100);border-radius:12px;overflow:hidden;text-decoration:none;color:inherit;transition:border-color .15s,box-shadow .15s,transform .12s;background:var(--white)}
+  .session-card.clickable:hover{border-color:var(--gray-200);box-shadow:0 4px 20px rgba(0,0,0,.06);transform:translateY(-1px)}
+  .session-card.disabled{opacity:.45;pointer-events:none}
+  .sc-num{width:60px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:500;color:var(--white)}
+  .sc-num.part-common{background:#1a1a1a}
+  .sc-num.part-md{background:var(--green)}
+  .sc-num.part-mkt{background:var(--amber)}
+  .sc-num.part-ops{background:var(--coral)}
+  .sc-num.part-dev{background:var(--blue)}
+  .sc-body{flex:1;padding:16px 20px}
+  .sc-header{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .sc-tag{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px}
+  .tag-common{background:#e8e8e3;color:#2c2c2a}
+  .tag-md{background:var(--green-l);color:var(--green)}
+  .tag-mkt{background:var(--amber-l);color:var(--amber)}
+  .tag-ops{background:var(--coral-l);color:var(--coral)}
+  .tag-dev{background:var(--blue-l);color:var(--blue)}
+  .sc-status{margin-left:auto;font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
+  .sc-status.done{color:#4CAF6E}
+  .sc-title{font-size:15px;font-weight:500;letter-spacing:-.01em;margin-bottom:4px}
+  .sc-desc{font-size:12px;color:var(--gray-600);line-height:1.55}
+  .sc-meta{display:flex;align-items:center;gap:14px;padding:0 20px;border-left:1px solid var(--gray-100);flex-shrink:0;min-width:110px}
+  .sc-meta-item{display:flex;flex-direction:column;gap:2px;text-align:center}
+  .sc-meta-key{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400)}
+  .sc-meta-val{font-size:13px;font-weight:500;color:var(--black)}
+  .tools-section{padding:48px 0;border-top:1px solid var(--gray-100);margin-top:24px}
+  .tools-title{font-size:18px;font-weight:700;letter-spacing:-.015em;margin-bottom:6px}
+  .tools-sub{font-size:13px;color:var(--gray-600);margin-bottom:24px}
+  .tools-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .tool-card{border:1px solid var(--gray-100);border-radius:10px;padding:16px 18px;background:var(--white)}
+  .tool-name{font-size:13px;font-weight:500;margin-bottom:4px}
+  .tool-desc{font-size:11px;color:var(--gray-600);line-height:1.55;margin-bottom:8px}
+  .tool-free{display:inline-block;font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:var(--green-l);color:var(--green)}
+  .update-guide{margin:48px 0 0;border:1px solid var(--gray-100);border-radius:12px;overflow:hidden}
+  .ug-head{background:var(--black);padding:20px 28px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .ug-head-title{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--white);font-weight:500}
+  .ug-head-sub{font-size:12px;color:var(--gray-600);margin-left:auto;font-family:var(--mono)}
+  .ug-body{padding:24px 28px;display:flex;flex-direction:column;gap:14px}
+  .ug-step{display:flex;gap:14px;align-items:flex-start}
+  .ug-num{font-family:var(--mono);font-size:11px;color:var(--gray-400);flex-shrink:0;min-width:28px;margin-top:2px}
+  .ug-content{font-size:13px;color:var(--gray-600);line-height:1.65}
+  .ug-content strong{color:var(--black);font-weight:500}
+  .ug-code{font-family:var(--mono);font-size:12px;background:#161b22;color:#7ee787;border-radius:6px;padding:10px 14px;margin-top:6px;line-height:1.7}
+  .loading{text-align:center;padding:80px 48px;font-family:var(--mono);font-size:12px;color:var(--gray-400);letter-spacing:.08em}
+  .footer{background:var(--black);color:var(--gray-600);padding:36px 48px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:60px}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  .fu{animation:fadeUp .4s ease both}
+  @media(max-width:680px){.hero,.topnav,.footer{padding-left:24px;padding-right:24px}.container{padding:0 24px}.filter-bar{padding:0 24px;overflow-x:auto}.sc-meta{display:none}.tools-grid{grid-template-columns:1fr 1fr}.gh-banner{padding:12px 24px}.ug-body{padding:18px 20px}}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a class="nav-logo" href="index.html">M몰 <span>/ AI 세션</span></a>
+  <span class="nav-right" id="nav-updated"></span>
+</nav>
+
+<header class="hero">
+  <div class="hero-eyebrow">M몰 AI 활용 세션</div>
+  <h1>전체 커리큘럼</h1>
+  <p class="hero-sub">MD·마케팅·운영·개발·기획 파트가 함께 만드는 AI 업무 활용 프로그램. 매주 30분, 실무에 바로 쓸 수 있는 방법을 배웁니다.</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-key">총 세션</span><span class="stat-val" id="stat-total">—</span></div>
+    <div class="stat"><span class="stat-key">완료</span><span class="stat-val" id="stat-done">—</span></div>
+    <div class="stat"><span class="stat-key">세션 시간</span><span class="stat-val">30분</span></div>
+    <div class="stat"><span class="stat-key">무료 기준</span><span class="stat-val">우선</span></div>
+  </div>
+</header>
+
+<div class="gh-banner">
+  <svg class="gh-icon" viewBox="0 0 24 24" fill="#8b949e"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+  <span class="gh-text"><strong>GitHub Pages로 운영 중</strong> — 새 세션 추가 시 sessions.json만 수정하면 이 페이지가 자동으로 업데이트됩니다</span>
+  <div class="gh-steps">
+    <span class="gh-step hl">1. 새 세션 HTML 올리기</span>
+    <span class="gh-step hl">2. sessions.json 2줄 수정</span>
+    <span class="gh-step">3. index.html 건드릴 필요 없음</span>
+  </div>
+</div>
+
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filter('all',this)">전체</button>
+  <button class="filter-btn" onclick="filter('common',this)">공통</button>
+  <button class="filter-btn" onclick="filter('md',this)">MD</button>
+  <button class="filter-btn" onclick="filter('mkt',this)">마케팅</button>
+  <button class="filter-btn" onclick="filter('ops',this)">운영</button>
+  <button class="filter-btn" onclick="filter('dev',this)">개발·기획</button>
+</div>
+
+<main class="container">
+  <div id="root"><div class="loading">커리큘럼 불러오는 중...</div></div>
+
+  <div class="tools-section">
+    <div class="tools-title">세션에서 활용하는 AI 도구</div>
+    <div class="tools-sub">유료 도구도 활용하되, 가급적 무료 플랜으로 실습 가능한 범위를 기준으로 진행합니다. 유료 기능이 필요한 경우 별도로 안내합니다.</div>
+    <div class="tools-grid">
+      <div class="tool-card"><div class="tool-name">Claude</div><div class="tool-desc">긴 문서 분석·기획서 작성. 조건 충족률이 높고 구조적 답변에 강함</div><span class="tool-free">무료 시작</span></div>
+      <div class="tool-card"><div class="tool-name">ChatGPT</div><div class="tool-desc">아이디어 브레인스토밍·카피라이팅. 대화 흐름이 자연스러움</div><span class="tool-free">무료 시작</span></div>
+      <div class="tool-card"><div class="tool-name">NotebookLM</div><div class="tool-desc">문서·PDF 업로드 후 AI 분석·요약·질의응답. 회의록·리서치 자료 정리에 최적</div><span class="tool-free">무료 시작</span></div>
+      <div class="tool-card"><div class="tool-name">Gemini</div><div class="tool-desc">Google 검색 연동 최신 트렌드 리서치. Gmail·Drive 연동 가능</div><span class="tool-free">무료 시작</span></div>
+      <div class="tool-card"><div class="tool-name">Stitch</div><div class="tool-desc">텍스트 설명으로 UI·배너 시안 자동 생성. 기획전 레퍼런스 비주얼 제작에 활용</div><span class="tool-free">무료 시작</span></div>
+      <div class="tool-card"><div class="tool-name">Perplexity</div><div class="tool-desc">실시간 웹 검색 기반 리서치. 경쟁사·트렌드 조사에 빠른 결과</div><span class="tool-free">무료 시작</span></div>
+      <div class="tool-card"><div class="tool-name">Canva AI</div><div class="tool-desc">카피 작성 후 배너 시안까지 바로 제작. 비전문가도 쉽게 활용</div><span class="tool-free">무료 시작</span></div>
+      <div class="tool-card"><div class="tool-name">Obsidian</div><div class="tool-desc">AI 플러그인 연동으로 노트·기획 문서를 로컬에서 관리. 세션 내용 정리·지식 축적에 활용</div><span class="tool-free">무료 시작</span></div>
+    </div>
+  </div>
+
+  <div class="update-guide">
+    <div class="ug-head">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="#8b949e"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+      <span class="ug-head-title">새 세션 추가하는 법 — sessions.json만 수정하면 됩니다</span>
+      <span class="ug-head-sub">index.html 수정 불필요</span>
+    </div>
+    <div class="ug-body">
+      <div class="ug-step"><span class="ug-num">STEP 1</span><div class="ug-content"><strong>새 세션 HTML 파일을 GitHub 저장소에 업로드</strong><br>예: session_03_common.html, session_k1_mkt.html</div></div>
+      <div class="ug-step"><span class="ug-num">STEP 2</span><div class="ug-content"><strong>sessions.json에서 해당 세션의 두 값만 수정</strong><div class="ug-code">"status": "upcoming"  →  "status": "done"<br>"file": ""  →  "file": "session_03_common.html"</div></div></div>
+      <div class="ug-step"><span class="ug-num">STEP 3</span><div class="ug-content"><strong>저장 후 GitHub에 커밋 — 끝</strong><br>index.html은 sessions.json을 자동으로 읽어서 렌더링하므로 별도 수정이 필요 없습니다.</div></div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <span>M몰 AI 활용 세션 — 전체 커리큘럼</span>
+  <span id="footer-updated" style="color:#3a3a38"></span>
+</footer>
+
+<script>
+const PC={"common":"part-common","md":"part-md","mkt":"part-mkt","ops":"part-ops","dev":"part-dev"};
+const TC={"common":"tag-common","md":"tag-md","mkt":"tag-mkt","ops":"tag-ops","dev":"tag-dev"};
+let DATA=null;
+
+async function init(){
+  try{
+    const r=await fetch("sessions.json");
+    DATA=await r.json();
+    let total=0,done=0;
+    DATA.phases.forEach(p=>p.sessions.forEach(s=>{total++;if(s.status==="done")done++;}));
+    document.getElementById("stat-total").textContent=total;
+    document.getElementById("stat-done").textContent=done;
+    document.getElementById("nav-updated").textContent="업데이트 "+DATA.meta.updated;
+    document.getElementById("footer-updated").textContent="업데이트: "+DATA.meta.updated;
+    render("all");
+  }catch(e){
+    document.getElementById("root").innerHTML="<div class=\"loading\">sessions.json을 찾을 수 없습니다.<br>같은 폴더에 sessions.json이 있는지 확인해주세요.</div>";
+  }
+}
+
+function render(f){
+  const root=document.getElementById("root");
+  root.innerHTML="";
+  DATA.phases.forEach(phase=>{
+    const list=phase.sessions.filter(s=>f==="all"||s.part===f);
+    if(!list.length)return;
+    const wrap=document.createElement("div");
+    wrap.className="phase fu";
+    wrap.innerHTML=`<div class="phase-head"><span class="phase-title">${phase.title}</span><span class="phase-sub">${phase.sub}</span></div><hr class="phase-divider"><div class="session-grid" id="g-${phase.id}"></div>`;
+    root.appendChild(wrap);
+    const grid=wrap.querySelector(`#g-${phase.id}`);
+    list.forEach((s,i)=>{
+      const done=s.status==="done";
+      const el=document.createElement(done&&s.file?"a":"div");
+      if(done&&s.file)el.href=s.file;
+      el.className="session-card fu "+(done?"clickable":"disabled");
+      el.style.animationDelay=(i*.05)+"s";
+      el.innerHTML=`<div class="sc-num ${PC[s.part]}">${s.id}</div><div class="sc-body"><div class="sc-header"><span class="sc-tag ${TC[s.part]}">${s.partLabel}</span><span class="sc-status ${done?"done":""}">${done?"완료":"예정"}</span></div><div class="sc-title">${s.title}</div><div class="sc-desc">${s.desc}</div></div><div class="sc-meta"><div class="sc-meta-item"><span class="sc-meta-key">시간</span><span class="sc-meta-val">${s.duration}</span></div><div class="sc-meta-item"><span class="sc-meta-key">도구</span><span class="sc-meta-val">${s.cost}</span></div></div>`;
+      grid.appendChild(el);
+    });
+  });
+}
+
+function filter(f,btn){
+  document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  render(f);
+}
+
+init();
+</script>
+</body>
+</html>
