@@ -41,7 +41,7 @@
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-behavior: smooth; }
   body {
     background: var(--bg);
     color: var(--black);
@@ -69,13 +69,14 @@
     color: var(--black); text-decoration: none;
     display: flex; align-items: center; gap: 8px;
   }
+  .nav-right { font-size: 12px; color: var(--gray-2); font-family: var(--display); font-weight: 700; }
   .nav-badge {
     font-size: 11px; font-weight: 700;
     background: linear-gradient(135deg, #e85d3a, #f5a623); color: #fff;
     border-radius: 20px; padding: 2px 9px;
     font-family: var(--display);
   }
-  .nav-right { font-size: 13px; color: var(--gray-1); }
+
 
   /* ── HERO ── */
   .hero {
@@ -95,14 +96,14 @@
   .hero-eyebrow {
     display: inline-flex; align-items: center; gap: 6px;
     background: var(--key-l); color: var(--key);
-    font-size: 13px; font-weight: 700;
+    font-size: clamp(11px, 3vw, 13px); font-weight: 700;
     border-radius: 20px; padding: 5px 14px;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     font-family: var(--display);
   }
   .hero h1 {
     font-family: var(--display);
-    font-size: clamp(32px, 6vw, 58px);
+    font-size: clamp(28px, 8vw, 58px);
     font-weight: 900; line-height: 1.1;
     letter-spacing: -.02em;
     color: var(--black);
@@ -111,15 +112,15 @@
   .hero h1 .accent { color: var(--blue); }
   .hero-sub-title {
     font-family: var(--display);
-    font-size: clamp(16px, 2.5vw, 22px);
+    font-size: clamp(15px, 4vw, 22px);
     font-weight: 700; color: var(--gray-1);
     margin-bottom: 20px;
   }
 
   .hero-desc {
-    font-size: 16px; color: var(--gray-1);
+    font-size: clamp(13px, 3.8vw, 16px); color: var(--gray-1);
     max-width: 520px; margin: 0 auto 20px;
-    line-height: 1.7;
+    line-height: 1.75; word-break: keep-all;
   }
 
   .hero-why-inline {
@@ -348,15 +349,40 @@
   @media (max-width: 680px) {
     .nav, .hero, .filter-wrap, .footer { padding-left: 20px; padding-right: 20px; }
     .container { padding: 0 20px; }
-    .hero { padding: 48px 20px 40px; }
+
+    /* 히어로 */
+    .hero { padding: 40px 20px 36px; text-align: left; }
+    .hero-eyebrow { margin-bottom: 14px; }
+    .hero h1 { margin-bottom: 8px; line-height: 1.15; }
+    .hero-sub-title { font-size: 15px; margin-bottom: 12px; }
+    .hero-desc { font-size: 13px; margin-bottom: 16px; }
+    .hero-why-inline { justify-content: flex-start; gap: 6px; margin-bottom: 24px; }
+    .why-chip { font-size: 11px; }
+    .why-divider { display: none; }
+
+    /* 통계 박스 */
     .hero-stats { grid-template-columns: repeat(2, 1fr); max-width: 100%; }
+    .stat { padding: 12px 8px; }
     .stat:nth-child(2) { border-right: none; }
     .stat:nth-child(3) { border-top: 1px solid var(--gray-3); }
     .stat:nth-child(4) { border-top: 1px solid var(--gray-3); border-right: none; }
-    .tools-grid { grid-template-columns: 1fr 1fr; }
+
+    /* 세션 카드 */
     .sc-meta { display: none; }
-    .why-chip { font-size: 12px; }
-    .why-divider { display: none; }
+    .sc-title { font-size: 14px; }
+    .sc-desc { font-size: 12px; }
+    .phase { padding: 36px 0 8px; }
+    .phase-title { font-size: 18px; }
+
+    /* 필터 */
+    .filter-wrap { gap: 6px; padding: 0 16px; }
+    .filter-btn { font-size: 12px; padding: 6px 12px; }
+
+    /* 도구 */
+    .tools-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .tool-name { font-size: 13px; }
+    .tool-desc { font-size: 11px; }
+    .tools-section { padding: 36px 0 16px; }
   }
 </style>
 </head>
@@ -514,8 +540,12 @@ async function init() {
     let total = 0, done = 0;
     DATA.phases.forEach(p => p.sessions.forEach(s => { total++; if (s.status === 'done') done++; }));
     document.getElementById('stat-total').textContent = total;
+    const lm = new Date(document.lastModified);
+    const yy = String(lm.getFullYear()).slice(2);
+    const mm = String(lm.getMonth()+1).padStart(2,'0');
+    const dd = String(lm.getDate()).padStart(2,'0');
+    document.getElementById('nav-updated').textContent = '🗓 ' + yy + '.' + mm + '.' + dd + ' 업데이트';
     document.getElementById('stat-done').textContent  = done;
-    document.getElementById('nav-updated').textContent = '🗓 ' + DATA.meta.updated + ' 업데이트';
     document.getElementById('footer-updated').textContent = DATA.meta.updated + ' 업데이트';
     render('all');
   } catch(e) {
