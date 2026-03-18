@@ -184,7 +184,7 @@
     border-bottom: 1px solid var(--gray-3);
     padding: 0 48px;
     position: sticky; top: 56px; z-index: 90;
-    display: flex; align-items: center; gap: 8px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
     height: 56px; overflow-x: auto;
   }
   .filter-wrap::-webkit-scrollbar { display: none; }
@@ -327,7 +327,8 @@
     font-family: var(--display); font-size: 10px; font-weight: 800;
     padding: 2px 8px; border-radius: 20px;
   }
-  .badge-free { background: var(--c-mint-l); color: var(--c-mint-d); }
+  .badge-free { background: var(--c-mint-l); color: var(--c-mint-d); border: 1.5px solid var(--c-mint); border-radius: 20px; padding: 4px 12px; font-size: 11px; font-weight: 800; cursor: pointer; transition: all .15s; display: inline-block; }
+  a .badge-free:hover { background: var(--c-mint); color: #fff; }
   .badge-paid { background: var(--purple-l); color: var(--purple-d); }
 
   
@@ -494,49 +495,49 @@
         <span class="tool-emoji">🧠</span>
         <div class="tool-name">Claude</div>
         <div class="tool-desc">긴 문서 분석·기획서 작성의 달인. 조건을 정확하게 지켜서 답해줘요</div>
-        <span class="tool-badge badge-free">무료 시작 가능</span>
+        <span class="tool-badge badge-free">무료 계정 만들기 →</span>
       </a>
       <a class="tool-card" href="https://chatgpt.com" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;display:block;">
         <span class="tool-emoji">💬</span>
         <div class="tool-name">ChatGPT</div>
         <div class="tool-desc">아이디어 뽑기·카피라이팅의 강자. 대화가 제일 자연스러워요</div>
-        <span class="tool-badge badge-free">무료 시작 가능</span>
+        <span class="tool-badge badge-free">무료 계정 만들기 →</span>
       </a>
       <a class="tool-card" href="https://notebooklm.google.com" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;display:block;">
         <span class="tool-emoji">📚</span>
         <div class="tool-name">NotebookLM</div>
         <div class="tool-desc">내 문서를 AI가 읽고 답해줘요. 회의록·리포트 정리에 최고!</div>
-        <span class="tool-badge badge-free">무료 시작 가능</span>
+        <span class="tool-badge badge-free">무료 계정 만들기 →</span>
       </a>
       <a class="tool-card" href="https://gemini.google.com" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;display:block;">
         <span class="tool-emoji">🔍</span>
         <div class="tool-name">Gemini</div>
         <div class="tool-desc">구글 검색 연동으로 최신 트렌드를 실시간으로 리서치해요</div>
-        <span class="tool-badge badge-free">무료 시작 가능</span>
+        <span class="tool-badge badge-free">무료 계정 만들기 →</span>
       </a>
       <a class="tool-card" href="https://stitch.withgoogle.com" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;display:block;">
         <span class="tool-emoji">🎨</span>
         <div class="tool-name">Stitch</div>
         <div class="tool-desc">말로 설명하면 UI·배너 시안이 뚝딱! 기획전 레퍼런스 제작에 굿</div>
-        <span class="tool-badge badge-free">무료 시작 가능</span>
+        <span class="tool-badge badge-free">무료 계정 만들기 →</span>
       </a>
       <a class="tool-card" href="https://www.perplexity.ai" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;display:block;">
         <span class="tool-emoji">⚡</span>
         <div class="tool-name">Perplexity</div>
         <div class="tool-desc">실시간 웹 검색 기반 리서치. 경쟁사·트렌드 조사 속도가 달라요</div>
-        <span class="tool-badge badge-free">무료 시작 가능</span>
+        <span class="tool-badge badge-free">무료 계정 만들기 →</span>
       </a>
       <a class="tool-card" href="https://www.canva.com" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;display:block;">
         <span class="tool-emoji">🖼</span>
         <div class="tool-name">Canva AI</div>
         <div class="tool-desc">카피 쓰고 배너 이미지까지 한 번에. 디자이너 없어도 OK!</div>
-        <span class="tool-badge badge-free">무료 시작 가능</span>
+        <span class="tool-badge badge-free">무료 계정 만들기 →</span>
       </a>
       <a class="tool-card" href="https://obsidian.md" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;display:block;">
         <span class="tool-emoji">📝</span>
         <div class="tool-name">Obsidian</div>
         <div class="tool-desc">AI 플러그인 연동으로 세션 내용·기획 문서를 로컬에서 관리해요</div>
-        <span class="tool-badge badge-free">무료 시작 가능</span>
+        <span class="tool-badge badge-free">무료 계정 만들기 →</span>
       </a>
     </div>
   </div>
@@ -549,7 +550,6 @@
 
 <footer class="footer">
   <span class="footer-brand">🤖 클로드가 떠먹여주는 AI 실무활용법</span>
-  <span id="footer-updated"></span>
 </footer>
 
 <script>
@@ -574,7 +574,6 @@ async function init() {
     const dd = String(lm.getDate()).padStart(2,'0');
     document.getElementById('nav-updated').textContent = '🗓 ' + yy + '.' + mm + '.' + dd + ' 업데이트';
     document.getElementById('stat-done').textContent  = done;
-    document.getElementById('footer-updated').textContent = DATA.meta.updated + ' 업데이트';
     render('all');
   } catch(e) {
     document.getElementById('root').innerHTML = `
