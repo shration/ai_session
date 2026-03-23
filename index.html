@@ -245,8 +245,6 @@
     color: var(--gray-2);
   }
   .sc-status.done { color: var(--c-mint-d); }
-  .sc-status.done::before { content: '✅ '; }
-  .sc-status:not(.done)::before { content: '🔒 '; }
 
   .sc-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; color: var(--black); line-height: 1.4; }
   .sc-desc  { font-size: 13px; color: var(--gray-1); line-height: 1.55; }
@@ -651,7 +649,7 @@ function render(f) {
             <span class="sc-tag ${TAG[s.part]}">${s.partLabel}</span>
             ${s.mainTool ? `<span class="main-tool-pill">${s.mainTool}</span>` : ''}
             ${s.level ? `<span class="level-pill ${levelCls}">${s.level}</span>` : ''}
-            <span class="sc-status ${done ? 'done' : ''}">${done ? '✅ 수강 완료' : '🔒 곧 오픈'}</span>
+            <span class="sc-status ${done ? 'done' : ''}">${done ? '✅ 오픈 완료' : '🔒 오픈 예정'}</span>
           </div>
           <div class="sc-title">${s.title}</div>
           <div class="sc-desc">${s.desc}</div>
