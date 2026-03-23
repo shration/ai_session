@@ -3,23 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>세션 01 · AI 도구 비교 체험 — M몰팀 칼퇴 생존 KIT</title>
+<title>세션 01 · Claude 세팅으로 내 업무 전용 AI 만들기</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:#f7f4ef; --white:#fdfbf8; --black:#1c1917;
-    --gray-1:#6b6560; --gray-2:#a8a39d; --gray-3:#ddd8d0;
-    --key:#e85d3a; --key-l:#fdf0ec;
-    --c-mint:#00b896; --c-mint-l:#e6faf6; --c-mint-d:#006b54;
-    --c-yellow:#f5a623; --c-yellow-l:#fef7e6; --c-yellow-d:#7a4f00;
-    --c-rose:#e8445a; --c-rose-l:#fdeef1; --c-rose-d:#7a1828;
-    --c-violet:#7b61ff; --c-violet-l:#f0eeff; --c-violet-d:#3a1faa;
-    --sans:'Noto Sans KR',sans-serif; --display:'Outfit',sans-serif;
-    --radius:20px; --radius-sm:14px;
-    --shadow:0 2px 16px rgba(28,25,23,.06);
-    --shadow-hover:0 8px 32px rgba(28,25,23,.12);
-  }
+  :root{--bg:#f7f4ef;--white:#fdfbf8;--black:#1c1917;--gray-1:#6b6560;--gray-2:#a8a39d;--gray-3:#ddd8d0;--key:#e85d3a;--key-l:#fdf0ec;--c-mint:#00b896;--c-mint-l:#e6faf6;--c-mint-d:#006b54;--c-yellow:#f5a623;--c-yellow-l:#fef7e6;--c-yellow-d:#7a4f00;--c-violet:#7b61ff;--c-violet-l:#f0eeff;--c-violet-d:#3a1faa;--sans:'Noto Sans KR',sans-serif;--display:'Outfit',sans-serif;--radius:20px;--radius-sm:14px;--shadow:0 2px 16px rgba(28,25,23,.06);--shadow-hover:0 8px 32px rgba(28,25,23,.12)}
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth}
   body{background:var(--bg);color:var(--black);font-family:var(--sans);font-weight:400;line-height:1.7;font-size:15px;-webkit-font-smoothing:antialiased}
@@ -31,26 +19,20 @@
   .nav-session{font-family:var(--display);font-size:12px;font-weight:700;color:var(--gray-2)}
   .nav-link{font-family:var(--display);font-size:12px;font-weight:700;color:var(--gray-1);text-decoration:none;border:1.5px solid var(--gray-3);border-radius:20px;padding:5px 14px;transition:all .15s;background:var(--white)}
   .nav-link:hover{border-color:var(--black);color:var(--black)}
+  .nav-next{background:linear-gradient(135deg,#1c1917,#3a3530);color:var(--white)!important;border-color:#1c1917!important}
 
   .hero{background:linear-gradient(145deg,#fdfaf5 0%,#fdf6ee 40%,#eef9f5 100%);padding:64px 48px 56px;position:relative;overflow:hidden;text-align:center}
   .hero-blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.15;pointer-events:none}
   .blob1{width:400px;height:400px;background:#e85d3a;top:-160px;left:-80px}
-  .blob2{width:300px;height:300px;background:#00b896;bottom:-100px;right:-60px}
+  .blob2{width:300px;height:300px;background:#f5a623;bottom:-100px;right:-60px}
   .hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:var(--key-l);color:var(--key);font-family:var(--display);font-size:clamp(10px,2.8vw,12px);font-weight:800;border-radius:20px;padding:5px 14px;margin-bottom:14px}
-  .hero h1{font-family:var(--display);font-size:clamp(24px,7vw,42px);font-weight:900;line-height:1.15;letter-spacing:-.02em;color:var(--black);margin:0 auto 10px;max-width:640px}
+  .hero h1{font-family:var(--display);font-size:clamp(24px,7vw,44px);font-weight:900;line-height:1.15;letter-spacing:-.02em;color:var(--black);margin:0 auto 10px;max-width:680px}
   .hero h1 .acc{color:var(--key)}
-  .hero-sub{font-size:clamp(13px,3.8vw,15px);color:var(--gray-1);max-width:520px;margin:0 auto 24px;line-height:1.7;word-break:keep-all}
-  .hero-meta{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    background:var(--white);
-    border-radius:var(--radius);
-    overflow:hidden;
-    border:1.5px solid var(--gray-3);
-    width:100%;
-    max-width:520px;
-    margin:0 auto;
-  }
+  .hero-sub{font-size:clamp(13px,3.8vw,15px);color:var(--gray-1);max-width:520px;margin:0 auto 20px;line-height:1.7;word-break:keep-all}
+  .hero-tools{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+  .tool-chip{font-family:var(--display);font-size:12px;font-weight:800;padding:6px 16px;border-radius:20px;border:1.5px solid var(--gray-3);background:var(--white);color:var(--gray-1);box-shadow:var(--shadow)}
+  .tool-chip.main{background:#1c1917;color:#fff;border-color:#1c1917}
+  .hero-meta{display:grid;grid-template-columns:repeat(4,1fr);background:var(--white);border-radius:var(--radius);overflow:hidden;border:1.5px solid var(--gray-3);width:100%;max-width:520px;margin:0 auto}
   .meta-item{padding:12px 8px;border-right:1px solid var(--gray-3);text-align:center;min-width:0}
   .meta-item:last-child{border-right:none}
   .meta-val{font-family:var(--display);font-size:clamp(13px,3.5vw,15px);font-weight:900;color:var(--black);display:block;word-break:keep-all}
@@ -70,7 +52,7 @@
   .section:last-child{border-bottom:none}
   .s-ey{font-family:var(--display);font-size:11px;font-weight:800;color:var(--key);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
   .s-ti{font-family:var(--display);font-size:clamp(18px,5.5vw,22px);font-weight:900;letter-spacing:-.01em;margin-bottom:8px;word-break:keep-all}
-  .s-de{font-size:clamp(12px,3.5vw,14px);color:var(--gray-1);margin-bottom:20px;max-width:560px;line-height:1.7;word-break:keep-all}
+  .s-de{font-size:clamp(12px,3.5vw,14px);color:var(--gray-1);margin-bottom:24px;max-width:560px;line-height:1.7;word-break:keep-all}
 
   .card{background:var(--white);border:1.5px solid var(--gray-3);border-radius:var(--radius);padding:22px 26px;margin-bottom:12px;box-shadow:var(--shadow);transition:all .18s}
   .card:hover{border-color:var(--black);box-shadow:var(--shadow-hover);transform:translateY(-1px)}
@@ -85,70 +67,159 @@
   .card-bo{font-size:clamp(13px,3.5vw,14px);color:var(--gray-1);line-height:1.75;word-break:keep-all}
   .card-bo strong{color:var(--black);font-weight:700}
 
-  .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
-  .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
-  .tcol{border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);overflow:hidden;background:var(--white);box-shadow:var(--shadow)}
-  .thead{padding:15px 18px 13px;border-bottom:1px solid var(--gray-3)}
-  .tlogo{font-family:var(--display);font-size:15px;font-weight:900;color:var(--black);margin-bottom:3px}
-  .ttag{font-size:11px;color:var(--gray-2);font-family:var(--display);font-weight:600}
-  .tbody2{padding:12px 18px}
-  .trow{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--gray-3);font-size:12px}
-  .trow:last-child{border-bottom:none}
-  .trk{color:var(--gray-2);min-width:36px;flex-shrink:0;font-weight:700;font-family:var(--display)}
-  .trv{color:var(--gray-1);line-height:1.5}
-  .fpill{display:inline-block;margin-top:8px;font-family:var(--display);font-size:10px;font-weight:800;padding:3px 10px;border-radius:20px;background:var(--c-mint-l);color:var(--c-mint-d)}
 
-  .qbox{background:#1c1917;border-radius:var(--radius-sm);padding:18px 22px;margin:14px 0;position:relative}
-  .ql{font-family:var(--display);font-size:10px;font-weight:800;color:#6b6560;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
-  .qt{font-size:13px;color:#fdfbf8;line-height:1.85;font-weight:300}
-  .qt em{color:#00e0b0;font-style:normal;font-weight:600}
+  /* ── CLAUDE INTRO ── */
+  .intro-section {
+    background: var(--bg);
+    border-bottom: 1.5px solid var(--gray-3);
+    padding: 0;
+  }
+  .intro-inner {
+    max-width: 860px; margin: 0 auto;
+    padding: 40px 48px;
+  }
+  .intro-head {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 14px;
+  }
+  .intro-logo { font-size: 36px; line-height: 1; }
+  .intro-name {
+    font-family: var(--display); font-size: 18px; font-weight: 900;
+    color: var(--black);
+  }
+  .intro-sub { font-size: 12px; color: var(--gray-2); font-family: var(--display); font-weight: 600; margin-top: 2px; }
+  .intro-desc {
+    font-size: 14px; color: var(--gray-1); line-height: 1.75;
+    margin-bottom: 24px; max-width: 640px; word-break: keep-all;
+  }
+  .intro-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 10px; margin-bottom: 20px;
+  }
+  .intro-card {
+    background: var(--white); border: 1.5px solid var(--gray-3);
+    border-radius: var(--radius-sm); padding: 14px 16px;
+    box-shadow: var(--shadow);
+  }
+  .intro-card-icon { font-size: 20px; margin-bottom: 6px; line-height: 1; }
+  .intro-card-title {
+    font-family: var(--display); font-size: 13px; font-weight: 800;
+    color: var(--black); margin-bottom: 4px;
+  }
+  .intro-card-desc { font-size: 12px; color: var(--gray-1); line-height: 1.6; word-break: keep-all; }
+  .intro-compare {
+    display: flex; flex-direction: column; gap: 8px;
+    background: var(--white); border: 1.5px solid var(--gray-3);
+    border-radius: var(--radius-sm); padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+  .intro-compare-item { display: flex; align-items: flex-start; gap: 12px; font-size: 13px; }
+  .ic-label {
+    font-family: var(--display); font-size: 11px; font-weight: 800;
+    white-space: nowrap; padding: 3px 10px; border-radius: 20px;
+    background: var(--gray-3); color: var(--gray-1); flex-shrink: 0;
+  }
+  .best-label { background: var(--key-l); color: var(--key); }
+  .ic-text { font-size: 12px; color: var(--gray-1); line-height: 1.6; word-break: keep-all; padding-top: 3px; }
 
+  /* 설정 단계 카드 */
+  .setup-steps{display:flex;flex-direction:column;gap:0;margin-top:16px;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);overflow:hidden}
+  .setup-step{display:flex;gap:0;border-bottom:1px solid var(--gray-3)}
+  .setup-step:last-child{border-bottom:none}
+  .setup-num{width:52px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:16px;font-weight:900;color:var(--white);background:#1c1917}
+  .setup-body{flex:1;padding:16px 20px;background:var(--white)}
+  .setup-title{font-family:var(--display);font-size:14px;font-weight:800;color:var(--black);margin-bottom:5px}
+  .setup-desc{font-size:13px;color:var(--gray-1);line-height:1.6;word-break:keep-all}
+  .setup-desc strong{color:var(--black);font-weight:700}
+  .setup-path{display:inline-block;font-family:var(--display);font-size:10px;font-weight:800;background:var(--bg);border:1px solid var(--gray-3);border-radius:6px;padding:3px 8px;color:var(--gray-1);margin-top:6px;letter-spacing:.02em}
+
+  /* BA 비교 */
+  .ba{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);overflow:hidden;margin-top:16px}
+  .ba-col{padding:18px 20px}
+  .ba-col.before{background:var(--bg);border-right:1.5px solid var(--gray-3)}
+  .ba-col.after{background:var(--white)}
+  .ba-label{font-family:var(--display);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;display:block}
+  .ba-col.before .ba-label{color:var(--gray-2)}
+  .ba-col.after .ba-label{color:var(--c-mint-d)}
+  .ba-text{font-size:13px;color:var(--gray-1);line-height:1.75}
+  .ba-text strong{color:var(--black);font-weight:700}
+
+  /* 프롬프트 */
   .pbx{background:#1c1917;border-radius:var(--radius-sm);padding:18px 22px;margin-bottom:10px;position:relative}
   .psc{font-family:var(--display);font-size:10px;font-weight:800;color:#6b6560;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;display:block}
   .pt{font-size:13px;color:#fdfbf8;line-height:1.85;font-weight:300}
   .pt em{color:#00e0b0;font-style:normal;font-weight:600}
-
   .copy-btn{position:absolute;top:12px;right:12px;background:rgba(253,251,248,.1);border:1px solid rgba(253,251,248,.15);border-radius:10px;color:#6b6560;font-family:var(--display);font-size:10px;font-weight:700;padding:4px 10px;cursor:pointer;letter-spacing:.04em;transition:all .15s}
   .copy-btn:hover{background:rgba(253,251,248,.18);color:#fdfbf8}
   .copy-btn.copied{color:#00e0b0;border-color:#00e0b0}
-
   .pl{font-family:var(--display);font-size:11px;font-weight:800;color:var(--gray-2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;display:flex;align-items:center;gap:8px}
   .pl::after{content:'';flex:1;height:1.5px;background:var(--gray-3);border-radius:2px}
 
-  .rg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
-  .rc{border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);overflow:hidden;background:var(--white);box-shadow:var(--shadow)}
-  .rh{padding:10px 14px;font-family:var(--display);font-size:12px;font-weight:800;border-bottom:1px solid var(--gray-3);display:flex;align-items:center;gap:8px}
-  .rdot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-  .rg-gpt{background:#00b896}.rg-claude{background:#e85d3a}.rg-gemini{background:#7b61ff}
-  .rb{padding:12px 14px;font-size:12px;color:var(--gray-1);line-height:1.7}
-  .rtag{display:inline-block;font-family:var(--display);font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px;margin-bottom:6px}
-  .rt-gpt{background:var(--c-mint-l);color:var(--c-mint-d)}
-  .rt-cl{background:var(--key-l);color:var(--key)}
-  .rt-ge{background:var(--c-violet-l);color:var(--c-violet-d)}
+  /* 기능 비교 그리드 */
+  .feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+  .feature-card{border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);overflow:hidden;background:var(--white);box-shadow:var(--shadow)}
+  .feature-head{padding:14px 16px 12px;border-bottom:1px solid var(--gray-3)}
+  .feature-icon{font-size:22px;margin-bottom:6px;display:block}
+  .feature-name{font-family:var(--display);font-size:14px;font-weight:900;color:var(--black);margin-bottom:2px}
+  .feature-sub{font-size:11px;color:var(--gray-2);font-family:var(--display);font-weight:600}
+  .feature-body{padding:12px 16px;font-size:12px;color:var(--gray-1);line-height:1.65}
+  .feature-tag{display:inline-block;font-family:var(--display);font-size:9px;font-weight:800;padding:2px 8px;border-radius:20px;margin-top:8px;background:var(--key-l);color:var(--key)}
 
-  .tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:13px}
-  .tbl th{text-align:left;padding:10px 14px;font-family:var(--display);font-size:11px;font-weight:800;color:var(--gray-1);background:var(--bg);text-transform:uppercase;letter-spacing:.04em}
-  .tbl td{padding:10px 14px;border-bottom:1px solid var(--gray-3);color:var(--gray-1)}
-  .tbl tr:last-child td{border-bottom:none}
-  .tbl td:first-child{font-weight:700;color:var(--black)}
+  /* 팁 */
+  .tip{background:var(--key-l);border:1.5px solid #f5c4b4;border-radius:var(--radius-sm);padding:14px 18px;margin-top:14px;font-size:13px;color:var(--key);line-height:1.65;font-weight:500;word-break:keep-all}
+  .tip-mint{background:var(--c-mint-l);border:1.5px solid #9fe1cb;border-radius:var(--radius-sm);padding:14px 18px;margin-top:14px;font-size:13px;color:var(--c-mint-d);line-height:1.65;font-weight:500;word-break:keep-all}
 
+  /* 그리드 */
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
   .mc{border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:20px 22px;background:var(--white);box-shadow:var(--shadow)}
   .mn{font-family:var(--display);font-size:28px;font-weight:900;color:var(--gray-3);margin-bottom:10px;line-height:1}
   .mt{font-family:var(--display);font-size:14px;font-weight:800;margin-bottom:6px}
-  .md2{font-size:12px;color:var(--gray-1);line-height:1.65}
+  .md2{font-size:12px;color:var(--gray-1);line-height:1.65;word-break:keep-all}
 
+  /* 체크리스트 */
   .cl{list-style:none;margin-top:12px}
   .cl li{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--gray-3);font-size:13px;color:var(--gray-1)}
   .cl li:last-child{border-bottom:none}
   .cb{width:18px;height:18px;border:1.5px solid var(--gray-3);border-radius:6px;flex-shrink:0;margin-top:1px}
 
-  .nb{background:var(--key-l);border:1.5px solid #f5c4b4;border-radius:var(--radius-sm);padding:14px 18px;margin-top:14px;font-size:13px;color:var(--key);line-height:1.65;font-weight:500}
-
-  .sl{display:flex;flex-direction:column;gap:12px;margin-top:14px}
-  .si{display:flex;gap:14px;align-items:flex-start}
-  .sn{font-family:var(--display);font-size:12px;font-weight:900;background:var(--key-l);color:var(--key);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-  .sc2{font-size:14px;color:var(--gray-1);line-height:1.65}
-  .sc2 strong{color:var(--black);font-weight:700}
+  /* 코멘트 */
+  .cm-input-wrap{background:var(--white);border:1.5px solid var(--gray-3);border-radius:var(--radius);padding:24px 24px 20px;box-shadow:var(--shadow);margin-bottom:28px}
+  .cm-input-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+  .cm-name{font-family:var(--sans);font-size:13px;font-weight:500;border:1.5px solid var(--gray-3);border-radius:14px;padding:9px 16px;background:var(--bg);color:var(--black);outline:none;width:150px;transition:border-color .18s}
+  .cm-name:focus{border-color:var(--key)}
+  .cm-name::placeholder{color:var(--gray-2)}
+  .cm-tag-row{display:flex;gap:6px;flex-wrap:wrap}
+  .cm-tag-btn{font-family:var(--display);font-size:11px;font-weight:800;border:1.5px solid var(--gray-3);border-radius:20px;padding:6px 13px;background:var(--white);color:var(--gray-1);cursor:pointer;transition:all .15s;white-space:nowrap}
+  .cm-tag-btn:hover{border-color:var(--key);color:var(--key);background:var(--key-l)}
+  .cm-tag-btn.active{background:var(--key);color:#fff;border-color:var(--key)}
+  .cm-box-wrap{position:relative;margin-bottom:14px;background:var(--bg);border:1.5px solid var(--gray-3);border-radius:18px;transition:border-color .18s}
+  .cm-box-wrap:focus-within{border-color:var(--key)}
+  .cm-textarea{width:100%;font-family:var(--sans);font-size:14px;border:none;border-radius:18px;padding:16px 18px 36px;background:transparent;color:var(--black);resize:none;outline:none;line-height:1.7;display:block}
+  .cm-textarea::placeholder{color:var(--gray-2)}
+  .cm-count{position:absolute;bottom:12px;right:16px;font-size:11px;font-family:var(--display);font-weight:700;color:var(--gray-2);pointer-events:none}
+  .cm-footer-row{display:flex;justify-content:flex-end}
+  .cm-submit{font-family:var(--display);font-size:13px;font-weight:800;background:linear-gradient(135deg,#e85d3a,#f5a623);color:#fff;border:none;border-radius:20px;padding:10px 24px;cursor:pointer;transition:opacity .15s,transform .12s;box-shadow:0 4px 14px rgba(232,93,58,.25)}
+  .cm-submit:hover{opacity:.9;transform:translateY(-1px)}
+  .cm-list{display:flex;flex-direction:column;gap:14px;clear:both;padding-top:4px}
+  .cm-empty{text-align:center;font-size:14px;color:var(--gray-2);padding:40px 0;font-family:var(--display);font-weight:700}
+  .cm-bubble-wrap{display:flex;flex-direction:column;gap:4px}
+  .cm-bubble-wrap.me{align-items:flex-end}
+  .cm-bubble-wrap.other{align-items:flex-start}
+  .cm-meta{display:flex;align-items:center;gap:6px;padding:0 14px}
+  .cm-bubble-wrap.me .cm-meta{flex-direction:row-reverse}
+  .cm-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;font-family:var(--display);flex-shrink:0}
+  .cm-author{font-family:var(--display);font-size:12px;font-weight:800;color:var(--black)}
+  .cm-time-label{font-size:11px;color:var(--gray-2);font-family:var(--display)}
+  .cm-tag-label{font-family:var(--display);font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px}
+  .tag-label-느낀점{background:var(--c-mint-l);color:var(--c-mint-d)}
+  .tag-label-개선점{background:var(--c-yellow-l);color:var(--c-yellow-d)}
+  .tag-label-다음세션요청{background:var(--c-violet-l);color:var(--c-violet-d)}
+  .tag-label-기타{background:var(--key-l);color:var(--key)}
+  .cm-bubble{max-width:75%;padding:13px 18px;font-size:14px;line-height:1.65;word-break:break-word;box-shadow:var(--shadow);animation:bubbleIn .3s ease both}
+  .cm-bubble-wrap.me .cm-bubble{background:linear-gradient(135deg,#e85d3a,#f5a623);color:#fff;border-radius:18px 18px 4px 18px}
+  .cm-bubble-wrap.other .cm-bubble{background:var(--white);color:var(--black);border:1.5px solid var(--gray-3);border-radius:18px 18px 18px 4px}
+  .cm-del{background:none;border:none;cursor:pointer;font-size:12px;color:var(--gray-2);padding:0 2px}
+  @keyframes bubbleIn{from{opacity:0;transform:translateY(8px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
 
   .footer{background:var(--bg);border-top:1px solid var(--gray-3);padding:32px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:60px;font-size:13px;color:var(--gray-1)}
   .fb{font-family:var(--display);font-size:14px;font-weight:900;color:var(--black)}
@@ -162,79 +233,29 @@
   @media(max-width:680px){
     .nav,.hero,.tl-wrap,.footer{padding-left:20px;padding-right:20px}
     .container{padding:0 20px}
-
-    /* 히어로 */
     .hero{padding:36px 20px 32px}
     .hero h1{font-size:32px;line-height:1.15;margin-bottom:8px}
-    .hero-sub{margin-bottom:20px}
+    .hero-sub{margin-bottom:16px}
     .hero-meta{grid-template-columns:repeat(2,1fr);max-width:100%}
     .meta-item{padding:10px 6px}
     .meta-item:nth-child(2){border-right:none}
     .meta-item:nth-child(3){border-top:1px solid var(--gray-3)}
     .meta-item:nth-child(4){border-top:1px solid var(--gray-3);border-right:none}
-
-    /* 타임라인 */
     .tl{flex-direction:column}
     .tl-seg{border-right:none;border-bottom:1px solid var(--gray-3);padding:12px 16px}
-    .tl-t{font-size:10px}
-    .tl-n{font-size:12px}
-
-    /* 섹션/카드 */
-    .section{padding:36px 0}
-    .card{padding:16px 18px}
-    .card-hd{margin-bottom:10px}
-    .g3,.rg,.g2{grid-template-columns:1fr}
-
-    /* 네비 */
+    .intro-inner{padding:32px 20px}
+    .intro-grid{grid-template-columns:1fr}
+    .intro-compare{flex-direction:column}
+    .g2{grid-template-columns:1fr}
+    .feature-grid{grid-template-columns:1fr}
+    .ba{grid-template-columns:1fr}
+    .ba-col.before{border-right:none;border-bottom:1.5px solid var(--gray-3)}
+    .setup-num{width:40px}
     .nav-session{display:none}
-    .nav-link{font-size:11px;padding:4px 10px}
-
-    /* 코멘트 */
     .cm-input-row{flex-direction:column;align-items:flex-start}
     .cm-name{width:100%}
     .cm-bubble{max-width:88%}
-    .cm-tag-btn{font-size:10px;padding:5px 10px}
   }
-
-  /* ── COMMENTS ── */
-  .cm-input-wrap { background:var(--white); border:1.5px solid var(--gray-3); border-radius:var(--radius); padding:24px 24px 20px; box-shadow:var(--shadow); margin-bottom:28px; }
-  .cm-input-row { display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
-  .cm-name { font-family:var(--sans); font-size:13px; font-weight:500; border:1.5px solid var(--gray-3); border-radius:14px; padding:9px 16px; background:var(--bg); color:var(--black); outline:none; width:150px; transition:border-color .18s; }
-  .cm-name:focus { border-color:var(--key); }
-  .cm-name::placeholder { color:var(--gray-2); }
-  .cm-tag-row { display:flex; gap:6px; flex-wrap:wrap; }
-  .cm-tag-btn { font-family:var(--display); font-size:11px; font-weight:800; border:1.5px solid var(--gray-3); border-radius:20px; padding:6px 13px; background:var(--white); color:var(--gray-1); cursor:pointer; transition:all .15s; white-space:nowrap; }
-  .cm-tag-btn:hover { border-color:var(--key); color:var(--key); background:var(--key-l); }
-  .cm-tag-btn.active { background:var(--key); color:#fff; border-color:var(--key); }
-  .cm-box-wrap { position:relative; margin-bottom:14px; background:var(--bg); border:1.5px solid var(--gray-3); border-radius:18px; transition:border-color .18s; }
-  .cm-textarea { width:100%; font-family:var(--sans); font-size:14px; border:none; border-radius:18px; padding:16px 18px 36px; background:transparent; color:var(--black); resize:none; outline:none; line-height:1.7; display:block; }
-  .cm-textarea::placeholder { color:var(--gray-2); }
-  .cm-count { position:absolute; bottom:12px; right:16px; font-size:11px; font-family:var(--display); font-weight:700; color:var(--gray-2); pointer-events:none; }
-  .cm-footer-row { display:flex; justify-content:flex-end; }
-  .cm-submit { font-family:var(--display); font-size:13px; font-weight:800; background:linear-gradient(135deg,#e85d3a,#f5a623); color:#fff; border:none; border-radius:20px; padding:10px 24px; cursor:pointer; transition:opacity .15s,transform .12s; box-shadow:0 4px 14px rgba(232,93,58,.25); }
-  .cm-submit:hover { opacity:.9; transform:translateY(-1px); }
-  .cm-submit:active { transform:scale(.97); }
-  .cm-list { display:flex; flex-direction:column; gap:14px; clear:both; padding-top:4px; }
-  .cm-empty { text-align:center; font-size:14px; color:var(--gray-2); padding:40px 0; font-family:var(--display); font-weight:700; }
-  .cm-bubble-wrap { display:flex; flex-direction:column; gap:4px; }
-  .cm-bubble-wrap.me { align-items:flex-end; }
-  .cm-bubble-wrap.other { align-items:flex-start; }
-  .cm-meta { display:flex; align-items:center; gap:6px; padding:0 14px; }
-  .cm-bubble-wrap.me .cm-meta { flex-direction:row-reverse; }
-  .cm-avatar { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:900; font-family:var(--display); flex-shrink:0; }
-  .cm-author { font-family:var(--display); font-size:12px; font-weight:800; color:var(--black); }
-  .cm-time-label { font-size:11px; color:var(--gray-2); font-family:var(--display); }
-  .cm-tag-label { font-family:var(--display); font-size:10px; font-weight:800; padding:2px 8px; border-radius:20px; }
-  .tag-label-느낀점 { background:var(--c-mint-l); color:var(--c-mint-d); }
-  .tag-label-개선점 { background:var(--c-yellow-l); color:var(--c-yellow-d); }
-  .tag-label-다음세션요청 { background:var(--c-violet-l); color:var(--c-violet-d); }
-  .tag-label-기타 { background:var(--key-l); color:var(--key); }
-  .cm-bubble { max-width:75%; padding:13px 18px; font-size:14px; line-height:1.65; word-break:break-word; box-shadow:var(--shadow); animation:bubbleIn .3s ease both; }
-  .cm-bubble-wrap.me .cm-bubble { background:linear-gradient(135deg,#e85d3a,#f5a623); color:#fff; border-radius:18px 18px 4px 18px; }
-  .cm-bubble-wrap.other .cm-bubble { background:var(--white); color:var(--black); border:1.5px solid var(--gray-3); border-radius:18px 18px 18px 4px; }
-  .cm-del { background:none; border:none; cursor:pointer; font-size:12px; color:var(--gray-2); padding:0 2px; }
-  @keyframes bubbleIn { from{opacity:0;transform:translateY(8px) scale(.96)} to{opacity:1;transform:translateY(0) scale(1)} }
-
 </style>
 </head>
 <body>
@@ -242,226 +263,466 @@
 <nav class="nav">
   <a class="nav-brand" href="index.html">🤖 AI 실무활용법<span class="nav-badge">M몰팀</span></a>
   <div class="nav-right">
-    <span class="nav-session">Session 01 · 공통</span>
+    <span class="nav-session">Session 01 · 1단계</span>
     <a class="nav-link" href="index.html">← 전체 목록</a>
+    <a class="nav-link nav-next" href="index.html">다음 세션 →</a>
   </div>
 </nav>
 
 <header class="hero">
   <div class="hero-blob blob1"></div>
   <div class="hero-blob blob2"></div>
-  <div class="hero-eyebrow">🤝 공통 세션 · Session 01</div>
-  <h1>AI 도구 비교 체험<br><span class="acc">나에게 맞는 AI 찾기</span></h1>
-  <p class="hero-sub">ChatGPT·Claude·Gemini를 같은 질문으로 직접 비교해보고, 내 업무에 어떤 AI가 찰떡인지 감 잡는 30분입니다 🎯</p>
+  <div class="hero-eyebrow">🧠 Session 01 · Claude 활용</div>
+  <h1>Claude 세팅으로<br><span class="acc">내 업무 전용 AI</span> 만들기</h1>
+  <p class="hero-sub">세팅을 제대로 해두면 Claude가 M몰을 이미 알고 있는 상태로 일해줘요. 지침·메모리·프로젝트 설정부터 심화 프롬프트까지 — 오늘 다 세팅하고 갑니다 🛠</p>
+  <div class="hero-tools">
+    <span class="tool-chip main">🧠 Claude — 메인</span>
+  </div>
   <div class="hero-meta">
     <div class="meta-item"><span class="meta-val">30분</span><span class="meta-key">⏱ 세션 시간</span></div>
     <div class="meta-item"><span class="meta-val">전 파트</span><span class="meta-key">🤝 대상</span></div>
     <div class="meta-item"><span class="meta-val">무료</span><span class="meta-key">💚 비용</span></div>
-    <div class="meta-item"><span class="meta-val">계정 3개</span><span class="meta-key">📋 사전 준비</span></div>
+    <div class="meta-item"><span class="meta-val">초급</span><span class="meta-key">📊 난이도</span></div>
   </div>
 </header>
 
 <div class="tl-wrap">
   <div class="tl">
-    <div class="tl-seg"><div class="tl-t">00:00 – 05:00</div><div class="tl-n"><span class="dot dm"></span>오프닝 &amp; 도구 소개</div></div>
-    <div class="tl-seg"><div class="tl-t">05:00 – 18:00</div><div class="tl-n"><span class="dot dc"></span>같은 질문 비교 데모</div></div>
-    <div class="tl-seg"><div class="tl-t">18:00 – 27:00</div><div class="tl-n"><span class="dot dy"></span>개인 실습 미션</div></div>
-    <div class="tl-seg"><div class="tl-t">27:00 – 30:00</div><div class="tl-n"><span class="dot dv"></span>공유 &amp; 마무리</div></div>
+    <div class="tl-seg"><div class="tl-t">00:00 – 05:00</div><div class="tl-n"><span class="dot dm"></span>Claude 세팅 3가지</div></div>
+    <div class="tl-seg"><div class="tl-t">05:00 – 15:00</div><div class="tl-n"><span class="dot dc"></span>심화 프롬프트 기법</div></div>
+    <div class="tl-seg"><div class="tl-t">15:00 – 27:00</div><div class="tl-n"><span class="dot dy"></span>M몰 전용 Claude 만들기</div></div>
+    <div class="tl-seg"><div class="tl-t">27:00 – 30:00</div><div class="tl-n"><span class="dot dv"></span>공유 & 마무리</div></div>
   </div>
 </div>
 
 <main class="container">
+  <!-- CLAUDE INTRO -->
+  <section class="intro-section">
+    <div class="intro-inner">
+      <div class="intro-head">
+        <span class="intro-logo">🧠</span>
+        <div>
+          <div class="intro-name">Claude by Anthropic</div>
+          <div class="intro-sub">Anthropic이 만든 AI · claude.ai · 무료 시작 가능</div>
+        </div>
+      </div>
+      <p class="intro-desc">긴 문서를 읽고 쓰고 분석하는 능력이 특히 강하고, 복잡한 조건을 정확하게 지켜서 결과물을 내주는 게 가장 큰 강점이에요. 지침·메모리·프로젝트 세팅으로 M몰 맥락을 학습시켜두면 매번 설명 없이도 척척 이해합니다.</p>
+      <div class="intro-grid">
+        <div class="intro-card">
+          <div class="intro-card-icon">📋</div>
+          <div class="intro-card-title">문서 작성·분석</div>
+          <div class="intro-card-desc">기획서·보고서·카피 초안 즉시 생성. PDF·엑셀 등 파일을 직접 읽고 핵심만 뽑아줌</div>
+        </div>
+        <div class="intro-card">
+          <div class="intro-card-icon">🎯</div>
+          <div class="intro-card-title">조건 정확히 지키기</div>
+          <div class="intro-card-desc">"20자 이내", "표로 정리", "bullet 금지" 같은 세부 조건을 다른 AI보다 잘 지킴</div>
+        </div>
+        <div class="intro-card">
+          <div class="intro-card-icon">⚙️</div>
+          <div class="intro-card-title">세팅으로 개인화</div>
+          <div class="intro-card-desc">지침·메모리·프로젝트 설정으로 M몰 맥락을 학습시켜 반복 설명 없이 바로 활용</div>
+        </div>
+      </div>
+      <div class="intro-compare">
+        <div class="intro-compare-item"><span class="ic-label best-label">🧠 Claude</span><div class="ic-text">긴 문서 작성·분석 / 조건 정확히 지키기 / 파일 첨부 분석 / 프로젝트 세팅 / <strong>바이브 코딩 — 말로 웹페이지 생성</strong></div></div>
+        <div class="intro-compare-item"><span class="ic-label">💬 ChatGPT</span><div class="ic-text">창의적 브레인스토밍·카피 / 예술적 이미지 생성(DALL-E) / 바이브 코딩(v0 연동) / 다양한 플러그인</div></div>
+        <div class="intro-compare-item"><span class="ic-label">🔍 Gemini</span><div class="ic-text">실시간 웹 검색·최신 정보 / 정밀한 이미지 생성(Imagen) / Google Workspace 연동 / NotebookLM·Stitch 동일 계정</div></div>
+      </div>
+    </div>
+  </section>
 
+
+  <!-- PART 01 -->
   <section class="section">
     <div class="s-ey">Part 01 · 00:00 – 05:00</div>
-    <h2 class="s-ti">AI 도구, 뭐가 다른 건가요? 🤔</h2>
-    <p class="s-de">세 가지 AI를 소개하고, 오늘 비교 체험의 방향을 잡습니다.</p>
+    <h2 class="s-ti">Claude 세팅 3가지 — 알고 쓰면 차원이 달라요 ⚙️</h2>
+    <p class="s-de">Claude는 세팅을 해두면 매번 같은 맥락을 설명하지 않아도 돼요. 딱 3가지만 설정해두면 됩니다.</p>
 
     <div class="card fu">
-      <div class="card-hd"><span class="ctag ti">진행 포인트</span><span class="ctime">3분</span></div>
-      <div class="card-ti">스마트폰처럼, AI도 브랜드마다 강점이 달라요!</div>
-      <div class="card-bo">ChatGPT는 <strong>아이디어·카피라이팅</strong>, Claude는 <strong>긴 문서·정확한 글쓰기</strong>, Gemini는 <strong>최신 정보·구글 연동</strong>에 강합니다.<br>오늘은 같은 질문을 세 AI에 던져서 직접 차이를 눈으로 확인합니다 👀</div>
-    </div>
-
-    <div class="card fu">
-      <div class="card-hd"><span class="ctag ti">도구별 한 줄 소개</span></div>
-      <div class="g3">
-        <div class="tcol"><div class="thead"><div class="tlogo">💬 ChatGPT</div><div class="ttag">OpenAI · GPT-4o</div></div><div class="tbody2"><div class="trow"><span class="trk">강점</span><span class="trv">아이디어 생성, 카피라이팅, 자연스러운 대화</span></div><div class="trow"><span class="trk">특징</span><span class="trv">플러그인·이미지 생성(DALL-E) 연동</span></div><div class="trow"><span class="trk">주의</span><span class="trv">무료 버전은 최신 정보 제한적</span></div><span class="fpill">✅ 무료 시작 가능</span></div></div>
-        <div class="tcol"><div class="thead"><div class="tlogo">🧠 Claude</div><div class="ttag">Anthropic · Sonnet</div></div><div class="tbody2"><div class="trow"><span class="trk">강점</span><span class="trv">긴 문서 분석, 기획서·보고서 작성</span></div><div class="trow"><span class="trk">특징</span><span class="trv">파일 첨부, 답변 일관성 높음</span></div><div class="trow"><span class="trk">주의</span><span class="trv">실시간 웹 검색은 유료에서 가능</span></div><span class="fpill">✅ 무료 시작 가능</span></div></div>
-        <div class="tcol"><div class="thead"><div class="tlogo">🔍 Gemini</div><div class="ttag">Google · 1.5 Flash</div></div><div class="tbody2"><div class="trow"><span class="trk">강점</span><span class="trv">최신 정보 검색, 구글 서비스 연동</span></div><div class="trow"><span class="trk">특징</span><span class="trv">Gmail·Drive·Docs 연동 (유료)</span></div><div class="trow"><span class="trk">주의</span><span class="trv">창의적 글쓰기는 타 도구 대비 보수적</span></div><span class="fpill">✅ 무료 시작 가능</span></div></div>
-      </div>
-    </div>
-
-    <div class="card fu">
-      <div class="card-hd"><span class="ctag ti">오늘의 목표 3가지</span></div>
-      <div class="sl">
-        <div class="si"><div class="sn">1</div><div class="sc2"><strong>세 가지 AI를 모두 직접 써본다</strong> — 눈으로 보는 것과 직접 써보는 건 달라요!</div></div>
-        <div class="si"><div class="sn">2</div><div class="sc2"><strong>같은 질문에 대한 답변 차이를 확인한다</strong> — 어떤 게 더 마음에 드는지 느껴보세요</div></div>
-        <div class="si"><div class="sn">3</div><div class="sc2"><strong>내 업무에 맞는 AI를 골라본다</strong> — 하나만 쓰지 말고 상황마다 골라 쓰는 게 핵심!</div></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="s-ey">Part 02 · 05:00 – 18:00</div>
-    <h2 class="s-ti">같은 질문, 다른 답변 🔍</h2>
-    <p class="s-de">진행자가 세 AI에 동일한 질문을 입력하고 결과를 나란히 보여줍니다. 3라운드!</p>
-
-    <div class="card fu">
-      <div class="card-hd"><span class="ctag td">Round 1</span><span class="ctime">4분</span></div>
-      <div class="card-ti">아이디어 생성 — 기획전 테마 제안 💡</div>
-      <div class="card-bo">창의적인 아이디어 생성에서 세 AI가 어떻게 다른지 확인합니다. 탭 3개를 열어두고 동시에 결과를 보여주세요!</div>
-      <div class="qbox">
-        <div class="ql">공통 질문 · Round 1</div>
-        <button class="copy-btn" onclick="cq(this)">copy</button>
-        <div class="qt">M몰(현대카드 포인트 전용 쇼핑몰)에서 올 가을에 진행할 기획전 테마를 5가지 제안해줘. 각 테마마다 제목과 한 줄 컨셉을 포함해줘.</div>
-      </div>
-      <div class="rg">
-        <div class="rc"><div class="rh"><span class="rdot rg-gpt"></span>ChatGPT</div><div class="rb"><span class="rtag rt-gpt">특징</span><br>5가지를 빠르게 정리. 구체적인 상품군까지 언급하고 문장이 자연스러워요. 아이디어 폭이 넓고 실용적 📝</div></div>
-        <div class="rc"><div class="rh"><span class="rdot rg-claude"></span>Claude</div><div class="rb"><span class="rtag rt-cl">특징</span><br>타겟 고객·분위기 설명까지 포함. 구조가 일관적이고 M몰 맥락을 잘 반영. 기획서로 바로 쓸 수 있는 형태 📋</div></div>
-        <div class="rc"><div class="rh"><span class="rdot rg-gemini"></span>Gemini</div><div class="rb"><span class="rtag rt-ge">특징</span><br>최신 트렌드 키워드 반영. 검색 기반이라 실제 소비 흐름이 녹아있어요. 리서치와 함께 쓰면 효과적 🔍</div></div>
-      </div>
-    </div>
-
-    <div class="card fu">
-      <div class="card-hd"><span class="ctag td">Round 2</span><span class="ctime">4분</span></div>
-      <div class="card-ti">문서 작성 — 팀장 보고용 3줄 요약 📄</div>
-      <div class="card-bo">실무에서 가장 많이 쓰는 "요약·정리" 능력을 비교합니다. 아래 내용을 그대로 붙여넣고 입력해보세요!</div>
-      <div class="qbox">
-        <div class="ql">공통 질문 · Round 2</div>
-        <button class="copy-btn" onclick="cq(this)">copy</button>
-        <div class="qt">아래 내용을 팀장 보고용으로 <em>3줄로 요약</em>해줘. 핵심 수치와 액션 아이템이 반드시 포함되어야 해.<br><br>[내용]<br>이번 달 M몰 기획전 성과 분석 결과, 뷰티 카테고리 매출이 전월 대비 32% 증가했으며 선케어 제품군이 전체 뷰티 매출의 45%를 차지했습니다. 반면 가전 카테고리는 12% 감소했는데, 경쟁사 프로모션 영향으로 분석됩니다. 고객 평균 포인트 사용액은 18만 포인트로 전월 대비 8% 상승했습니다. 다음 달에는 가전 카테고리 강화를 위해 단독 브랜드 딜을 기획하고, 뷰티는 여름 후속 라인으로 이어가는 전략을 검토 중입니다.</div>
-      </div>
-      <div class="rg">
-        <div class="rc"><div class="rh"><span class="rdot rg-gpt"></span>ChatGPT</div><div class="rb"><span class="rtag rt-gpt">특징</span><br>간결하고 읽기 쉬운 3줄 요약. 수치 포함, 문장이 매끄러워요. 빠른 초안 작성에 딱! ⚡</div></div>
-        <div class="rc"><div class="rh"><span class="rdot rg-claude"></span>Claude</div><div class="rb"><span class="rtag rt-cl">특징</span><br>요청 조건(수치+액션)을 빠짐없이 충족. 보고서 맥락에 맞는 어투. 조건 충족률 최고 🎯</div></div>
-        <div class="rc"><div class="rh"><span class="rdot rg-gemini"></span>Gemini</div><div class="rb"><span class="rtag rt-ge">특징</span><br>핵심은 담겨있으나 문장이 다소 딱딱할 수 있어요. 구글 문서 연동 시 편리 📁</div></div>
-      </div>
-    </div>
-
-    <div class="card fu">
-      <div class="card-hd"><span class="ctag td">Round 3</span><span class="ctime">5분</span></div>
-      <div class="card-ti">파트별 실무 질문 — 내 업무에 맞는 AI 찾기 🎯</div>
-      <div class="card-bo">각 파트 질문을 하나씩 직접 입력해봅니다. 내 파트 결과를 세 AI에서 비교해보세요!</div>
-      <div class="sl" style="margin-top:16px">
-        <div class="si"><div class="sn" style="background:var(--c-mint-l);color:var(--c-mint-d)">🛍</div><div class="sc2"><strong>MD 파트</strong><div class="qbox" style="margin-top:8px"><button class="copy-btn" onclick="cq(this)">copy</button><div class="qt">추석 시즌에 맞는 M몰 기획전 상품 카테고리 구성안을 표로 만들어줘. 카테고리명 / 대표 브랜드 2개 / 기획전 내 역할(메인/서브) 포함.</div></div></div></div>
-        <div class="si"><div class="sn" style="background:var(--c-yellow-l);color:var(--c-yellow-d)">📣</div><div class="sc2"><strong>마케팅 파트</strong><div class="qbox" style="margin-top:8px"><button class="copy-btn" onclick="cq(this)">copy</button><div class="qt">현대카드 M몰 가을 기획전 앱 푸시 알림 문구를 3가지 톤(감성적/직관적/긴급성)으로 각각 만들어줘. 20자 이내로.</div></div></div></div>
-        <div class="si"><div class="sn" style="background:var(--c-rose-l);color:var(--c-rose-d)">🛠</div><div class="sc2"><strong>운영 파트</strong><div class="qbox" style="margin-top:8px"><button class="copy-btn" onclick="cq(this)">copy</button><div class="qt">M몰에서 "포인트가 차감됐는데 상품이 안 왔어요"라는 고객 민원이 들어왔을 때, 고객센터에 전달할 대응 가이드 초안을 작성해줘.</div></div></div></div>
-        <div class="si"><div class="sn" style="background:var(--c-violet-l);color:var(--c-violet-d)">💻</div><div class="sc2"><strong>개발·기획 파트</strong><div class="qbox" style="margin-top:8px"><button class="copy-btn" onclick="cq(this)">copy</button><div class="qt">M몰 앱에 "포인트 소멸 예정 알림" 기능을 추가하려고 해. 필요한 기능 요구사항을 유저스토리 형식으로 3개 작성해줘.</div></div></div></div>
-      </div>
-    </div>
-
-    <div class="card fu">
-      <div class="card-hd"><span class="ctag td">참고표</span></div>
-      <div class="card-ti">파트별 AI 추천 조합 🗂</div>
-      <table class="tbl">
-        <thead><tr><th>파트</th><th>주요 업무</th><th>1순위</th><th>2순위</th></tr></thead>
-        <tbody>
-          <tr><td>🛍 MD</td><td>소싱 리서치, 기획전 구성, 상품 카피</td><td>Claude</td><td>Perplexity</td></tr>
-          <tr><td>📣 마케팅</td><td>카피 생성, 프로모션 기획, SNS 콘텐츠</td><td>ChatGPT</td><td>Claude</td></tr>
-          <tr><td>🛠 운영</td><td>VOC 분석, 가이드 문서, 이슈 보고서</td><td>Claude</td><td>ChatGPT</td></tr>
-          <tr><td>💻 개발·기획</td><td>PRD 작성, 요구사항 정리, UX 분석</td><td>Claude</td><td>ChatGPT</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="s-ey">Part 03 · 18:00 – 27:00</div>
-    <h2 class="s-ti">직접 해보는 시간 ✋</h2>
-    <p class="s-de">각자 세 가지 AI를 모두 써보고, 가장 마음에 드는 결과물을 하나 골라 공유합니다!</p>
-    <div class="g2">
-      <div class="mc fu"><div class="mn">01</div><div class="mt">같은 질문을 세 AI에 던져보기</div><div class="md2">내 파트 질문(위 Round 3)을 ChatGPT·Claude·Gemini에 각각 입력해보세요. 어떤 차이가 느껴지나요? 🤔</div></div>
-      <div class="mc fu"><div class="mn">02</div><div class="mt">마음에 드는 결과 골라서 다듬기</div><div class="md2">세 결과 중 가장 마음에 드는 걸 골라, "더 구체적으로" 또는 "더 짧게"로 이어서 요청해보세요 ✂️</div></div>
-      <div class="mc fu"><div class="mn">03</div><div class="mt">나만의 업무 질문 하나 만들기</div><div class="md2">오늘 당장 실무에서 쓸 수 있는 나만의 질문을 만들어 입력해보세요. 아래 템플릿 참고!</div></div>
-      <div class="mc fu"><div class="mn">🔥</div><div class="mt">도전! Perplexity로 트렌드 검색</div><div class="md2">perplexity.ai에서 "2024 하반기 프리미엄 커머스 트렌드"를 검색해보세요. 결과가 어떻게 다른가요?</div></div>
-    </div>
-    <div style="margin-top:20px">
-      <div class="pl">개인 실습용 기본 템플릿</div>
+      <div class="card-hd"><span class="ctag ti">세팅 1 — 지침 (Custom Instructions)</span></div>
+      <div class="card-ti">Claude한테 "나는 이런 사람이야"를 한 번만 알려두기</div>
+      <div class="card-bo">지침은 모든 대화에 자동으로 적용되는 배경 설정이에요. 내 직무·업무 환경·원하는 답변 스타일을 넣어두면 매번 설명할 필요가 없어요.</div>
+      <span class="setup-path">설정 방법 → claude.ai → 우측 상단 프로필 → 설정 → 사용자 지침</span>
+      <div class="pl" style="margin-top:16px">M몰 팀원 지침 예시 (복사해서 바로 쓰세요!)</div>
       <div class="pbx">
-        <span class="psc">[ ] 부분만 바꿔서 입력하세요!</span>
-        <button class="copy-btn" onclick="cp2(this)">copy</button>
-        <div class="pt">나는 현대카드 M몰에서 <em>[파트명: MD / 마케팅 / 운영 / 기획]</em> 업무를 담당하고 있어.<br><br>지금 해결하고 싶은 업무 상황은 이래:<br><em>[상황 설명: 예) 다음 달 추석 기획전 테마를 정해야 하는데 아이디어가 부족함]</em><br><br>이 상황에서 내가 해야 할 첫 번째 액션과, 참고할 만한 아이디어를 3가지 제안해줘.</div>
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt">나는 현대카드 M몰에서 일하는 <em>[직무: MD / 마케터 / 기획자 / 운영담당자]</em>야.
+M몰은 현대카드 M포인트로만 쇼핑하는 프리미엄 포인트 전용 쇼핑몰이야.
+주요 카테고리는 패션·뷰티·가전·여행·식품이고, 주요 고객은 30~50대 현대카드 회원이야.
+
+답변할 때 이렇게 해줘:
+- 실무에 바로 쓸 수 있는 형태로 작성해줘
+- 불필요한 설명 없이 결과물 중심으로 줘
+- 한국어로 답변하고, 보고서 어투로 작성해줘
+- 분량은 A4 1장 이내가 기본이야 (별도 요청 없으면)</div>
+      </div>
+      <div class="tip">💡 지침 설정 후에는 "기획서 써줘" 한 마디만 해도 M몰 맥락이 자동 반영돼요!</div>
+    </div>
+
+    <div class="card fu">
+      <div class="card-hd"><span class="ctag ti">세팅 2 — 메모리 (Memory)</span></div>
+      <div class="card-ti">Claude가 나에 대해 기억하게 만들기</div>
+      <div class="card-bo">메모리를 켜두면 Claude가 이전 대화에서 중요한 내용을 자동으로 기억해요. 내가 담당하는 브랜드·카테고리·선호하는 작업 방식을 점점 쌓아갑니다.</div>
+      <span class="setup-path">설정 방법 → claude.ai → 설정 → 개인화 → 메모리 ON</span>
+      <div class="ba" style="margin-top:16px">
+        <div class="ba-col before">
+          <span class="ba-label">😞 메모리 OFF</span>
+          <div class="ba-text">매 대화마다 "나는 M몰 MD야, 뷰티 카테고리 담당이야..."를 반복해서 설명해야 함</div>
+        </div>
+        <div class="ba-col after">
+          <span class="ba-label">✅ 메모리 ON</span>
+          <div class="ba-text">Claude가 알아서 기억: "지난번에 뷰티 기획전 얘기하셨죠? 이번 추석 기획전도 비슷한 방향으로 할까요?"</div>
+        </div>
+      </div>
+      <div class="tip-mint">💡 "지금 이 내용 기억해줘"라고 말하면 Claude가 해당 내용을 명시적으로 메모리에 저장해요!</div>
+
+      <div class="pl" style="margin-top:20px">보너스 — 다른 AI 맥락을 Claude 메모리로 이식하기</div>
+      <div class="card-bo" style="margin-bottom:14px">ChatGPT·Gemini에서 쌓아온 맥락을 Claude 공식 기능으로 그대로 옮길 수 있어요. Anthropic이 공식 제공하는 프롬프트를 기존 AI에 입력하고, 결과를 Claude 메모리에 붙여넣으면 끝입니다.</div>
+      <div class="setup-steps">
+        <div class="setup-step">
+          <div class="setup-num">1</div>
+          <div class="setup-body">
+            <div class="setup-title">Claude 공식 추출 프롬프트 복사하기</div>
+            <div class="setup-desc">아래 Anthropic 공식 프롬프트를 복사하거나, Claude 설정에서 직접 확인할 수 있어요</div>
+            <span class="setup-path">Settings → Capabilities → Memory → Import memory</span>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-num">2</div>
+          <div class="setup-body">
+            <div class="setup-title">기존 AI(ChatGPT·Gemini 등)에 붙여넣고 실행</div>
+            <div class="setup-desc">기존 AI가 저장된 맥락·선호도·프로젝트 정보를 코드 블록으로 뽑아줘요. 전체 복사!</div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-num">3</div>
+          <div class="setup-body">
+            <div class="setup-title">결과물을 Claude 메모리 설정에 붙여넣기</div>
+            <div class="setup-desc">Claude 설정 → 메모리 가져오기 텍스트 박스에 붙여넣으면 24시간 이내 반영</div>
+            <span class="setup-path">확인 방법 → 새 대화에서 "내 메모리에 뭐가 저장됐어?" 입력</span>
+          </div>
+        </div>
+      </div>
+      <div class="pl" style="margin-top:16px">Anthropic 공식 메모리 추출 프롬프트 (다른 AI에 입력)</div>
+      <div class="pbx">
+        <span class="psc">Anthropic 공식 제공 · ChatGPT / Gemini / Copilot 등에 붙여넣기</span>
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt">I'm moving to another service and need to export my data. List every memory you have stored about me, as well as any context you've learned about me from past conversations. Output everything in a single code block so I can easily copy it. Format each entry as: [date saved, if available] - memory content.<br><br>
+Make sure to cover all of the following — <em>preserve my words verbatim where possible</em>:<br>
+- Instructions I've given you about how to respond (tone, format, style, 'always do X', 'never do Y')<br>
+- Personal details: name, location, job, family, interests<br>
+- Projects, goals, and recurring topics<br>
+- Tools, languages, and frameworks I use<br>
+- Preferences and corrections I've made to your behavior</div>
+      </div>
+      <div class="tip-mint">💡 무료 플랜에서도 메모리를 쓸 수 있어요! ChatGPT를 오래 써왔다면 지금까지 쌓인 맥락을 Claude로 그대로 옮겨보세요. AI를 바꾼다고 처음부터 다시 시작할 필요 없습니다 🚀</div>
+    </div>
+
+    <div class="card fu">
+      <div class="card-hd"><span class="ctag ti">세팅 3 — 프로젝트 (Projects)</span></div>
+      <div class="card-ti">업무별로 Claude를 분리해서 쓰기</div>
+      <div class="card-bo">프로젝트는 특정 업무 전용 Claude 공간이에요. 각 프로젝트마다 지침과 파일을 따로 설정할 수 있어서 업무가 섞이지 않아요.</div>
+      <span class="setup-path">설정 방법 → claude.ai → 좌측 사이드바 → 새 프로젝트</span>
+      <div class="feature-grid" style="margin-top:16px">
+        <div class="feature-card">
+          <div class="feature-head">
+            <span class="feature-icon">🗂</span>
+            <div class="feature-name">업무별로 분리</div>
+            <div class="feature-sub">혼선 없이 깔끔하게</div>
+          </div>
+          <div class="feature-body">기획전 준비, 마케팅 카피, VOC 분석처럼 성격이 다른 업무를 프로젝트로 나눠 맥락이 섞이지 않게 관리<br><span class="feature-tag" style="margin-top:10px">맥락 혼용 방지</span></div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-head">
+            <span class="feature-icon">📁</span>
+            <div class="feature-name">자료를 프로젝트에 저장</div>
+            <div class="feature-sub">매번 첨부 불필요</div>
+          </div>
+          <div class="feature-body">기획 문서·가이드라인·데이터를 한 번 업로드해두면 해당 프로젝트의 모든 대화에서 자동으로 참조<br><span class="feature-tag" style="margin-top:10px">파일 영구 연결</span></div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-head">
+            <span class="feature-icon">👥</span>
+            <div class="feature-name">팀과 공유 가능</div>
+            <div class="feature-sub">Team 플랜 기능</div>
+          </div>
+          <div class="feature-body">같은 프로젝트를 팀원과 공유하면 동일한 지침·맥락 하에 각자 Claude를 활용 가능. 팀 작업에 유용<br><span class="feature-tag" style="margin-top:10px">협업 가능</span></div>
+        </div>
       </div>
     </div>
   </section>
 
+  <!-- PART 02 -->
   <section class="section">
-    <div class="s-ey">보너스 · Google 도구</div>
-    <h2 class="s-ti">NotebookLM & Stitch도 써보세요! 🎁</h2>
-    <p class="s-de">Gemini 계정 하나면 바로 쓸 수 있는 두 가지 꿀 도구를 소개합니다.</p>
+    <div class="s-ey">Part 02 · 05:00 – 15:00</div>
+    <h2 class="s-ti">심화 프롬프트 기법 — 이것만 알면 결과가 달라져요 🎯</h2>
+    <p class="s-de">기본 프롬프트는 이미 아시죠? 여기서는 결과물 품질을 확 올려주는 심화 기법을 다룹니다.</p>
+
     <div class="card fu">
-      <div class="card-hd"><span class="ctag td">📚 NotebookLM</span><span class="ctime">notebooklm.google.com</span></div>
-      <div class="card-ti">내 문서를 AI가 직접 읽고 답해주는 도구</div>
-      <div class="card-bo">PDF·문서·링크를 올리면 AI가 읽고 질문에 답해줍니다. <strong>M몰 활용 예시:</strong> 기획서·경쟁사 리포트를 올려두고 "추석 관련 인사이트만 요약해줘"처럼 활용!</div>
-      <div class="qbox" style="margin-top:14px">
-        <button class="copy-btn" onclick="cq(this)">copy</button>
-        <div class="qt">[MD] 이 상품 카탈로그에서 가을 기획전으로 묶을 수 있는 카테고리를 추천해줘<br>[마케팅] 이 캠페인 성과 보고서에서 다음 분기 전략에 반영할 인사이트 3가지를 뽑아줘<br>[운영] 이 CS 로그에서 반복적으로 발생하는 이슈 유형을 분류해줘<br>[개발·기획] 이 앱 리뷰 데이터에서 사용자 불만 패턴을 우선순위별로 정리해줘</div>
+      <div class="card-hd"><span class="ctag td">기법 1</span></div>
+      <div class="card-ti">멀티턴 대화 — 한 번에 완성하려 하지 말기</div>
+      <div class="card-bo">처음부터 완벽한 결과를 요구하면 오히려 품질이 떨어져요. 단계적으로 발전시키는 게 훨씬 효과적입니다.</div>
+      <div class="setup-steps" style="margin-top:16px">
+        <div class="setup-step">
+          <div class="setup-num">1</div>
+          <div class="setup-body">
+            <div class="setup-title">초안 요청</div>
+            <div class="setup-desc">"추석 기획전 기획서 초안 잡아줘. 구성만 먼저."</div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-num">2</div>
+          <div class="setup-body">
+            <div class="setup-title">방향 수정</div>
+            <div class="setup-desc">"상품 카테고리 부분을 뷰티·프리미엄 식품 중심으로 바꿔줘."</div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-num">3</div>
+          <div class="setup-body">
+            <div class="setup-title">형식 다듬기</div>
+            <div class="setup-desc">"전체를 팀장 보고용 톤으로 압축하고 표로 정리해줘."</div>
+          </div>
+        </div>
       </div>
     </div>
+
     <div class="card fu">
-      <div class="card-hd"><span class="ctag td">🎨 Stitch</span><span class="ctime">stitch.withgoogle.com</span></div>
-      <div class="card-ti">말로 설명하면 UI·배너 시안이 뚝딱!</div>
-      <div class="card-bo">텍스트로 설명하면 AI가 시각적 시안을 자동 생성합니다. <strong>M몰 활용 예시:</strong> "M몰 추석 기획전 메인 배너, 프리미엄 느낌, 다크 배경, 골드 포인트"처럼!</div>
+      <div class="card-hd"><span class="ctag td">기법 2</span></div>
+      <div class="card-ti">파일 업로드 활용 — Claude가 내 자료를 읽게 하기 📎</div>
+      <div class="card-bo">PDF·엑셀·이미지·텍스트 파일을 직접 첨부하면 Claude가 내용을 읽고 분석해줘요. 긴 문서 요약·데이터 분석에 강력합니다.</div>
+      <div class="pl" style="margin-top:16px">활용 예시 프롬프트</div>
+      <div class="pbx">
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt"><em>[파일 첨부 후]</em><br><br>
+이 자료를 읽고 아래 내용을 정리해줘:<br>
+1. 핵심 인사이트 3가지<br>
+2. M몰 기획전에 적용할 수 있는 아이디어 2가지<br>
+3. 주의해야 할 리스크 1가지<br><br>
+각 항목은 <em>2줄 이내</em>로 간결하게</div>
+      </div>
     </div>
+
     <div class="card fu">
-      <div class="card-hd"><span class="ctag td">🔗 Gemini → NotebookLM → Claude → Stitch 워크플로우</span></div>
-      <div class="sl">
-        <div class="si"><div class="sn">1</div><div class="sc2"><strong>Gemini</strong>로 최신 트렌드·경쟁사 정보 검색 & 정리</div></div>
-        <div class="si"><div class="sn">2</div><div class="sc2"><strong>NotebookLM</strong>에 자료 + 사내 기획서 업로드해서 심층 분석</div></div>
-        <div class="si"><div class="sn">3</div><div class="sc2"><strong>Claude / ChatGPT</strong>로 분석 결과를 기획서·보고서로 완성</div></div>
-        <div class="si"><div class="sn">4</div><div class="sc2"><strong>Stitch / Canva AI</strong>로 기획전 배너·비주얼 레퍼런스 제작</div></div>
+      <div class="card-hd"><span class="ctag td">기법 3</span></div>
+      <div class="card-ti">출력 형식 강제하기 — 원하는 틀 그대로 받기 📐</div>
+      <div class="card-bo">형식을 명확히 지정하면 바로 사용할 수 있는 결과물이 나와요. 특히 보고서·테이블·슬라이드 구성에 효과적입니다.</div>
+      <div class="ba">
+        <div class="ba-col before">
+          <span class="ba-label">😞 형식 미지정</span>
+          <div class="ba-text">"뷰티 기획전 기획서 써줘"<br><br>→ Claude 마음대로 형식 결정, 쓰기 불편한 구조로 나올 수도</div>
+        </div>
+        <div class="ba-col after">
+          <span class="ba-label">✅ 형식 명확히 지정</span>
+          <div class="ba-text">"아래 표 형식으로 작성해줘:<br>| 카테고리 | 메인 브랜드 | 예상 포인트 범위 | 역할 |<br>5개 카테고리, 각 1줄씩"<br><br>→ 바로 복사해서 쓸 수 있는 표로 나옴 🎉</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card fu">
+      <div class="card-hd"><span class="ctag td">기법 4</span></div>
+      <div class="card-ti">역할극 프롬프트 — Claude를 전문가로 만들기 🎭</div>
+      <div class="card-bo">단순히 "써줘"가 아니라 구체적인 전문가 역할을 부여하면 결과물의 깊이가 달라져요.</div>
+      <div class="pl" style="margin-top:16px">역할 부여 프롬프트 예시</div>
+      <div class="pbx">
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt">너는 <em>현대카드 M몰에서 10년 경력을 가진 수석 MD</em>야.<br>
+뷰티·럭셔리 카테고리 전문가이고, 포인트 커머스 시장 트렌드를 꿰고 있어.<br><br>
+이번 시즌 기획전 방향성에 대해 <em>비판적인 시각</em>으로 검토해줘.<br>
+잘 될 것 같은 부분과 리스크가 있는 부분을 솔직하게 말해줘.<br><br>
+<em>[기획안 붙여넣기]</em></div>
+      </div>
+      <div class="tip">💡 "비판적으로", "솔직하게", "리스크 중심으로" 같은 관점 지시어를 넣으면 더 날카로운 피드백을 받을 수 있어요!</div>
+    </div>
+<div class="card fu" >
+      <div class="card-hd"><span class="ctag td">기법 5</span></div>
+      <div class="card-ti">메타 프롬프트 — Claude가 프롬프트를 대신 써주게 하기 🤖</div>
+      <div class="card-bo">메타 프롬프트란 <strong>"좋은 프롬프트를 만들어달라"</strong>는 프롬프트예요. 어떻게 요청해야 할지 막막할 때 Claude한테 먼저 물어보고, 그 프롬프트를 그대로 쓰는 방식입니다. 잘 만든 메타 프롬프트는 저장해두고 팀 전체가 재사용할 수 있어요.</div>
+      <div class="setup-steps" style="margin-top:16px">
+        <div class="setup-step"><div class="setup-num">1</div><div class="setup-body"><div class="setup-title">먼저 메타 프롬프트 요청하기</div><div class="setup-desc">"[목적]을 위한 최적의 프롬프트를 만들어줘. 매번 바꿔야 하는 변수는 [변수명] 형태로 표시해줘."</div></div></div>
+        <div class="setup-step"><div class="setup-num">2</div><div class="setup-body"><div class="setup-title">Claude가 만든 프롬프트 검토 & 보완</div><div class="setup-desc">나온 프롬프트를 확인하고 빠진 조건이 있으면 "여기에 ~도 추가해줘"로 이어서 수정</div></div></div>
+        <div class="setup-step"><div class="setup-num">3</div><div class="setup-body"><div class="setup-title">완성된 프롬프트를 프로젝트 지침에 저장</div><div class="setup-desc">자주 쓰는 프롬프트는 프로젝트 지침에 저장해두면 새 대화를 시작해도 자동 반영. 팀원과 공유도 가능</div></div></div>
+      </div>
+      <div class="pl" style="margin-top:16px">메타 프롬프트 요청 예시</div>
+      <div class="pbx">
+        <span class="psc">복사해서 바로 써보세요!</span>
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt">나는 현대카드 M몰 <em>[직무]</em>야.<br>
+아래 목적에 맞는 <em>최적의 Claude 프롬프트</em>를 만들어줘.<br><br>
+목적: <em>[예: 시즌별 기획전 기획서 초안 빠르게 생성하기]</em><br><br>
+조건:<br>
+- M몰 맥락이 자동 반영되어야 해<br>
+- 매번 바꿔야 하는 부분은 <em>[변수명]</em> 형태로 표시해줘<br>
+- 결과물은 바로 팀장 보고 가능한 수준으로<br>
+- 한 번 저장해두고 반복 재사용할 수 있는 구조로 만들어줘</div>
+      </div>
+      <div class="ba">
+        <div class="ba-col before"><span class="ba-label">😞 메타 프롬프트 없이</span><div class="ba-text">매번 프롬프트를 처음부터 고민해야 함. 결과 품질도 들쑥날쑥</div></div>
+        <div class="ba-col after"><span class="ba-label">✅ 메타 프롬프트 활용</span><div class="ba-text">Claude가 만든 검증된 프롬프트 재사용. <strong>[변수]만 바꾸면</strong> 매번 일관된 품질 🎉</div></div>
+      </div>
+      <div class="tip-mint">💡 잘 만든 메타 프롬프트는 프로젝트 지침에 넣어두세요. 팀원들과 공유하면 팀 전체 문서 품질이 올라가요!</div>
+    </div>
+  </section>
+
+  <!-- PART 03 -->
+  <section class="section">
+    <div class="s-ey">Part 03 · 15:00 – 27:00</div>
+    <h2 class="s-ti">M몰 전용 Claude 직접 만들기 🛠</h2>
+    <p class="s-de">지금 바로 claude.ai에서 내 업무 전용 프로젝트를 만들어봅니다. 세팅 완료 전후 결과물 차이를 직접 체감해보세요!</p>
+
+    <div class="card fu">
+      <div class="card-hd"><span class="ctag tp">실습 순서</span></div>
+      <div class="setup-steps">
+        <div class="setup-step">
+          <div class="setup-num">1</div>
+          <div class="setup-body">
+            <div class="setup-title">사용자 지침 설정하기</div>
+            <div class="setup-desc">위 Part 01의 지침 예시를 복사해서 내 직무에 맞게 수정 후 저장. <strong>설정 → 사용자 지침</strong></div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-num">2</div>
+          <div class="setup-body">
+            <div class="setup-title">메모리 켜기</div>
+            <div class="setup-desc"><strong>설정 → 개인화 → 메모리 ON</strong>. 켠 후 "내가 M몰 [직무]라는 걸 기억해줘"라고 입력</div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-num">3</div>
+          <div class="setup-body">
+            <div class="setup-title">내 업무 전용 프로젝트 만들기</div>
+            <div class="setup-desc">좌측 사이드바 → 새 프로젝트 → 프로젝트 지침에 업무별 세부 맥락 입력 (아래 템플릿 참고)</div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-num">4</div>
+          <div class="setup-body">
+            <div class="setup-title">세팅 전후 비교 실습</div>
+            <div class="setup-desc">일반 채팅 vs 프로젝트 채팅에서 동일한 질문 입력 → 결과물 차이 확인!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card fu">
+      <div class="card-hd"><span class="ctag tp">프로젝트 지침 템플릿</span></div>
+      <div class="card-ti">내 업무 프로젝트에 붙여넣고 수정하세요</div>
+      <div class="pl" style="margin-top:12px">🛍 MD 파트용</div>
+      <div class="pbx">
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt">## 프로젝트 목적<br>
+M몰 기획전 기획 및 MD 업무 전용 공간<br><br>
+## M몰 기본 맥락<br>
+- 현대카드 M포인트 전용 프리미엄 쇼핑몰<br>
+- 주요 고객: 30~50대 현대카드 회원<br>
+- 주요 카테고리: 패션·뷰티·가전·여행·식품<br>
+- 경쟁사: SSG닷컴, 롯데온, 네이버쇼핑<br><br>
+## 담당 업무<br>
+- 담당 카테고리: <em>[뷰티 / 가전 / 식품 등 입력]</em><br>
+- 주요 업무: 기획전 기획, 상품 소싱, 카피 작성<br><br>
+## 답변 규칙<br>
+- 기획서는 항상 배경/목표/상품구성/마케팅 순서로<br>
+- 카피는 항상 3가지 톤(감성적/직관적/혜택강조)으로<br>
+- 수치 제안 시 근거 함께 제시</div>
+      </div>
+
+      <div class="pl" style="margin-top:16px">📣 마케팅 파트용</div>
+      <div class="pbx">
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt">## 프로젝트 목적<br>
+M몰 마케팅 콘텐츠 제작 전용 공간<br><br>
+## M몰 기본 맥락<br>
+- 현대카드 M포인트 전용 프리미엄 쇼핑몰<br>
+- 주요 고객: 30~50대 현대카드 회원<br>
+- 채널: 앱 푸시, 카카오 알림톡, 이메일, 인스타그램<br><br>
+## 담당 업무<br>
+- 주요 업무: 프로모션 기획, 카피 작성, 캠페인 성과 분석<br>
+- 담당 채널: <em>[앱 푸시 / SNS / 이메일 등 입력]</em><br><br>
+## 답변 규칙<br>
+- 앱 푸시: 20자 이내, 카카오 알림톡: 40자 이내<br>
+- 카피는 항상 감성적/직관적/혜택강조 3가지 버전으로<br>
+- M몰 톤앤매너: 프리미엄하지만 친근한 어투 유지</div>
+      </div>
+
+      <div class="pl" style="margin-top:16px">🛠 운영 파트용</div>
+      <div class="pbx">
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt">## 프로젝트 목적<br>
+M몰 운영 및 CS 대응 전용 공간<br><br>
+## M몰 기본 맥락<br>
+- 현대카드 M포인트 전용 프리미엄 쇼핑몰<br>
+- 포인트 소진·주문·배송·반품 관련 CS 주로 발생<br>
+- 고객 응대는 외주 CS팀을 통해 진행<br><br>
+## 담당 업무<br>
+- 주요 업무: VOC 분석, 이슈 보고서, CS 가이드 작성<br><br>
+## 답변 규칙<br>
+- CS 대응 초안은 항상 공감→안내→해결책 순서로<br>
+- 이슈 보고서는 현황/원인/조치/재발방지 구조로<br>
+- 고객 감정을 자극하는 표현 사용 금지</div>
+      </div>
+
+      <div class="pl" style="margin-top:16px">💻 기획·개발 파트용</div>
+      <div class="pbx">
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt">## 프로젝트 목적<br>
+M몰 서비스 기획 및 개발 협업 전용 공간<br><br>
+## M몰 기본 맥락<br>
+- 현대카드 M포인트 전용 프리미엄 쇼핑몰 (모바일 앱·웹)<br>
+- 기획·개발·디자인 파트 협업 구조<br>
+- 주요 서비스: 포인트 쇼핑, 기획전, 추천, 검색<br><br>
+## 담당 업무<br>
+- 주요 업무: 서비스 기획, PRD 작성, UX 개선, 개발 요건 정의<br>
+- 담당 서비스: <em>[담당 서비스명 입력]</em><br><br>
+## 답변 규칙<br>
+- 기획서는 배경/목표/기능명세/플로우 순서로<br>
+- 유저스토리는 "~로서 ~하기 위해 ~하고 싶다" 형식으로<br>
+- 기술 용어는 비개발자도 이해할 수 있게 설명 추가</div>
       </div>
     </div>
   </section>
 
+  <!-- PART 04 -->
   <section class="section">
     <div class="s-ey">Part 04 · 27:00 – 30:00</div>
     <h2 class="s-ti">공유 & 마무리 🎤</h2>
-    <p class="s-de">빠르게 공유하고, 오늘의 핵심을 정리합니다.</p>
+    <p class="s-de">세팅 완료한 분들 결과 공유하고, 오늘의 핵심을 정리합니다.</p>
+
     <div class="card fu">
       <div class="card-hd"><span class="ctag tw">공유 질문</span><span class="ctime">2분</span></div>
-      <div class="card-ti">1~2명이 간단히 공유해주세요 🙋</div>
-      <div class="card-bo">1) 세 AI 중 어떤 도구의 답변이 가장 마음에 들었나요?<br>2) 내 업무에 바로 쓸 수 있겠다 싶은 순간이 있었나요?<br>3) 반대로 AI가 기대보다 아쉬웠던 부분은요?</div>
+      <div class="card-ti">1~2명이 공유해주세요 🙋</div>
+      <div class="card-bo">
+        1) 세팅 전후 Claude 결과물이 어떻게 달라졌나요?<br>
+        2) 프로젝트 지침에 어떤 내용을 넣었나요?<br>
+        3) 앞으로 어떤 업무에 가장 많이 쓸 것 같나요?
+      </div>
     </div>
+
+
     <div class="card fu">
       <div class="card-hd"><span class="ctag tw">오늘 꼭 기억할 것</span><span class="ctime">1분</span></div>
       <ul class="cl">
-        <li><span class="cb"></span>AI마다 강점이 다릅니다. 하나만 쓰지 말고 상황에 따라 골라 쓰세요 🎯</li>
-        <li><span class="cb"></span>첫 답변이 마음에 안 들면, 조건을 추가해서 다시 요청하면 됩니다 🔄</li>
-        <li><span class="cb"></span>무료로도 충분히 시작할 수 있어요. 오늘부터 하루 하나씩 써보세요 💪</li>
+        <li><span class="cb"></span><strong>지침·메모리·프로젝트</strong> 3가지를 세팅하면 Claude가 M몰 맥락을 자동 반영해요 ⚙️</li>
+        <li><span class="cb"></span>한 번에 완성하려 하지 말고 <strong>멀티턴으로 단계적으로 발전</strong>시키세요 🔄</li>
+        <li><span class="cb"></span>파일을 첨부하면 Claude가 직접 읽고 분석해줘요. <strong>긴 문서는 첨부가 정답</strong> 📎</li>
       </ul>
     </div>
+
     <div class="card fu">
       <div class="card-hd"><span class="ctag tw">다음 세션 예고 👀</span></div>
-      <div class="card-ti">Session 02 — 프롬프트 기초: 잘 물어보는 법</div>
-      <div class="card-bo">오늘 써본 AI에서 더 좋은 결과를 뽑는 비법을 배웁니다.<br>역할·맥락·형식 딱 3가지만 지정해도 답변 품질이 얼마나 달라지는지 직접 확인해요 🚀</div>
+      <div class="card-ti">Session 02 — Stitch로 디자이너 없이 시안 만들기</div>
+      <div class="card-bo">텍스트 설명 한 줄로 기획전 배너·앱 화면 시안이 뚝딱! 다음 시간엔 Stitch·Canva AI로 비주얼 결과물을 즉석에서 만들어봅니다 🎨</div>
     </div>
   </section>
 
-  <section class="section">
-    <div class="s-ey">📋 세션 전 준비</div>
-    <h2 class="s-ti">계정 3개만 미리 만들어오세요!</h2>
-    <p class="s-de">세션 당일 계정 만드느라 시간 날리지 않게, 미리 준비해오시면 좋아요 😊 모두 무료!</p>
-    <div class="nb">💡 구글 계정 하나면 Gemini·NotebookLM·Stitch 세 개를 한 번에 쓸 수 있어요!</div>
-    <div class="g3" style="margin-top:16px">
-      <div class="tcol"><div class="thead"><div class="tlogo">💬 ChatGPT</div><div class="ttag">chatgpt.com</div></div><div class="tbody2"><div class="trow"><span class="trk">가입</span><span class="trv">구글 계정으로 소셜 로그인 가능</span></div><div class="trow"><span class="trk">무료</span><span class="trv">GPT-4o mini 무제한, GPT-4o 하루 제한</span></div><span class="fpill">✅ 무료 시작</span></div></div>
-      <div class="tcol"><div class="thead"><div class="tlogo">🧠 Claude</div><div class="ttag">claude.ai</div></div><div class="tbody2"><div class="trow"><span class="trk">가입</span><span class="trv">이메일 또는 구글 계정으로 가입</span></div><div class="trow"><span class="trk">무료</span><span class="trv">Claude Sonnet 하루 사용량 제한</span></div><span class="fpill">✅ 무료 시작</span></div></div>
-      <div class="tcol"><div class="thead"><div class="tlogo">🔍 Gemini</div><div class="ttag">gemini.google.com</div></div><div class="tbody2"><div class="trow"><span class="trk">가입</span><span class="trv">구글 계정 있으면 바로 사용 가능</span></div><div class="trow"><span class="trk">무료</span><span class="trv">Gemini 1.5 Flash 무료 제공</span></div><span class="fpill">✅ 무료 시작</span></div></div>
-    </div>
-  </section>
-
-
-  <!-- ── 코멘트 섹션 ── -->
+  <!-- 코멘트 -->
   <section class="section" id="comments">
     <div class="s-ey">💬 자유롭게 남겨주세요</div>
     <h2 class="s-ti">이번 세션 어떠셨나요?</h2>
     <p class="s-de">느낀 점, 개선점, 다음 세션에 다뤄줬으면 하는 것들을 자유롭게 남겨주세요. 익명으로 남길 수 있어요 😊</p>
-
-    <!-- 입력 영역 -->
     <div class="cm-input-wrap">
       <div class="cm-input-row">
-        <input class="cm-name" id="cm-name" type="text" placeholder="닉네임 (선택, 익명 가능)" maxlength="12" />
+        <input class="cm-name" id="cm-name" type="text" placeholder="닉네임 (선택, 익명 가능)" maxlength="12"/>
         <div class="cm-tag-row">
           <button class="cm-tag-btn active" data-tag="느낀점" onclick="setTag(this)">✨ 느낀점</button>
           <button class="cm-tag-btn" data-tag="개선점" onclick="setTag(this)">🔧 개선점</button>
@@ -475,138 +736,34 @@
       </div>
       <div class="cm-footer-row"><button class="cm-submit" onclick="submitComment()">보내기 ↗</button></div>
     </div>
-
-    <!-- 말풍선 목록 -->
-    <div class="cm-list" id="cm-list">
-      <div class="cm-empty" id="cm-empty">아직 코멘트가 없어요. 첫 번째로 남겨보세요! 🎉</div>
-    </div>
+    <div class="cm-list" id="cm-list"></div>
   </section>
-
 
 </main>
 
 <footer class="footer">
   <span class="fb">🤖 클로드가 떠먹여주는 AI 실무활용법</span>
-  <span>Session 01 · 공통 — AI 도구 비교 체험</span>
+  <span>Session 01 · Claude 세팅으로 내 업무 전용 AI 만들기</span>
 </footer>
 
 <script>
-
-// ── 코멘트 시스템 ──
-const SESSION_KEY = 'mmall_comments_session_01';
-const COLORS = [
-  {bg:'#fdf0ec',text:'#e85d3a'},{bg:'#e6faf6',text:'#006b54'},
-  {bg:'#fef7e6',text:'#7a4f00'},{bg:'#f0eeff',text:'#3a1faa'},
-  {bg:'#fdeef1',text:'#7a1828'},{bg:'#f7f4ef',text:'#6b6560'},
-];
-let selectedTag = '느낀점';
-
-function setTag(btn) {
-  document.querySelectorAll('.cm-tag-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  selectedTag = btn.dataset.tag;
-}
-
-function updateCount(el) {
-  document.getElementById('cm-count').textContent = el.value.length + ' / 300';
-}
-
-function getComments() {
-  try { return JSON.parse(localStorage.getItem(SESSION_KEY) || '[]'); } catch { return []; }
-}
-
-function saveComments(list) {
-  localStorage.setItem(SESSION_KEY, JSON.stringify(list));
-}
-
-function colorForName(name) {
-  let hash = 0;
-  for (let c of name) hash = (hash * 31 + c.charCodeAt(0)) % COLORS.length;
-  return COLORS[Math.abs(hash)];
-}
-
-function timeStr(ts) {
-  const d = new Date(ts);
-  const now = new Date();
-  const diff = Math.floor((now - d) / 60000);
-  if (diff < 1) return '방금 전';
-  if (diff < 60) return diff + '분 전';
-  if (diff < 1440) return Math.floor(diff / 60) + '시간 전';
-  return (d.getMonth()+1) + '/' + d.getDate();
-}
-
-function tagEmoji(tag) {
-  return {느낀점:'✨',개선점:'🔧',다음세션요청:'🙋',기타:'💭'}[tag] || '💭';
-}
-
-function renderBubble(item, isMe) {
-  const name = item.name || '익명';
-  const col = colorForName(name);
-  const initial = name.charAt(0).toUpperCase();
-  const side = isMe ? 'me' : 'other';
-
-  return `
-    <div class="cm-bubble-wrap ${side}" data-id="${item.id}">
-      <div class="cm-meta">
-        <div class="cm-avatar" style="background:${col.bg};color:${col.text}">${initial}</div>
-        <span class="cm-author">${name}</span>
-        <span class="cm-tag-label tag-label-${item.tag}">${tagEmoji(item.tag)} ${item.tag}</span>
-        <span class="cm-time-label">${timeStr(item.ts)}</span>
-        ${isMe ? '<button onclick="deleteComment(\''+item.id+'\')" style="background:none;border:none;cursor:pointer;font-size:12px;color:var(--gray-2);padding:0 2px" title="삭제">✕</button>' : ''}
-      </div>
-      <div class="cm-bubble">${item.text.replace(/\n/g,'<br>')}</div>
-    </div>`;
-}
-
-function renderAll() {
-  const list = getComments();
-  const el = document.getElementById('cm-list');
-  const empty = document.getElementById('cm-empty');
-  if (!list.length) {
-    el.innerHTML = '';
-    el.appendChild(empty || Object.assign(document.createElement('div'), {className:'cm-empty',textContent:'아직 코멘트가 없어요. 첫 번째로 남겨보세요! 🎉'}));
-    return;
-  }
-  const myId = localStorage.getItem('mmall_my_id');
-  el.innerHTML = list.map(item => renderBubble(item, item.authorId === myId)).join('');
-}
-
-function submitComment() {
-  const text = document.getElementById('cm-text').value.trim();
-  if (!text) { document.getElementById('cm-text').focus(); return; }
-  const name = document.getElementById('cm-name').value.trim() || '익명';
-
-  let myId = localStorage.getItem('mmall_my_id');
-  if (!myId) { myId = 'u_' + Date.now() + Math.random().toString(36).slice(2,6); localStorage.setItem('mmall_my_id', myId); }
-
-  const item = { id: Date.now().toString(), authorId: myId, name, tag: selectedTag, text, ts: Date.now() };
-  const list = getComments();
-  list.push(item);
-  saveComments(list);
-
-  document.getElementById('cm-text').value = '';
-  document.getElementById('cm-count').textContent = '0 / 300';
-  renderAll();
-  document.getElementById('cm-list').lastElementChild?.scrollIntoView({behavior:'smooth', block:'end'});
-}
-
-function deleteComment(id) {
-  if (!confirm('이 코멘트를 삭제할까요?')) return;
-  const list = getComments().filter(c => c.id !== id);
-  saveComments(list);
-  renderAll();
-}
-
-// 엔터 전송 (Shift+Enter 줄바꿈)
-document.addEventListener('DOMContentLoaded', () => {
-  renderAll();
-  document.getElementById('cm-text').addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitComment(); }
-  });
-});
-
-function cq(btn){const b=btn.closest('.qbox');const e=b.querySelector('.qt');navigator.clipboard.writeText(e?e.innerText:'').then(()=>{btn.textContent='copied ✓';btn.classList.add('copied');setTimeout(()=>{btn.textContent='copy';btn.classList.remove('copied')},2000)})}
-function cp2(btn){const b=btn.closest('.pbx');const e=b.querySelector('.pt');navigator.clipboard.writeText(e?e.innerText:'').then(()=>{btn.textContent='copied ✓';btn.classList.add('copied');setTimeout(()=>{btn.textContent='copy';btn.classList.remove('copied')},2000)})}
+const SESSION_KEY='mmall_comments_session_01';
+const COLORS=[{bg:'#fdf0ec',text:'#e85d3a'},{bg:'#e6faf6',text:'#006b54'},{bg:'#fef7e6',text:'#7a4f00'},{bg:'#f0eeff',text:'#3a1faa'},{bg:'#fdeef1',text:'#7a1828'},{bg:'#f7f4ef',text:'#6b6560'}];
+let selectedTag='느낀점';
+function setTag(btn){document.querySelectorAll('.cm-tag-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');selectedTag=btn.dataset.tag}
+function updateCount(el){document.getElementById('cm-count').textContent=el.value.length+' / 300'}
+function getComments(){try{return JSON.parse(localStorage.getItem(SESSION_KEY)||'[]')}catch{return[]}}
+function saveComments(list){localStorage.setItem(SESSION_KEY,JSON.stringify(list))}
+function colorForName(name){let hash=0;for(let c of name)hash=(hash*31+c.charCodeAt(0))%COLORS.length;return COLORS[Math.abs(hash)]}
+function timeStr(ts){const d=new Date(ts),now=new Date(),diff=Math.floor((now-d)/60000);if(diff<1)return'방금 전';if(diff<60)return diff+'분 전';if(diff<1440)return Math.floor(diff/60)+'시간 전';return(d.getMonth()+1)+'/'+d.getDate()}
+function tagEmoji(tag){return{느낀점:'✨',개선점:'🔧',다음세션요청:'🙋',기타:'💭'}[tag]||'💭'}
+function renderBubble(item,isMe){const name=item.name||'익명';const col=colorForName(name);const initial=name.charAt(0).toUpperCase();const side=isMe?'me':'other';return`<div class="cm-bubble-wrap ${side}"><div class="cm-meta"><div class="cm-avatar" style="background:${col.bg};color:${col.text}">${initial}</div><span class="cm-author">${name}</span><span class="cm-tag-label tag-label-${item.tag}">${tagEmoji(item.tag)} ${item.tag}</span><span class="cm-time-label">${timeStr(item.ts)}</span>${isMe?`<button class="cm-del" onclick="delComment('${item.id}')">✕</button>`:''}</div><div class="cm-bubble">${item.text.replace(/
+/g,'<br>')}</div></div>`}
+function renderAll(){const list=getComments();const el=document.getElementById('cm-list');if(!list.length){el.innerHTML='<div class="cm-empty">아직 코멘트가 없어요. 첫 번째로 남겨보세요! 🎉</div>';return}const myId=localStorage.getItem('mmall_my_id');el.innerHTML=list.map(item=>renderBubble(item,item.authorId===myId)).join('')}
+function submitComment(){const text=document.getElementById('cm-text').value.trim();if(!text){document.getElementById('cm-text').focus();return}const name=document.getElementById('cm-name').value.trim()||'익명';let myId=localStorage.getItem('mmall_my_id');if(!myId){myId='u_'+Date.now()+Math.random().toString(36).slice(2,6);localStorage.setItem('mmall_my_id',myId)}const item={id:Date.now().toString(),authorId:myId,name,tag:selectedTag,text,ts:Date.now()};const list=getComments();list.push(item);saveComments(list);document.getElementById('cm-text').value='';document.getElementById('cm-count').textContent='0 / 300';renderAll();document.getElementById('cm-list').lastElementChild?.scrollIntoView({behavior:'smooth',block:'end'})}
+function delComment(id){if(!confirm('이 코멘트를 삭제할까요?'))return;saveComments(getComments().filter(c=>c.id!==id));renderAll()}
+function cp(btn){const b=btn.closest('.pbx');const e=b.querySelector('.pt');navigator.clipboard.writeText(e?e.innerText:'').then(()=>{btn.textContent='copied ✓';btn.classList.add('copied');setTimeout(()=>{btn.textContent='copy';btn.classList.remove('copied')},2000)})}
+document.addEventListener('DOMContentLoaded',()=>{renderAll();document.getElementById('cm-text').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();submitComment()}})});
 </script>
 </body>
 </html>

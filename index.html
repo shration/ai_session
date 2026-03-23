@@ -178,31 +178,6 @@
   }
   .stat-key { font-size: clamp(10px, 2.5vw, 12px); color: var(--gray-1); margin-top: 4px; display: block; word-break: keep-all; }
 
-  /* ── FILTER ── */
-  .filter-wrap {
-    background: var(--white);
-    border-bottom: 1px solid var(--gray-3);
-    padding: 0 48px;
-    position: sticky; top: 56px; z-index: 90;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    height: 56px; overflow-x: auto;
-  }
-  .filter-wrap::-webkit-scrollbar { display: none; }
-  .filter-wrap::-webkit-scrollbar { display: none; }
-  .filter-btn {
-    flex-shrink: 0;
-    font-family: var(--display);
-    font-size: 13px; font-weight: 700;
-    padding: 7px 16px;
-    border: 1.5px solid var(--gray-3);
-    border-radius: 20px;
-    background: var(--white); color: var(--gray-1);
-    cursor: pointer; transition: all .15s;
-    white-space: nowrap;
-  }
-  .filter-btn:hover { border-color: var(--black); color: var(--black); }
-  .filter-btn.active { background: linear-gradient(135deg, #1c1917, #3a3530); color: var(--white); border-color: #1c1917; }
-
   /* ── MAIN ── */
   .container { max-width: 920px; margin: 0 auto; padding: 0 48px; }
 
@@ -336,6 +311,33 @@
     color: var(--c-mint-d);
     border-color: var(--c-mint);
   }
+  .main-tool-pill {
+    font-family: var(--display); font-size: 10px; font-weight: 800;
+    padding: 3px 10px; border-radius: 20px;
+    background: #1c1917; color: #fdfbf8;
+    letter-spacing: .02em;
+  }
+  .level-pill {
+    font-family: var(--display); font-size: 9px; font-weight: 800;
+    padding: 2px 8px; border-radius: 20px; letter-spacing: .04em;
+  }
+  .lv-입문  { background: var(--c-mint-l);   color: var(--c-mint-d); }
+  .lv-초급  { background: var(--c-yellow-l); color: var(--c-yellow-d); }
+  .lv-중급  { background: var(--c-violet-l); color: var(--c-violet-d); }
+  .lv-종합  { background: linear-gradient(135deg,#e85d3a,#f5a623); color: #fff; }
+  .sc-tools { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+  .tool-chip {
+    font-family: var(--display); font-size: 10px; font-weight: 700;
+    padding: 2px 8px; border-radius: 20px;
+    background: var(--bg); border: 1px solid var(--gray-3);
+    color: var(--gray-1);
+  }
+  .sc-goal {
+    font-size: 11px; color: var(--gray-2);
+    margin-top: 6px; line-height: 1.5;
+    padding-top: 8px; border-top: 1px solid var(--gray-3);
+  }
+  .sc-goal::before { content: '🎯 '; }
   .free-badge {
     display: inline-flex;
     align-items: center;
@@ -396,7 +398,7 @@
 
   /* ── RESPONSIVE ── */
   @media (max-width: 680px) {
-    .nav, .hero, .filter-wrap, .footer { padding-left: 20px; padding-right: 20px; }
+    .nav, .hero, .footer { padding-left: 20px; padding-right: 20px; }
     .container { padding: 0 20px; }
 
     /* 히어로 */
@@ -427,9 +429,7 @@
     .phase { padding: 36px 0 8px; }
     .phase-title { font-size: 18px; }
 
-    /* 필터 */
-    .filter-wrap { gap: 6px; padding: 0 16px; justify-content: flex-start; }
-    .filter-btn { font-size: 12px; padding: 6px 12px; flex-shrink: 0; }
+
 
     /* 도구 */
     .tools-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -482,7 +482,7 @@
     </div>
     <div class="stat">
       <span class="stat-val" id="stat-done">—</span>
-      <span class="stat-key">완료한 세션 🎉</span>
+      <span class="stat-key">완료 🎉</span>
     </div>
     <div class="stat">
       <span class="stat-val">30분</span>
@@ -501,14 +501,7 @@
 </header>
 
 <!-- FILTER -->
-<div class="filter-wrap">
-  <button class="filter-btn active" onclick="filter('all',this)">🌍 전체보기</button>
-  <button class="filter-btn" onclick="filter('common',this)">🤝 공통</button>
-  <button class="filter-btn" onclick="filter('md',this)">🛍 MD</button>
-  <button class="filter-btn" onclick="filter('mkt',this)">📣 마케팅</button>
-  <button class="filter-btn" onclick="filter('ops',this)">🛠 운영</button>
-  <button class="filter-btn" onclick="filter('dev',this)">💻 개발·기획</button>
-</div>
+
 
 <main class="container">
   <div id="root"><div class="loading"><span class="loading-spinner">⏳</span>세션 불러오는 중...</div></div>
@@ -525,13 +518,13 @@
       <a class="tool-card" href="https://claude.ai" target="_blank" rel="noopener">
         <span class="tool-emoji">🧠</span>
         <div class="tool-name">Claude</div>
-        <div class="tool-desc">긴 문서 분석·기획서 작성의 달인. 조건을 정확하게 지켜서 답해줘요</div>
+        <div class="tool-desc">문서 작성·분석·바이브 코딩까지. 조건을 정확히 지키고 프로젝트 세팅으로 개인화 가능</div>
         <span class="free-badge">무료 계정 만들기 →</span>
       </a>
       <a class="tool-card" href="https://chatgpt.com" target="_blank" rel="noopener">
         <span class="tool-emoji">💬</span>
         <div class="tool-name">ChatGPT</div>
-        <div class="tool-desc">아이디어 뽑기·카피라이팅의 강자. 대화가 제일 자연스러워요</div>
+        <div class="tool-desc">창의적 브레인스토밍·카피 생성. 예술적 이미지 생성(DALL-E)과 다양한 플러그인 활용</div>
         <span class="free-badge">무료 계정 만들기 →</span>
       </a>
       <a class="tool-card" href="https://notebooklm.google.com" target="_blank" rel="noopener">
@@ -543,7 +536,7 @@
       <a class="tool-card" href="https://gemini.google.com" target="_blank" rel="noopener">
         <span class="tool-emoji">🔍</span>
         <div class="tool-name">Gemini</div>
-        <div class="tool-desc">구글 검색 연동으로 최신 트렌드를 실시간으로 리서치해요</div>
+        <div class="tool-desc">실시간 웹 검색·최신 정보 탐색. 정밀한 이미지 생성(Imagen)과 Google Workspace 연동</div>
         <span class="free-badge">무료 계정 만들기 →</span>
       </a>
       <a class="tool-card" href="https://stitch.withgoogle.com" target="_blank" rel="noopener">
@@ -555,7 +548,7 @@
       <a class="tool-card" href="https://www.perplexity.ai" target="_blank" rel="noopener">
         <span class="tool-emoji">⚡</span>
         <div class="tool-name">Perplexity</div>
-        <div class="tool-desc">실시간 웹 검색 기반 리서치. 경쟁사·트렌드 조사 속도가 달라요</div>
+        <div class="tool-desc">웹 검색 기반 리서치 특화. 모든 답변에 출처 URL이 붙어 신뢰도 확인이 쉬워요</div>
         <span class="free-badge">무료 계정 만들기 →</span>
       </a>
       <a class="tool-card" href="https://www.canva.com" target="_blank" rel="noopener">
@@ -621,7 +614,7 @@ function render(f) {
   root.innerHTML = '';
 
   DATA.phases.forEach(phase => {
-    const list = phase.sessions.filter(s => f === 'all' || s.part === f);
+    const list = phase.sessions;
     if (!list.length) return;
 
     const wrap = document.createElement('div');
@@ -648,16 +641,22 @@ function render(f) {
       if (done && s.file) el.href = s.file;
       el.className = 'session-card fu ' + (done ? 'clickable' : 'disabled');
       el.style.animationDelay = (i * .06) + 's';
+      const toolChips = (s.tools || []).map(t => `<span class="tool-chip">${t}</span>`).join('');
+      const levelCls = s.level ? `lv-${s.level}` : '';
       el.innerHTML = `
         <div class="sc-accent ${ACCENT[s.part]}"></div>
         <div class="sc-num">${s.id}</div>
         <div class="sc-body">
           <div class="sc-header">
             <span class="sc-tag ${TAG[s.part]}">${s.partLabel}</span>
-            <span class="sc-status ${done ? 'done' : ''}">${done ? '수강 완료' : '곧 오픈'}</span>
+            ${s.mainTool ? `<span class="main-tool-pill">${s.mainTool}</span>` : ''}
+            ${s.level ? `<span class="level-pill ${levelCls}">${s.level}</span>` : ''}
+            <span class="sc-status ${done ? 'done' : ''}">${done ? '✅ 수강 완료' : '🔒 곧 오픈'}</span>
           </div>
           <div class="sc-title">${s.title}</div>
           <div class="sc-desc">${s.desc}</div>
+          ${toolChips ? `<div class="sc-tools">${toolChips}</div>` : ''}
+          ${s.goal ? `<div class="sc-goal">${s.goal}</div>` : ''}
         </div>
         <div class="sc-meta">
           <span class="sc-pill">⏱ ${s.duration}</span>
@@ -669,11 +668,6 @@ function render(f) {
   });
 }
 
-function filter(f, btn) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  render(f);
-}
 
 init();
 </script>
