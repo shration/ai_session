@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>세션 02 · Stitch로 디자인 시안·프로토 페이지 뚝딱 만들기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#f7f4ef;--white:#fdfbf8;--black:#1c1917;--gray-1:#6b6560;--gray-2:#a8a39d;--gray-3:#ddd8d0;--key:#e85d3a;--key-l:#fdf0ec;--c-mint:#00b896;--c-mint-l:#e6faf6;--c-mint-d:#006b54;--c-yellow:#f5a623;--c-yellow-l:#fef7e6;--c-yellow-d:#7a4f00;--c-violet:#7b61ff;--c-violet-l:#f0eeff;--c-violet-d:#3a1faa;--sans:'Noto Sans KR',sans-serif;--display:'Outfit',sans-serif;--radius:20px;--radius-sm:14px;--shadow:0 2px 16px rgba(28,25,23,.06);--shadow-hover:0 8px 32px rgba(28,25,23,.12)}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--black);font-family:var(--sans);font-weight:400;line-height:1.7;font-size:15px;-webkit-font-smoothing:antialiased}
+  .nav{background:rgba(253,251,248,.92);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid rgba(0,0,0,.06);position:sticky;top:0;z-index:100;padding:0 48px;height:56px;display:flex;align-items:center;justify-content:space-between}
+  .nav-brand{font-family:var(--display);font-size:15px;font-weight:800;color:var(--black);text-decoration:none;display:flex;align-items:center;gap:8px}
+  .nav-badge{font-size:11px;font-weight:700;background:linear-gradient(135deg,#e85d3a,#f5a623);color:#fff;border-radius:20px;padding:2px 9px;font-family:var(--display)}
+  .nav-right{display:flex;align-items:center;gap:10px}
+  .nav-session{font-family:var(--display);font-size:12px;font-weight:700;color:var(--gray-2)}
+  .nav-link{font-family:var(--display);font-size:12px;font-weight:700;color:var(--gray-1);text-decoration:none;border:1.5px solid var(--gray-3);border-radius:20px;padding:5px 14px;transition:all .15s;background:var(--white)}
+  .nav-link:hover{border-color:var(--black);color:var(--black)}
+  .nav-next{background:linear-gradient(135deg,#1c1917,#3a3530);color:var(--white)!important;border-color:#1c1917!important}
+  .hero{background:linear-gradient(145deg,#fdfaf5 0%,#fdf6ee 40%,#eaf6ff 100%);padding:64px 48px 56px;position:relative;overflow:hidden;text-align:center}
+  .hero-blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.15;pointer-events:none}
+  .blob1{width:400px;height:400px;background:#7b61ff;top:-160px;left:-80px}
+  .blob2{width:300px;height:300px;background:#00b896;bottom:-100px;right:-60px}
+  .hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:var(--c-violet-l);color:var(--c-violet-d);font-family:var(--display);font-size:clamp(10px,2.8vw,12px);font-weight:800;border-radius:20px;padding:5px 14px;margin-bottom:14px}
+  .hero h1{font-family:var(--display);font-size:clamp(24px,7vw,44px);font-weight:900;line-height:1.15;letter-spacing:-.02em;color:var(--black);margin:0 auto 10px;max-width:700px}
+  .hero h1 .acc{color:var(--c-violet)}
+  .hero-sub{font-size:clamp(13px,3.8vw,15px);color:var(--gray-1);max-width:520px;margin:0 auto 20px;line-height:1.7;word-break:keep-all}
+  .hero-tools{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+  .tool-chip{font-family:var(--display);font-size:12px;font-weight:800;padding:6px 16px;border-radius:20px;border:1.5px solid var(--gray-3);background:var(--white);color:var(--gray-1);box-shadow:var(--shadow)}
+  .tool-chip.main{background:#1c1917;color:#fff;border-color:#1c1917}
+  .tool-chip.sub{background:var(--c-mint-l);color:var(--c-mint-d);border-color:#9fe1cb}
+  .hero-meta{display:grid;grid-template-columns:repeat(4,1fr);background:var(--white);border-radius:var(--radius);overflow:hidden;border:1.5px solid var(--gray-3);width:100%;max-width:520px;margin:0 auto}
+  .meta-item{padding:12px 8px;border-right:1px solid var(--gray-3);text-align:center;min-width:0}
+  .meta-item:last-child{border-right:none}
+  .meta-val{font-family:var(--display);font-size:clamp(13px,3.5vw,15px);font-weight:900;color:var(--black);display:block;word-break:keep-all}
+  .meta-key{font-size:clamp(9px,2.2vw,11px);color:var(--gray-1);margin-top:3px;display:block;word-break:keep-all}
+  .tl-wrap{background:var(--white);border-bottom:1.5px solid var(--gray-3);padding:0 48px}
+  .tl{display:flex;max-width:860px;margin:0 auto}
+  .tl-seg{flex:1;padding:16px 16px 14px 16px;border-right:1px solid var(--gray-3)}
+  .tl-seg:last-child{border-right:none}
+  .tl-t{font-family:var(--display);font-size:11px;font-weight:700;color:var(--gray-2);margin-bottom:4px}
+  .tl-n{font-size:13px;font-weight:500;color:var(--black);display:flex;align-items:center;gap:6px}
+  .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .dm{background:#00b896}.dc{background:#7b61ff}.dy{background:#f5a623}.dv{background:#e85d3a}
+  .container{max-width:860px;margin:0 auto;padding:0 48px}
+  .section{padding:52px 0;border-bottom:1.5px solid var(--gray-3)}
+  .section:last-child{border-bottom:none}
+  .s-ey{font-family:var(--display);font-size:11px;font-weight:800;color:var(--c-violet);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
+  .s-ti{font-family:var(--display);font-size:clamp(18px,5.5vw,22px);font-weight:900;letter-spacing:-.01em;margin-bottom:8px;word-break:keep-all}
+  .s-de{font-size:clamp(12px,3.5vw,14px);color:var(--gray-1);margin-bottom:24px;max-width:560px;line-height:1.7;word-break:keep-all}
+  .card{background:var(--white);border:1.5px solid var(--gray-3);border-radius:var(--radius);padding:22px 26px;margin-bottom:12px;box-shadow:var(--shadow);transition:all .18s}
+  .card:hover{border-color:var(--black);box-shadow:var(--shadow-hover);transform:translateY(-1px)}
+  .card-hd{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .ctag{font-family:var(--display);font-size:11px;font-weight:800;padding:4px 12px;border-radius:20px}
+  .ti{background:var(--c-mint-l);color:var(--c-mint-d)}
+  .td{background:var(--c-violet-l);color:var(--c-violet-d)}
+  .tp{background:var(--c-yellow-l);color:var(--c-yellow-d)}
+  .tw{background:var(--key-l);color:var(--key)}
+  .ctime{font-family:var(--display);font-size:11px;font-weight:700;color:var(--gray-2);margin-left:auto}
+  .card-ti{font-family:var(--display);font-size:clamp(15px,4vw,17px);font-weight:800;margin-bottom:8px;word-break:keep-all}
+  .card-bo{font-size:clamp(13px,3.5vw,14px);color:var(--gray-1);line-height:1.75;word-break:keep-all}
+  .card-bo strong{color:var(--black);font-weight:700}
+  .pbx{background:#1c1917;border-radius:var(--radius-sm);padding:18px 22px;margin-bottom:10px;position:relative}
+  .psc{font-family:var(--display);font-size:10px;font-weight:800;color:#6b6560;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;display:block}
+  .pt{font-size:13px;color:#fdfbf8;line-height:1.85;font-weight:300}
+  .pt em{color:#c4b5fd;font-style:normal;font-weight:600}
+  .copy-btn{position:absolute;top:12px;right:12px;background:rgba(253,251,248,.1);border:1px solid rgba(253,251,248,.15);border-radius:10px;color:#6b6560;font-family:var(--display);font-size:10px;font-weight:700;padding:4px 10px;cursor:pointer;letter-spacing:.04em;transition:all .15s}
+  .copy-btn:hover{background:rgba(253,251,248,.18);color:#fdfbf8}
+  .copy-btn.copied{color:#c4b5fd;border-color:#c4b5fd}
+  .pl{font-family:var(--display);font-size:11px;font-weight:800;color:var(--gray-2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .pl::after{content:'';flex:1;height:1.5px;background:var(--gray-3);border-radius:2px}
+  .setup-steps{display:flex;flex-direction:column;gap:0;margin-top:16px;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);overflow:hidden}
+  .setup-step{display:flex;gap:0;border-bottom:1px solid var(--gray-3)}
+  .setup-step:last-child{border-bottom:none}
+  .setup-num{width:52px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:16px;font-weight:900;color:var(--white);background:#1c1917}
+  .setup-body{flex:1;padding:16px 20px;background:var(--white)}
+  .setup-title{font-family:var(--display);font-size:14px;font-weight:800;color:var(--black);margin-bottom:5px}
+  .setup-desc{font-size:13px;color:var(--gray-1);line-height:1.6;word-break:keep-all}
+  .setup-desc strong{color:var(--black);font-weight:700}
+  .setup-path{display:inline-block;font-family:var(--display);font-size:10px;font-weight:800;background:var(--bg);border:1px solid var(--gray-3);border-radius:6px;padding:3px 8px;color:var(--gray-1);margin-top:6px}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+  .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+  .mc{border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:20px 22px;background:var(--white);box-shadow:var(--shadow)}
+  .mn{font-family:var(--display);font-size:28px;font-weight:900;color:var(--gray-3);margin-bottom:10px;line-height:1}
+  .mt{font-family:var(--display);font-size:14px;font-weight:800;margin-bottom:6px}
+  .md2{font-size:12px;color:var(--gray-1);line-height:1.65;word-break:keep-all}
+  .ba{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);overflow:hidden;margin-top:16px}
+  .ba-col{padding:18px 20px}
+  .ba-col.before{background:var(--bg);border-right:1.5px solid var(--gray-3)}
+  .ba-col.after{background:var(--white)}
+  .ba-label{font-family:var(--display);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;display:block}
+  .ba-col.before .ba-label{color:var(--gray-2)}
+  .ba-col.after .ba-label{color:var(--c-violet-d)}
+  .ba-text{font-size:13px;color:var(--gray-1);line-height:1.75}
+  .ba-text strong{color:var(--black);font-weight:700}
+  .tip{background:var(--key-l);border:1.5px solid #f5c4b4;border-radius:var(--radius-sm);padding:14px 18px;margin-top:14px;font-size:13px;color:var(--key);line-height:1.65;font-weight:500;word-break:keep-all}
+  .tip-violet{background:var(--c-violet-l);border:1.5px solid #c4b5fd;border-radius:var(--radius-sm);padding:14px 18px;margin-top:14px;font-size:13px;color:var(--c-violet-d);line-height:1.65;font-weight:500;word-break:keep-all}
+  .cl{list-style:none;margin-top:12px}
+  .cl li{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--gray-3);font-size:13px;color:var(--gray-1)}
+  .cl li:last-child{border-bottom:none}
+  .cb{width:18px;height:18px;border:1.5px solid var(--gray-3);border-radius:6px;flex-shrink:0;margin-top:1px}
+  /* 코멘트 */
+  .cm-input-wrap{background:var(--white);border:1.5px solid var(--gray-3);border-radius:var(--radius);padding:24px 24px 20px;box-shadow:var(--shadow);margin-bottom:28px}
+  .cm-input-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+  .cm-name{font-family:var(--sans);font-size:13px;font-weight:500;border:1.5px solid var(--gray-3);border-radius:14px;padding:9px 16px;background:var(--bg);color:var(--black);outline:none;width:150px;transition:border-color .18s}
+  .cm-name:focus{border-color:var(--key)}
+  .cm-name::placeholder{color:var(--gray-2)}
+  .cm-tag-row{display:flex;gap:6px;flex-wrap:wrap}
+  .cm-tag-btn{font-family:var(--display);font-size:11px;font-weight:800;border:1.5px solid var(--gray-3);border-radius:20px;padding:6px 13px;background:var(--white);color:var(--gray-1);cursor:pointer;transition:all .15s;white-space:nowrap}
+  .cm-tag-btn:hover{border-color:var(--key);color:var(--key);background:var(--key-l)}
+  .cm-tag-btn.active{background:var(--key);color:#fff;border-color:var(--key)}
+  .cm-box-wrap{position:relative;margin-bottom:14px;background:var(--bg);border:1.5px solid var(--gray-3);border-radius:18px;transition:border-color .18s}
+  .cm-box-wrap:focus-within{border-color:var(--key)}
+  .cm-textarea{width:100%;font-family:var(--sans);font-size:14px;border:none;border-radius:18px;padding:16px 18px 36px;background:transparent;color:var(--black);resize:none;outline:none;line-height:1.7;display:block}
+  .cm-textarea::placeholder{color:var(--gray-2)}
+  .cm-count{position:absolute;bottom:12px;right:16px;font-size:11px;font-family:var(--display);font-weight:700;color:var(--gray-2);pointer-events:none}
+  .cm-footer-row{display:flex;justify-content:flex-end}
+  .cm-submit{font-family:var(--display);font-size:13px;font-weight:800;background:linear-gradient(135deg,#e85d3a,#f5a623);color:#fff;border:none;border-radius:20px;padding:10px 24px;cursor:pointer;transition:opacity .15s,transform .12s;box-shadow:0 4px 14px rgba(232,93,58,.25)}
+  .cm-submit:hover{opacity:.9;transform:translateY(-1px)}
+  .cm-list{display:flex;flex-direction:column;gap:14px;clear:both;padding-top:4px}
+  .cm-empty{text-align:center;font-size:14px;color:var(--gray-2);padding:40px 0;font-family:var(--display);font-weight:700}
+  .cm-bubble-wrap{display:flex;flex-direction:column;gap:4px}
+  .cm-bubble-wrap.me{align-items:flex-end}
+  .cm-bubble-wrap.other{align-items:flex-start}
+  .cm-meta{display:flex;align-items:center;gap:6px;padding:0 14px}
+  .cm-bubble-wrap.me .cm-meta{flex-direction:row-reverse}
+  .cm-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;font-family:var(--display);flex-shrink:0}
+  .cm-author{font-family:var(--display);font-size:12px;font-weight:800;color:var(--black)}
+  .cm-time-label{font-size:11px;color:var(--gray-2);font-family:var(--display)}
+  .cm-tag-label{font-family:var(--display);font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px}
+  .tag-label-느낀점{background:var(--c-mint-l);color:var(--c-mint-d)}
+  .tag-label-개선점{background:var(--c-yellow-l);color:var(--c-yellow-d)}
+  .tag-label-다음세션요청{background:var(--c-violet-l);color:var(--c-violet-d)}
+  .tag-label-기타{background:var(--key-l);color:var(--key)}
+  .cm-bubble{max-width:75%;padding:13px 18px;font-size:14px;line-height:1.65;word-break:break-word;box-shadow:var(--shadow);animation:bubbleIn .3s ease both}
+  .cm-bubble-wrap.me .cm-bubble{background:linear-gradient(135deg,#e85d3a,#f5a623);color:#fff;border-radius:18px 18px 4px 18px}
+  .cm-bubble-wrap.other .cm-bubble{background:var(--white);color:var(--black);border:1.5px solid var(--gray-3);border-radius:18px 18px 18px 4px}
+  .cm-del{background:none;border:none;cursor:pointer;font-size:12px;color:var(--gray-2);padding:0 2px}
+  @keyframes bubbleIn{from{opacity:0;transform:translateY(8px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+  .footer{background:var(--bg);border-top:1px solid var(--gray-3);padding:32px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:60px;font-size:13px;color:var(--gray-1)}
+  .fb{font-family:var(--display);font-size:14px;font-weight:900;color:var(--black)}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+  .fu{animation:fadeUp .42s ease both}
+  .fu:nth-child(2){animation-delay:.07s}
+  .fu:nth-child(3){animation-delay:.14s}
+  .fu:nth-child(4){animation-delay:.21s}
+  @media(max-width:680px){
+    .nav,.hero,.tl-wrap,.footer{padding-left:20px;padding-right:20px}
+    .container{padding:0 20px}
+    .hero{padding:36px 20px 32px}
+    .hero h1{font-size:32px;line-height:1.15;margin-bottom:8px}
+    .hero-sub{margin-bottom:16px}
+    .hero-meta{grid-template-columns:repeat(2,1fr);max-width:100%}
+    .meta-item{padding:10px 6px}
+    .meta-item:nth-child(2){border-right:none}
+    .meta-item:nth-child(3){border-top:1px solid var(--gray-3)}
+    .meta-item:nth-child(4){border-top:1px solid var(--gray-3);border-right:none}
+    .tl{flex-direction:column}
+    .tl-seg{border-right:none;border-bottom:1px solid var(--gray-3);padding:12px 16px}
+    .g2,.g3{grid-template-columns:1fr}
+    .ba{grid-template-columns:1fr}
+    .ba-col.before{border-right:none;border-bottom:1.5px solid var(--gray-3)}
+    .setup-num{width:40px}
+    .nav-session{display:none}
+    .cm-input-row{flex-direction:column;align-items:flex-start}
+    .cm-name{width:100%}
+    .cm-bubble{max-width:88%}
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-brand" href="index.html">🤖 AI Session<span class="nav-badge">M몰팀</span></a>
+  <div class="nav-right">
+    <span class="nav-session">Session 02 · 2단계</span>
+    <a class="nav-link" href="session_01_common.html">← 이전 세션</a>
+    <a class="nav-link nav-next" href="index.html">목록 →</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-blob blob1"></div>
+  <div class="hero-blob blob2"></div>
+  <div class="hero-eyebrow">🎨 Session 02 · Stitch 활용</div>
+  <h1>디자인 시안·프로토 페이지<br><span class="acc">뚝딱 만들기</span></h1>
+  <p class="hero-sub">텍스트 설명 한 줄이면 앱 화면·배너 시안이 즉시 생성돼요. 코드도 Figma도 몰라도 됩니다. Stitch 하나로 기획 단계부터 프로토타입까지 🚀</p>
+  <div class="hero-tools">
+    <span class="tool-chip main">🎨 Stitch — 메인</span>
+  </div>
+  <div class="hero-meta">
+    <div class="meta-item"><span class="meta-val">30분</span><span class="meta-key">⏱ 세션 시간</span></div>
+    <div class="meta-item"><span class="meta-val">전 파트</span><span class="meta-key">🤝 대상</span></div>
+    <div class="meta-item"><span class="meta-val">무료</span><span class="meta-key">💚 비용</span></div>
+    <div class="meta-item"><span class="meta-val">입문</span><span class="meta-key">📊 난이도</span></div>
+  </div>
+</header>
+
+<div class="tl-wrap">
+  <div class="tl">
+    <div class="tl-seg"><div class="tl-t">00:00 – 05:00</div><div class="tl-n"><span class="dot dm"></span>Stitch 소개 & 시작하기</div></div>
+    <div class="tl-seg"><div class="tl-t">05:00 – 18:00</div><div class="tl-n"><span class="dot dc"></span>라이브 실습 5단계</div></div>
+    <div class="tl-seg"><div class="tl-t">18:00 – 27:00</div><div class="tl-n"><span class="dot dy"></span>개인 실습 미션</div></div>
+    <div class="tl-seg"><div class="tl-t">27:00 – 30:00</div><div class="tl-n"><span class="dot dv"></span>공유 & 마무리</div></div>
+  </div>
+</div>
+
+<main class="container">
+
+  <!-- STITCH 소개 -->
+  <section class="section" style="padding-top:40px;padding-bottom:40px;border-bottom:1.5px solid var(--gray-3)">
+    <div class="card fu" style="margin-bottom:0">
+      <div class="card-hd"><span class="ctag ti">🎨 Stitch by Google Labs</span><a href="https://stitch.withgoogle.com" target="_blank" rel="noopener" style="margin-left:auto;font-family:var(--display);font-size:11px;font-weight:800;color:var(--c-violet-d);text-decoration:none">stitch.withgoogle.com →</a></div>
+      <div class="card-ti">말로 설명하면 UI가 만들어지는 Google의 AI 디자인 도구</div>
+      <div class="card-bo">Gemini 2.5 Pro 기반으로 텍스트 프롬프트 → 고품질 UI 시안을 즉시 생성해요. 모바일 앱·웹 화면 모두 지원하고, Figma로 내보내거나 HTML/CSS 코드로 추출도 가능합니다.</div>
+      <div class="g3" style="margin-top:16px">
+        <div class="mc">
+          <div class="mt">💬 텍스트로 생성</div>
+          <div class="md2">원하는 화면을 자연어로 설명하면 고품질 UI 시안 즉시 생성. 여러 변형안도 한 번에</div>
+        </div>
+        <div class="mc">
+          <div class="mt">🔄 프로토타입 연결</div>
+          <div class="md2">여러 화면을 이어 붙여 클릭 가능한 인터랙티브 프로토타입 즉시 생성. Play 버튼으로 미리보기</div>
+        </div>
+        <div class="mc">
+          <div class="mt">📤 Figma·코드 내보내기</div>
+          <div class="md2">완성된 시안을 Figma에 바로 붙여넣거나 HTML/CSS 코드로 추출해 개발팀과 공유</div>
+        </div>
+      </div>
+      <div class="tip-violet" style="margin-top:14px">💡 구글 계정만 있으면 무료로 시작 가능! Gemini·NotebookLM과 같은 계정으로 바로 로그인할 수 있어요.</div>
+    </div>
+  </section>
+
+  <!-- PART 01 -->
+  <section class="section">
+    <div class="s-ey">Part 01 · 00:00 – 05:00</div>
+    <h2 class="s-ti">Stitch, 이렇게 시작해요 🚀</h2>
+    <p class="s-de">처음 써보는 분들을 위한 빠른 시작 가이드. 3분이면 첫 번째 시안이 나옵니다.</p>
+
+    <div class="card fu">
+      <div class="card-hd"><span class="ctag ti">시작 전 준비</span></div>
+      <div class="setup-steps">
+        <div class="setup-step">
+          <div class="setup-num">1</div>
+          <div class="setup-body">
+            <div class="setup-title">stitch.withgoogle.com 접속</div>
+            <div class="setup-desc">구글 계정으로 로그인. 별도 설치 없이 웹 브라우저에서 바로 사용 가능</div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-num">2</div>
+          <div class="setup-body">
+            <div class="setup-title">새 프로젝트 만들기</div>
+            <div class="setup-desc">홈 화면에서 <strong>New Project</strong> 클릭. 모바일·웹 중 목적에 맞게 선택</div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-num">3</div>
+          <div class="setup-body">
+            <div class="setup-title">AI 모델 선택</div>
+            <div class="setup-desc"><strong>Gemini 2.5 Flash</strong> — 빠른 생성 (월 350회), <strong>Gemini 2.5 Pro</strong> — 고품질 생성 (월 50회). 실습은 Flash로 시작 추천!</div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-num">4</div>
+          <div class="setup-body">
+            <div class="setup-title">프롬프트 입력 후 Generate</div>
+            <div class="setup-desc">원하는 화면을 설명하고 Generate 클릭. 약 60~90초면 시안이 나와요</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card fu">
+      <div class="card-hd"><span class="ctag ti">좋은 프롬프트의 3요소</span></div>
+      <div class="ba">
+        <div class="ba-col before">
+          <span class="ba-label">😞 이렇게 하면</span>
+          <div class="ba-text">"앱 화면 만들어줘"<br><br>→ 맥락 없이 일반적인 화면만 생성</div>
+        </div>
+        <div class="ba-col after">
+          <span class="ba-label">✅ 이렇게 하면</span>
+          <div class="ba-text"><strong>① 목적</strong> + <strong>② 화면 구성</strong> + <strong>③ 분위기·색상</strong><br><br>"M몰 앱의 추석 기획전 메인 화면. 상단 배너, 카테고리 탭, 상품 카드 그리드 구성. 프리미엄한 느낌, 다크 네이비 컬러"</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PART 02 -->
+  <section class="section">
+    <div class="s-ey">Part 02 · 05:00 – 18:00</div>
+    <h2 class="s-ti">라이브 실습 — 3단계로 완성 ⚡</h2>
+    <p class="s-de">진행자가 실시간으로 Stitch를 조작합니다. 어떻게 발전시키는지 과정을 주목해보세요!</p>
+
+    <div class="card fu">
+      <div class="card-hd"><span class="ctag td">Demo 1</span><span class="ctime">4분</span></div>
+      <div class="card-ti">M몰 앱 기획전 메인 화면 생성 📱</div>
+      <div class="card-bo">텍스트 설명만으로 M몰 스타일의 기획전 메인 화면을 즉석에서 만들어봅니다.</div>
+      <div class="pl" style="margin-top:16px">Stitch에 입력하는 프롬프트</div>
+      <div class="pbx">
+        <span class="psc">모바일 앱 화면 · M몰 기획전</span>
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt">현대카드 M몰 앱의 <em>추석 기획전 메인 화면</em>을 디자인해줘.<br><br>
+화면 구성:<br>
+- 상단: 추석 기획전 풀 배너 (이미지+텍스트)<br>
+- 중단: 카테고리 탭 (뷰티/식품/가전/패션)<br>
+- 하단: 상품 카드 그리드 (2열, 포인트 가격 표시)<br><br>
+분위기: <em>프리미엄하고 고급스러운 느낌</em><br>
+색상: 딥 네이비 배경, 골드 포인트 컬러<br>
+스타일: 현대카드 브랜드에 맞는 미니멀하고 세련된 디자인</div>
+      </div>
+    </div>
+
+    <div class="card fu">
+      <div class="card-hd"><span class="ctag td">Demo 2</span><span class="ctime">5분</span></div>
+      <div class="card-ti">AI Chat으로 화면 수정하기 🔧</div>
+      <div class="card-bo">처음 생성된 시안을 채팅으로 수정하는 방법을 보여줍니다. <strong>생성보다 수정이 더 중요해요!</strong></div>
+      <div class="pl" style="margin-top:16px">후속 수정 프롬프트 예시</div>
+      <div class="pbx">
+        <span class="psc">채팅창에 이어서 입력</span>
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt"><em>수정 요청 1)</em> 배너 영역을 더 크게 키우고, "최대 50% 포인트 적립" 문구를 뚜렷하게 넣어줘<br><br>
+<em>수정 요청 2)</em> 상품 카드에 "한정수량" 뱃지와 남은 수량 표시를 추가해줘<br><br>
+<em>수정 요청 3)</em> 전체적인 폰트를 더 굵고 읽기 쉽게 바꿔줘</div>
+      </div>
+      <div class="tip-violet">💡 수정할 때 <strong>구체적인 위치와 내용</strong>을 함께 말해줄수록 원하는 결과가 나와요!</div>
+    </div>
+
+    <div class="card fu">
+      <div class="card-hd"><span class="ctag td">Demo 3</span><span class="ctime">5분</span></div>
+      <div class="card-ti">다음 화면 추가 → 프로토타입 연결 🔗</div>
+      <div class="card-bo">상품 상세 화면을 추가하고 메인 화면과 연결해 클릭 가능한 프로토타입을 만들어봅니다.</div>
+      <div class="setup-steps">
+        <div class="setup-step">
+          <div class="setup-num">1</div>
+          <div class="setup-body">
+            <div class="setup-title">상품 상세 화면 추가</div>
+            <div class="setup-desc">왼쪽 패널에서 <strong>+ Add screen</strong> → "M몰 상품 상세 화면, 포인트 가격·구매 버튼·상품 이미지 포함" 입력</div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-num">2</div>
+          <div class="setup-body">
+            <div class="setup-title">화면 간 연결 (Stitch)</div>
+            <div class="setup-desc">메인 화면의 상품 카드 컴포넌트 선택 → <strong>Link to screen</strong> → 상품 상세 화면 선택</div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-num">3</div>
+          <div class="setup-body">
+            <div class="setup-title">Play로 프로토타입 미리보기</div>
+            <div class="setup-desc">우측 상단 <strong>▶ Play</strong> 클릭 → 실제로 클릭해서 화면 전환되는 프로토타입 확인!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card fu">
+      <div class="card-hd"><span class="ctag td">Demo 4</span><span class="ctime">3분</span></div>
+      <div class="card-ti">Ideate 모드 — 아이디어를 빠르게 여러 방향으로 펼치기 💡</div>
+      <div class="card-bo">Ideate 모드는 하나의 프롬프트로 <strong>다양한 디자인 방향의 시안을 동시에 여러 개</strong> 생성해줍니다. 기획 초기 단계에서 방향성을 빠르게 탐색할 때 가장 유용해요.</div>
+      <div class="setup-steps" style="margin-top:16px">
+        <div class="setup-step">
+          <div class="setup-num">1</div>
+          <div class="setup-body">
+            <div class="setup-title">Ideate 모드 진입</div>
+            <div class="setup-desc">프롬프트 입력창 하단에서 <strong>Ideate</strong> 탭 선택. 생성 전 여러 콘셉트를 동시에 받아보는 모드</div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-num">2</div>
+          <div class="setup-body">
+            <div class="setup-title">큰 방향만 잡아서 입력</div>
+            <div class="setup-desc">세부 사항 없이 목적과 분위기 위주로 입력하면 AI가 다양한 해석으로 변형안 제시. 예: "M몰 포인트 적립 프로모션 배너, 프리미엄 느낌"</div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-num">3</div>
+          <div class="setup-body">
+            <div class="setup-title">마음에 드는 시안 선택 후 발전</div>
+            <div class="setup-desc">생성된 여러 안 중 방향성이 맞는 것을 골라 <strong>Edit</strong>으로 진입 → 채팅으로 세부 수정 진행</div>
+          </div>
+        </div>
+      </div>
+      <div class="tip-violet" style="margin-top:14px">💡 기획·MD 파트에서 팀 리뷰 전 방향성 후보를 뽑을 때 특히 유용해요. "이 중에 어떤 느낌이 좋아?" 논의 자료로 바로 활용 가능!</div>
+    </div>
+
+    <div class="card fu">
+      <div class="card-hd"><span class="ctag td">Demo 5</span><span class="ctime">3분</span></div>
+      <div class="card-ti">Redesign 모드 — 기존 화면을 AI로 개선하기 🔁</div>
+      <div class="card-bo">Redesign 모드는 <strong>기존 화면 캡처 이미지를 업로드하면</strong> AI가 이를 분석해 개선된 시안을 생성해줍니다. 현재 M몰 화면이나 경쟁사 레퍼런스를 기반으로 빠르게 개선안을 만들 수 있어요.</div>
+      <div class="setup-steps" style="margin-top:16px">
+        <div class="setup-step">
+          <div class="setup-num">1</div>
+          <div class="setup-body">
+            <div class="setup-title">Redesign 모드 진입 & 이미지 업로드</div>
+            <div class="setup-desc">프롬프트 입력창에서 <strong>Redesign</strong> 탭 선택 → 개선하고 싶은 화면 캡처 이미지를 드래그하거나 첨부</div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-num">2</div>
+          <div class="setup-body">
+            <div class="setup-title">개선 방향 프롬프트 입력</div>
+            <div class="setup-desc">현재 화면의 어떤 부분을 어떻게 바꾸고 싶은지 지시. 예: "전반적인 레이아웃은 유지하되, 버튼 CTA를 더 강조하고 가독성을 높여줘"</div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-num">3</div>
+          <div class="setup-body">
+            <div class="setup-title">원본 vs 개선안 비교</div>
+            <div class="setup-desc">생성 후 원본 이미지와 나란히 비교하며 어떤 부분이 바뀌었는지 확인. 필요하면 채팅으로 추가 수정</div>
+          </div>
+        </div>
+      </div>
+      <div class="tip" style="margin-top:14px">💡 경쟁사 앱 화면을 업로드해서 "M몰 스타일로 재해석해줘"도 가능해요. 벤치마킹 + 시안 초안을 한 번에!</div>
+    </div>
+
+    <div class="card fu">
+      <div class="card-hd"><span class="ctag td">결과물 공유하기</span></div>
+      <div class="card-ti">만든 시안을 팀에 공유하는 3가지 방법 📤</div>
+      <div class="g3" style="margin-top:0">
+        <div class="mc">
+          <div class="mt">📋 Figma로 내보내기</div>
+          <div class="md2">Export → Copy to Figma. 디자인팀과 협업하거나 추가 편집이 필요할 때</div>
+        </div>
+        <div class="mc">
+          <div class="mt">💻 코드로 내보내기</div>
+          <div class="md2">Export → Download. HTML/CSS 코드 추출로 개발팀에 바로 전달 가능</div>
+        </div>
+        <div class="mc">
+          <div class="mt">🔗 링크로 공유</div>
+          <div class="md2">Share → Public link. 팀원들이 브라우저에서 바로 프로토타입 확인 가능</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PART 03 -->
+  <section class="section">
+    <div class="s-ey">Part 03 · 18:00 – 27:00</div>
+    <h2 class="s-ti">지금 바로 내 업무에 써보기 ✋</h2>
+    <p class="s-de">아래 미션 중 하나를 골라 stitch.withgoogle.com에서 직접 만들어보세요. 10분 안에 결과물 완성이 목표!</p>
+
+    <div class="g2">
+      <div class="mc fu">
+        <div class="mn">🛍</div>
+        <div class="mt">MD 파트 미션</div>
+        <div class="md2">담당 카테고리 기획전 메인 화면 시안 만들기. 아래 MD용 프롬프트 참고!</div>
+      </div>
+      <div class="mc fu">
+        <div class="mn">📣</div>
+        <div class="mt">마케팅 파트 미션</div>
+        <div class="md2">앱 푸시 알림 랜딩 페이지 또는 프로모션 배너 화면 만들기</div>
+      </div>
+      <div class="mc fu">
+        <div class="mn">🛠</div>
+        <div class="mt">운영 파트 미션</div>
+        <div class="md2">CS 문의 접수 화면 또는 주문 상태 확인 화면 시안 만들기</div>
+      </div>
+      <div class="mc fu">
+        <div class="mn">💻</div>
+        <div class="mt">기획·개발 파트 미션</div>
+        <div class="md2">새로운 기능의 앱 화면 플로우 (2~3화면) 만들고 프로토타입 연결하기</div>
+      </div>
+    </div>
+
+    <div style="margin-top:24px">
+      <div class="pl">파트별 실습 프롬프트</div>
+      <div class="pbx" style="margin-bottom:10px">
+        <span class="psc">🛍 MD 파트용</span>
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt">현대카드 M몰 앱의 <em>[카테고리명] 기획전 메인 화면</em>을 디자인해줘.<br>
+구성: 기획전 타이틀 배너 / 브랜드 로고 나열 / 추천 상품 카드 (포인트 가격 표시)<br>
+분위기: <em>[프리미엄 / 트렌디 / 따뜻한 중 선택]</em>, M몰 브랜드에 맞는 세련된 스타일</div>
+      </div>
+      <div class="pbx" style="margin-bottom:10px">
+        <span class="psc">📣 마케팅 파트용</span>
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt">현대카드 M몰 앱의 <em>[프로모션명] 랜딩 페이지</em>를 디자인해줘.<br>
+구성: 풀스크린 배너 (타이틀+서브 카피) / 혜택 안내 섹션 / CTA 버튼<br>
+색상: <em>[컬러 컨셉 입력]</em>, 임팩트 있고 클릭을 유도하는 디자인</div>
+      </div>
+      <div class="pbx">
+        <span class="psc">💻 기획·개발 파트용</span>
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt">현대카드 M몰 앱에 <em>[신규 기능명]</em> 기능을 추가하려고 해.<br>
+이 기능의 주요 화면 3개를 순서대로 디자인해줘:<br>
+1. 진입 화면 (기능 소개)<br>
+2. 메인 기능 화면<br>
+3. 완료/결과 화면<br>
+M몰 스타일에 맞는 미니멀하고 직관적인 디자인</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PART 04 -->
+  <section class="section">
+    <div class="s-ey">Part 04 · 27:00 – 30:00</div>
+    <h2 class="s-ti">공유 & 마무리 🎤</h2>
+    <p class="s-de">만든 시안을 공유하고, 오늘의 핵심을 정리합니다.</p>
+
+    <div class="card fu">
+      <div class="card-hd"><span class="ctag tw">공유 질문</span><span class="ctime">2분</span></div>
+      <div class="card-ti">1~2명이 화면 보여주세요 🙋</div>
+      <div class="card-bo">
+        1) 어떤 화면을 만들어봤나요? 실제로 쓸 수 있는 수준이었나요?<br>
+        2) 수정 요청을 몇 번 했나요? 어떻게 달라졌나요?<br>
+        3) 기획·디자인 과정에서 어떻게 활용하면 좋을 것 같나요?
+      </div>
+    </div>
+
+    <div class="card fu">
+      <div class="card-hd"><span class="ctag tw">오늘 꼭 기억할 것</span><span class="ctime">1분</span></div>
+      <ul class="cl">
+        <li><span class="cb"></span><strong>목적 + 화면 구성 + 분위기·색상</strong> — 이 3가지를 넣으면 원하는 시안이 나와요 🎯</li>
+        <li><span class="cb"></span>처음 결과가 별로면 채팅으로 <strong>구체적인 위치와 내용을 지정해서 수정</strong>하세요 🔧</li>
+        <li><span class="cb"></span>화면을 이어 붙이면 <strong>클릭 가능한 프로토타입</strong>이 돼요. 팀 공유·테스트에 바로 활용 가능 🔗</li>
+      </ul>
+    </div>
+
+    <div class="card fu">
+      <div class="card-hd"><span class="ctag tw">다음 세션 예고 👀</span></div>
+      <div class="card-ti">Session 03 — NotebookLM·Obsidian으로 보고 자료 뚝딱 만들기</div>
+      <div class="card-bo">회의록·기획서·데이터를 AI에 업로드하면 보고 자료 초안이 자동으로 나와요. 다음 시간엔 NotebookLM과 Obsidian으로 리서치부터 보고까지 한 번에 해봅니다 📚</div>
+    </div>
+  </section>
+
+  <!-- 코멘트 -->
+  <section class="section" id="comments">
+    <div class="s-ey">💬 자유롭게 남겨주세요</div>
+    <h2 class="s-ti">이번 세션 어떠셨나요?</h2>
+    <p class="s-de">느낀 점, 개선점, 다음 세션에 다뤄줬으면 하는 것들을 자유롭게 남겨주세요. 익명으로 남길 수 있어요 😊</p>
+    <div class="cm-input-wrap">
+      <div class="cm-input-row">
+        <input class="cm-name" id="cm-name" type="text" placeholder="닉네임 (선택, 익명 가능)" maxlength="12"/>
+        <div class="cm-tag-row">
+          <button class="cm-tag-btn active" data-tag="느낀점" onclick="setTag(this)">✨ 느낀점</button>
+          <button class="cm-tag-btn" data-tag="개선점" onclick="setTag(this)">🔧 개선점</button>
+          <button class="cm-tag-btn" data-tag="다음세션요청" onclick="setTag(this)">🙋 다음 세션 요청</button>
+          <button class="cm-tag-btn" data-tag="기타" onclick="setTag(this)">💭 기타</button>
+        </div>
+      </div>
+      <div class="cm-box-wrap">
+        <textarea class="cm-textarea" id="cm-text" placeholder="여기에 자유롭게 작성해주세요..." maxlength="300" rows="3" oninput="updateCount(this)"></textarea>
+        <span class="cm-count" id="cm-count">0 / 300</span>
+      </div>
+      <div class="cm-footer-row"><button class="cm-submit" onclick="submitComment()">보내기 ↗</button></div>
+    </div>
+    <div class="cm-list" id="cm-list"></div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <span class="fb">🤖 M몰팀 AI Session</span>
+  <span>Session 02 · Stitch로 디자인 시안·프로토 페이지 뚝딱 만들기</span>
+</footer>
+
+<script>
+const SESSION_KEY='mmall_comments_session_02';
+const COLORS=[{bg:'#fdf0ec',text:'#e85d3a'},{bg:'#e6faf6',text:'#006b54'},{bg:'#fef7e6',text:'#7a4f00'},{bg:'#f0eeff',text:'#3a1faa'},{bg:'#fdeef1',text:'#7a1828'},{bg:'#f7f4ef',text:'#6b6560'}];
+let selectedTag='느낀점';
+function setTag(btn){document.querySelectorAll('.cm-tag-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');selectedTag=btn.dataset.tag}
+function updateCount(el){document.getElementById('cm-count').textContent=el.value.length+' / 300'}
+function getComments(){try{return JSON.parse(localStorage.getItem(SESSION_KEY)||'[]')}catch{return[]}}
+function saveComments(list){localStorage.setItem(SESSION_KEY,JSON.stringify(list))}
+function colorForName(name){let hash=0;for(let c of name)hash=(hash*31+c.charCodeAt(0))%COLORS.length;return COLORS[Math.abs(hash)]}
+function timeStr(ts){const d=new Date(ts),now=new Date(),diff=Math.floor((now-d)/60000);if(diff<1)return'방금 전';if(diff<60)return diff+'분 전';if(diff<1440)return Math.floor(diff/60)+'시간 전';return(d.getMonth()+1)+'/'+d.getDate()}
+function tagEmoji(tag){return{느낀점:'✨',개선점:'🔧',다음세션요청:'🙋',기타:'💭'}[tag]||'💭'}
+function renderBubble(item,isMe){const name=item.name||'익명';const col=colorForName(name);const initial=name.charAt(0).toUpperCase();const side=isMe?'me':'other';return`<div class="cm-bubble-wrap ${side}"><div class="cm-meta"><div class="cm-avatar" style="background:${col.bg};color:${col.text}">${initial}</div><span class="cm-author">${name}</span><span class="cm-tag-label tag-label-${item.tag}">${tagEmoji(item.tag)} ${item.tag}</span><span class="cm-time-label">${timeStr(item.ts)}</span>${isMe?`<button class="cm-del" onclick="delComment('${item.id}')">✕</button>`:''}</div><div class="cm-bubble">${item.text.replace(/
+/g,'<br>')}</div></div>`}
+function renderAll(){const list=getComments();const el=document.getElementById('cm-list');if(!list.length){el.innerHTML='<div class="cm-empty">아직 코멘트가 없어요. 첫 번째로 남겨보세요! 🎉</div>';return}const myId=localStorage.getItem('mmall_my_id');el.innerHTML=list.map(item=>renderBubble(item,item.authorId===myId)).join('')}
+function submitComment(){const text=document.getElementById('cm-text').value.trim();if(!text){document.getElementById('cm-text').focus();return}const name=document.getElementById('cm-name').value.trim()||'익명';let myId=localStorage.getItem('mmall_my_id');if(!myId){myId='u_'+Date.now()+Math.random().toString(36).slice(2,6);localStorage.setItem('mmall_my_id',myId)}const item={id:Date.now().toString(),authorId:myId,name,tag:selectedTag,text,ts:Date.now()};const list=getComments();list.push(item);saveComments(list);document.getElementById('cm-text').value='';document.getElementById('cm-count').textContent='0 / 300';renderAll();document.getElementById('cm-list').lastElementChild?.scrollIntoView({behavior:'smooth',block:'end'})}
+function delComment(id){if(!confirm('이 코멘트를 삭제할까요?'))return;saveComments(getComments().filter(c=>c.id!==id));renderAll()}
+function cp(btn){const b=btn.closest('.pbx');const e=b.querySelector('.pt');navigator.clipboard.writeText(e?e.innerText:'').then(()=>{btn.textContent='copied ✓';btn.classList.add('copied');setTimeout(()=>{btn.textContent='copy';btn.classList.remove('copied')},2000)})}
+document.addEventListener('DOMContentLoaded',()=>{renderAll();document.getElementById('cm-text').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();submitComment()}})});
+</script>
+</body>
+</html>

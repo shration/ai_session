@@ -31,17 +31,16 @@
           "id": "02",
           "part": "common",
           "partLabel": "공통",
-          "title": "Stitch로 클릭 한 번으로 디자인 시안 및 프로토 페이지 만들기",
-          "desc": "텍스트 설명 한 줄 → 배너·앱 화면 시안 즉시 생성 / 프로토타입 페이지 제작 / Canva AI로 마무리",
+          "title": "Stitch로 디자인 시안·프로토 페이지 뚝딱 만들기",
+          "desc": "텍스트 설명 한 줄 → 배너·앱 화면 시안 즉시 생성 / Ideate 모드로 방향성 탐색 / Redesign 모드로 기존 화면 개선 / 프로토타입 연결",
           "goal": "텍스트 설명만으로 기획전 배너·앱 화면 레퍼런스를 즉시 만들 수 있다",
           "tools": [
-            "Stitch",
-            "Canva AI"
+            "Stitch"
           ],
           "mainTool": "Stitch",
           "level": "입문",
-          "file": "",
-          "status": "upcoming",
+          "file": "session_02_common.html",
+          "status": "done",
           "duration": "30분",
           "cost": "무료"
         }
