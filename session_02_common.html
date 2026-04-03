@@ -559,23 +559,152 @@ M몰 스타일에 맞는 미니멀하고 직관적인 디자인</div>
 </footer>
 
 <script>
-const SESSION_KEY='mmall_comments_session_02';
+/* ── 설정 ── */
+const STORAGE_KEY = 'session_02_comments'; // persistent storage 키
+const POLL_MS     = 8000;                   // 새 댓글 폴링 주기 (ms)
+
 const COLORS=[{bg:'#fdf0ec',text:'#e85d3a'},{bg:'#e6faf6',text:'#006b54'},{bg:'#fef7e6',text:'#7a4f00'},{bg:'#f0eeff',text:'#3a1faa'},{bg:'#fdeef1',text:'#7a1828'},{bg:'#f7f4ef',text:'#6b6560'}];
-let selectedTag='느낀점';
+let selectedTag = '느낀점';
+let myId = localStorage.getItem('mmall_my_id');
+if(!myId){ myId='u_'+Date.now()+Math.random().toString(36).slice(2,6); localStorage.setItem('mmall_my_id',myId); }
+
+/* ── 태그·카운터 ── */
 function setTag(btn){document.querySelectorAll('.cm-tag-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');selectedTag=btn.dataset.tag}
 function updateCount(el){document.getElementById('cm-count').textContent=el.value.length+' / 300'}
-function getComments(){try{return JSON.parse(localStorage.getItem(SESSION_KEY)||'[]')}catch{return[]}}
-function saveComments(list){localStorage.setItem(SESSION_KEY,JSON.stringify(list))}
-function colorForName(name){let hash=0;for(let c of name)hash=(hash*31+c.charCodeAt(0))%COLORS.length;return COLORS[Math.abs(hash)]}
+
+/* ── 유틸 ── */
+function colorForName(name){let h=0;for(let c of name)h=(h*31+c.charCodeAt(0))%COLORS.length;return COLORS[Math.abs(h)]}
 function timeStr(ts){const d=new Date(ts),now=new Date(),diff=Math.floor((now-d)/60000);if(diff<1)return'방금 전';if(diff<60)return diff+'분 전';if(diff<1440)return Math.floor(diff/60)+'시간 전';return(d.getMonth()+1)+'/'+d.getDate()}
 function tagEmoji(tag){return{느낀점:'✨',개선점:'🔧',다음세션요청:'🙋',기타:'💭'}[tag]||'💭'}
-function renderBubble(item,isMe){const name=item.name||'익명';const col=colorForName(name);const initial=name.charAt(0).toUpperCase();const side=isMe?'me':'other';return`<div class="cm-bubble-wrap ${side}"><div class="cm-meta"><div class="cm-avatar" style="background:${col.bg};color:${col.text}">${initial}</div><span class="cm-author">${name}</span><span class="cm-tag-label tag-label-${item.tag}">${tagEmoji(item.tag)} ${item.tag}</span><span class="cm-time-label">${timeStr(item.ts)}</span>${isMe?`<button class="cm-del" onclick="delComment('${item.id}')">✕</button>`:''}</div><div class="cm-bubble">${item.text.replace(/
-/g,'<br>')}</div></div>`}
-function renderAll(){const list=getComments();const el=document.getElementById('cm-list');if(!list.length){el.innerHTML='<div class="cm-empty">아직 코멘트가 없어요. 첫 번째로 남겨보세요! 🎉</div>';return}const myId=localStorage.getItem('mmall_my_id');el.innerHTML=list.map(item=>renderBubble(item,item.authorId===myId)).join('')}
-function submitComment(){const text=document.getElementById('cm-text').value.trim();if(!text){document.getElementById('cm-text').focus();return}const name=document.getElementById('cm-name').value.trim()||'익명';let myId=localStorage.getItem('mmall_my_id');if(!myId){myId='u_'+Date.now()+Math.random().toString(36).slice(2,6);localStorage.setItem('mmall_my_id',myId)}const item={id:Date.now().toString(),authorId:myId,name,tag:selectedTag,text,ts:Date.now()};const list=getComments();list.push(item);saveComments(list);document.getElementById('cm-text').value='';document.getElementById('cm-count').textContent='0 / 300';renderAll();document.getElementById('cm-list').lastElementChild?.scrollIntoView({behavior:'smooth',block:'end'})}
-function delComment(id){if(!confirm('이 코멘트를 삭제할까요?'))return;saveComments(getComments().filter(c=>c.id!==id));renderAll()}
-function cp(btn){const b=btn.closest('.pbx');const e=b.querySelector('.pt');navigator.clipboard.writeText(e?e.innerText:'').then(()=>{btn.textContent='copied ✓';btn.classList.add('copied');setTimeout(()=>{btn.textContent='copy';btn.classList.remove('copied')},2000)})}
-document.addEventListener('DOMContentLoaded',()=>{renderAll();document.getElementById('cm-text').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();submitComment()}})});
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+/* ── 렌더 ── */
+function renderBubble(item){
+  const name=item.name||'익명';
+  const col=colorForName(name);
+  const initial=name.charAt(0).toUpperCase();
+  const isMe=(item.authorId===myId);
+  const side=isMe?'me':'other';
+  const delBtn=isMe?`<button class="cm-del" onclick="delComment('${escHtml(item.id)}')">✕</button>`:'';
+  return`<div class="cm-bubble-wrap ${side}">
+    <div class="cm-meta">
+      <div class="cm-avatar" style="background:${col.bg};color:${col.text}">${initial}</div>
+      <span class="cm-author">${escHtml(name)}</span>
+      <span class="cm-tag-label tag-label-${item.tag}">${tagEmoji(item.tag)} ${item.tag}</span>
+      <span class="cm-time-label">${timeStr(item.ts)}</span>
+      ${delBtn}
+    </div>
+    <div class="cm-bubble">${escHtml(item.text).replace(/\n/g,'<br>')}</div>
+  </div>`;
+}
+
+function renderAll(list){
+  const el=document.getElementById('cm-list');
+  if(!list||!list.length){el.innerHTML='<div class="cm-empty">아직 코멘트가 없어요. 첫 번째로 남겨보세요! 🎉</div>';return;}
+  el.innerHTML=list.map(renderBubble).join('');
+}
+
+function setStatus(msg,isErr=false){
+  let s=document.getElementById('cm-status');
+  if(!s){s=document.createElement('p');s.id='cm-status';s.style.cssText='font-size:12px;font-family:var(--display);margin-top:8px;text-align:right';document.querySelector('.cm-footer-row').appendChild(s);}
+  s.style.color=isErr?'#e85d3a':'#a8a39d';
+  s.textContent=msg;
+}
+
+/* ── Persistent Storage API ── */
+async function loadComments(){
+  try{
+    const res=await window.storage.get(STORAGE_KEY,true); // shared=true → 팀 전체 공유
+    return res?JSON.parse(res.value):[];
+  }catch(e){
+    // 키가 없는 첫 접근은 정상
+    return[];
+  }
+}
+
+async function persistComments(list){
+  const res=await window.storage.set(STORAGE_KEY,JSON.stringify(list),true);
+  if(!res) throw new Error('storage.set 실패');
+}
+
+/* ── 제출 ── */
+async function submitComment(){
+  const textEl=document.getElementById('cm-text');
+  const text=textEl.value.trim();
+  if(!text){textEl.focus();return;}
+  const name=document.getElementById('cm-name').value.trim()||'익명';
+  const btn=document.querySelector('.cm-submit');
+  btn.disabled=true; btn.textContent='저장 중…';
+  setStatus('');
+  try{
+    const list=await loadComments();
+    const item={id:Date.now().toString(),authorId:myId,name,tag:selectedTag,text,ts:Date.now()};
+    list.push(item);
+    await persistComments(list);
+    textEl.value='';
+    document.getElementById('cm-count').textContent='0 / 300';
+    renderAll(list);
+    document.getElementById('cm-list').lastElementChild?.scrollIntoView({behavior:'smooth',block:'end'});
+    setStatus('저장됐어요 ✓');
+  }catch(e){
+    console.error(e);
+    setStatus('저장에 실패했어요. 다시 시도해주세요.', true);
+  }finally{
+    btn.disabled=false; btn.textContent='보내기 ↗';
+  }
+}
+
+/* ── 삭제 ── */
+async function delComment(id){
+  if(!confirm('이 코멘트를 삭제할까요?'))return;
+  try{
+    const list=await loadComments();
+    await persistComments(list.filter(c=>c.id!==id));
+    renderAll(await loadComments());
+  }catch(e){
+    alert('삭제에 실패했어요.');
+  }
+}
+
+/* ── 폴링 (8초마다 새 댓글 반영) ── */
+let pollTimer=null;
+async function poll(){
+  try{
+    const list=await loadComments();
+    renderAll(list);
+  }catch(_){}
+  pollTimer=setTimeout(poll,POLL_MS);
+}
+function cp(btn){
+  const b=btn.closest('.pbx');
+  const e=b.querySelector('.pt');
+  if(!e)return;
+  const text=e.innerText||e.textContent||'';
+  function markCopied(){btn.textContent='copied ✓';btn.classList.add('copied');setTimeout(()=>{btn.textContent='copy';btn.classList.remove('copied')},2000)}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(markCopied).catch(()=>fallbackCopy(text,markCopied));
+  } else {
+    fallbackCopy(text,markCopied);
+  }
+}
+function fallbackCopy(text,cb){
+  const ta=document.createElement('textarea');
+  ta.value=text;
+  ta.style.cssText='position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+  document.body.appendChild(ta);
+  ta.focus();ta.select();
+  try{document.execCommand('copy');cb();}catch(err){console.warn('copy failed',err);}
+  document.body.removeChild(ta);
+}
+document.addEventListener('DOMContentLoaded',async()=>{
+  const list=await loadComments();
+  renderAll(list);
+  pollTimer=setTimeout(poll,POLL_MS);
+  document.getElementById('cm-text').addEventListener('keydown',e=>{
+    if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();submitComment();}
+  });
+  window.addEventListener('beforeunload',()=>clearTimeout(pollTimer));
+});
 </script>
 </body>
 </html>
