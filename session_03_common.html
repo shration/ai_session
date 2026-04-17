@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>세션 03 · NotebookLM으로 트렌드 보고 자료 뚝딱 만들기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#f7f4ef;--white:#fdfbf8;--black:#1c1917;--gray-1:#6b6560;--gray-2:#a8a39d;--gray-3:#ddd8d0;--key:#e85d3a;--key-l:#fdf0ec;--c-mint:#00b896;--c-mint-l:#e6faf6;--c-mint-d:#006b54;--c-yellow:#f5a623;--c-yellow-l:#fef7e6;--c-yellow-d:#7a4f00;--c-violet:#7b61ff;--c-violet-l:#f0eeff;--c-violet-d:#3a1faa;--sans:'Noto Sans KR',sans-serif;--display:'Outfit',sans-serif;--radius:20px;--radius-sm:14px;--shadow:0 2px 16px rgba(28,25,23,.06);--shadow-hover:0 8px 32px rgba(28,25,23,.12)}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--black);font-family:var(--sans);font-weight:400;line-height:1.7;font-size:15px;-webkit-font-smoothing:antialiased}
+  .nav{background:rgba(253,251,248,.92);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid rgba(0,0,0,.06);position:sticky;top:0;z-index:100;padding:0 48px;height:56px;display:flex;align-items:center;justify-content:space-between}
+  .nav-brand{font-family:var(--display);font-size:15px;font-weight:800;color:var(--black);text-decoration:none;display:flex;align-items:center;gap:8px}
+  .nav-badge{font-size:11px;font-weight:700;background:linear-gradient(135deg,#e85d3a,#f5a623);color:#fff;border-radius:20px;padding:2px 9px;font-family:var(--display)}
+  .nav-right{display:flex;align-items:center;gap:10px}
+  .nav-session{font-family:var(--display);font-size:12px;font-weight:700;color:var(--gray-2)}
+  .nav-link{font-family:var(--display);font-size:12px;font-weight:700;color:var(--gray-1);text-decoration:none;border:1.5px solid var(--gray-3);border-radius:20px;padding:5px 14px;transition:all .15s;background:var(--white)}
+  .nav-link:hover{border-color:var(--black);color:var(--black)}
+  .nav-next{background:linear-gradient(135deg,#1c1917,#3a3530);color:var(--white)!important;border-color:#1c1917!important}
+  .hero{background:linear-gradient(145deg,#fdfaf5 0%,#f0fdf4 40%,#fefce8 100%);padding:64px 48px 56px;position:relative;overflow:hidden;text-align:center}
+  .hero-blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.15;pointer-events:none}
+  .blob1{width:400px;height:400px;background:#00b896;top:-160px;left:-80px}
+  .blob2{width:300px;height:300px;background:#f5a623;bottom:-100px;right:-60px}
+  .hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:var(--c-mint-l);color:var(--c-mint-d);font-family:var(--display);font-size:clamp(10px,2.8vw,12px);font-weight:800;border-radius:20px;padding:5px 14px;margin-bottom:14px}
+  .hero h1{font-family:var(--display);font-size:clamp(24px,7vw,44px);font-weight:900;line-height:1.15;letter-spacing:-.02em;color:var(--black);margin:0 auto 10px;max-width:700px}
+  .hero h1 .acc{color:var(--c-mint)}
+  .hero-sub{font-size:clamp(13px,3.8vw,15px);color:var(--gray-1);max-width:520px;margin:0 auto 20px;line-height:1.7;word-break:keep-all}
+  .hero-tools{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+  .tool-chip{font-family:var(--display);font-size:12px;font-weight:800;padding:6px 16px;border-radius:20px;border:1.5px solid var(--gray-3);background:var(--white);color:var(--gray-1);box-shadow:var(--shadow)}
+  .tool-chip.main{background:#1c1917;color:#fff;border-color:#1c1917}
+  .tool-chip.sub{background:var(--c-yellow-l);color:var(--c-yellow-d);border-color:#f5d87a}
+  .hero-meta{display:grid;grid-template-columns:repeat(4,1fr);background:var(--white);border-radius:var(--radius);overflow:hidden;border:1.5px solid var(--gray-3);width:100%;max-width:520px;margin:0 auto}
+  .meta-item{padding:12px 8px;border-right:1px solid var(--gray-3);text-align:center;min-width:0}
+  .meta-item:last-child{border-right:none}
+  .meta-val{font-family:var(--display);font-size:clamp(13px,3.5vw,15px);font-weight:900;color:var(--black);display:block;word-break:keep-all}
+  .meta-key{font-size:clamp(9px,2.2vw,11px);color:var(--gray-1);margin-top:3px;display:block;word-break:keep-all}
+  .tl-wrap{background:var(--white);border-bottom:1.5px solid var(--gray-3);padding:0 48px}
+  .tl{display:flex;max-width:860px;margin:0 auto}
+  .tl-seg{flex:1;padding:16px 16px 14px 16px;border-right:1px solid var(--gray-3)}
+  .tl-seg:last-child{border-right:none}
+  .tl-t{font-family:var(--display);font-size:11px;font-weight:700;color:var(--gray-2);margin-bottom:4px}
+  .tl-n{font-size:13px;font-weight:500;color:var(--black);display:flex;align-items:center;gap:6px}
+  .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .dm{background:#00b896}.dc{background:#e85d3a}.dy{background:#f5a623}.dv{background:#7b61ff}
+  .container{max-width:860px;margin:0 auto;padding:0 48px}
+  .section{padding:52px 0;border-bottom:1.5px solid var(--gray-3)}
+  .section:last-child{border-bottom:none}
+  .s-ey{font-family:var(--display);font-size:11px;font-weight:800;color:var(--c-mint-d);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
+  .s-ti{font-family:var(--display);font-size:clamp(18px,5.5vw,22px);font-weight:900;letter-spacing:-.01em;margin-bottom:8px;word-break:keep-all}
+  .s-de{font-size:clamp(12px,3.5vw,14px);color:var(--gray-1);margin-bottom:24px;max-width:560px;line-height:1.7;word-break:keep-all}
+  .card{background:var(--white);border:1.5px solid var(--gray-3);border-radius:var(--radius);padding:22px 26px;margin-bottom:12px;box-shadow:var(--shadow);transition:all .18s}
+  .card:hover{border-color:var(--black);box-shadow:var(--shadow-hover);transform:translateY(-1px)}
+  .card-hd{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .ctag{font-family:var(--display);font-size:11px;font-weight:800;padding:4px 12px;border-radius:20px}
+  .ti{background:var(--c-mint-l);color:var(--c-mint-d)}
+  .td{background:var(--key-l);color:var(--key)}
+  .tp{background:var(--c-yellow-l);color:var(--c-yellow-d)}
+  .tw{background:var(--c-violet-l);color:var(--c-violet-d)}
+  .ctime{font-family:var(--display);font-size:11px;font-weight:700;color:var(--gray-2);margin-left:auto}
+  .card-ti{font-family:var(--display);font-size:clamp(15px,4vw,17px);font-weight:800;margin-bottom:8px;word-break:keep-all}
+  .card-bo{font-size:clamp(13px,3.5vw,14px);color:var(--gray-1);line-height:1.75;word-break:keep-all}
+  .card-bo strong{color:var(--black);font-weight:700}
+  .pbx{background:#1c1917;border-radius:var(--radius-sm);padding:18px 22px;margin-bottom:10px;position:relative}
+  .psc{font-family:var(--display);font-size:10px;font-weight:800;color:#6b6560;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;display:block}
+  .pt{font-size:13px;color:#fdfbf8;line-height:1.85;font-weight:300}
+  .pt em{color:#6ee7b7;font-style:normal;font-weight:600}
+  .copy-btn{position:absolute;top:12px;right:12px;background:rgba(253,251,248,.1);border:1px solid rgba(253,251,248,.15);border-radius:10px;color:#6b6560;font-family:var(--display);font-size:10px;font-weight:700;padding:4px 10px;cursor:pointer;letter-spacing:.04em;transition:all .15s}
+  .copy-btn:hover{background:rgba(253,251,248,.18);color:#fdfbf8}
+  .copy-btn.copied{color:#6ee7b7;border-color:#6ee7b7}
+  .pl{font-family:var(--display);font-size:11px;font-weight:800;color:var(--gray-2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .pl::after{content:'';flex:1;height:1.5px;background:var(--gray-3);border-radius:2px}
+  .setup-steps{display:flex;flex-direction:column;gap:0;margin-top:16px;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);overflow:hidden}
+  .setup-step{display:flex;gap:0;border-bottom:1px solid var(--gray-3)}
+  .setup-step:last-child{border-bottom:none}
+  .setup-num{width:52px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:16px;font-weight:900;color:var(--white);background:#1c1917}
+  .setup-body{flex:1;padding:16px 20px;background:var(--white)}
+  .setup-title{font-family:var(--display);font-size:14px;font-weight:800;color:var(--black);margin-bottom:5px}
+  .setup-desc{font-size:13px;color:var(--gray-1);line-height:1.6;word-break:keep-all}
+  .setup-desc strong{color:var(--black);font-weight:700}
+  .setup-path{display:inline-block;font-family:var(--display);font-size:10px;font-weight:800;background:var(--bg);border:1px solid var(--gray-3);border-radius:6px;padding:3px 8px;color:var(--gray-1);margin-top:6px}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+  .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+  .mc{border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:20px 22px;background:var(--white);box-shadow:var(--shadow)}
+  .mn{font-family:var(--display);font-size:28px;font-weight:900;color:var(--gray-3);margin-bottom:10px;line-height:1}
+  .mt{font-family:var(--display);font-size:14px;font-weight:800;margin-bottom:6px}
+  .md2{font-size:12px;color:var(--gray-1);line-height:1.65;word-break:keep-all}
+  .step-badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-size:12px;font-weight:800;background:var(--key-l);color:var(--key);border-radius:20px;padding:5px 14px}
+  .step-num{background:var(--key);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;flex-shrink:0}
+  .flow-wrap{display:flex;align-items:center;gap:6px;margin-top:16px;flex-wrap:wrap}
+  .flow-step{background:var(--white);border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:10px 12px;font-size:11px;font-family:var(--display);font-weight:800;color:var(--black);text-align:center;min-width:80px;flex:1;box-shadow:var(--shadow)}
+  .flow-arrow{font-size:16px;color:var(--gray-2);flex-shrink:0}
+  .trend-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+  .trend-card{background:var(--white);border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:16px 18px;box-shadow:var(--shadow)}
+  .trend-num{font-family:var(--display);font-size:11px;font-weight:800;color:var(--c-mint-d);margin-bottom:6px;background:var(--c-mint-l);display:inline-block;padding:2px 8px;border-radius:20px}
+  .trend-title{font-family:var(--display);font-size:14px;font-weight:900;color:var(--black);margin-bottom:6px}
+  .trend-desc{font-size:12px;color:var(--gray-1);line-height:1.6;word-break:keep-all}
+  .trend-tag{font-family:var(--display);font-size:10px;font-weight:800;color:var(--c-yellow-d);background:var(--c-yellow-l);padding:2px 8px;border-radius:20px;display:inline-block;margin-top:8px}
+  .tip{background:var(--key-l);border:1.5px solid #f5c4b4;border-radius:var(--radius-sm);padding:14px 18px;margin-top:14px;font-size:13px;color:var(--key);line-height:1.65;font-weight:500;word-break:keep-all}
+  .tip-mint{background:var(--c-mint-l);border:1.5px solid #9fe1cb;border-radius:var(--radius-sm);padding:14px 18px;margin-top:14px;font-size:13px;color:var(--c-mint-d);line-height:1.65;font-weight:500;word-break:keep-all}
+  .tip-yellow{background:var(--c-yellow-l);border:1.5px solid #f5d87a;border-radius:var(--radius-sm);padding:14px 18px;margin-top:14px;font-size:13px;color:var(--c-yellow-d);line-height:1.65;font-weight:500;word-break:keep-all}
+  .cl{list-style:none;margin-top:12px}
+  .cl li{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--gray-3);font-size:13px;color:var(--gray-1)}
+  .cl li:last-child{border-bottom:none}
+  .cb{width:18px;height:18px;border:1.5px solid var(--gray-3);border-radius:6px;flex-shrink:0;margin-top:1px}
+  .cm-input-wrap{background:var(--white);border:1.5px solid var(--gray-3);border-radius:var(--radius);padding:24px 24px 20px;box-shadow:var(--shadow);margin-bottom:28px}
+  .cm-input-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+  .cm-name{font-family:var(--sans);font-size:13px;font-weight:500;border:1.5px solid var(--gray-3);border-radius:14px;padding:9px 16px;background:var(--bg);color:var(--black);outline:none;width:150px;transition:border-color .18s}
+  .cm-name:focus{border-color:var(--key)}
+  .cm-name::placeholder{color:var(--gray-2)}
+  .cm-tag-row{display:flex;gap:6px;flex-wrap:wrap}
+  .cm-tag-btn{font-family:var(--display);font-size:11px;font-weight:800;border:1.5px solid var(--gray-3);border-radius:20px;padding:6px 13px;background:var(--white);color:var(--gray-1);cursor:pointer;transition:all .15s;white-space:nowrap}
+  .cm-tag-btn:hover{border-color:var(--key);color:var(--key);background:var(--key-l)}
+  .cm-tag-btn.active{background:var(--key);color:#fff;border-color:var(--key)}
+  .cm-box-wrap{position:relative;margin-bottom:14px;background:var(--bg);border:1.5px solid var(--gray-3);border-radius:18px;transition:border-color .18s}
+  .cm-box-wrap:focus-within{border-color:var(--key)}
+  .cm-textarea{width:100%;font-family:var(--sans);font-size:14px;border:none;border-radius:18px;padding:16px 18px 36px;background:transparent;color:var(--black);resize:none;outline:none;line-height:1.7;display:block}
+  .cm-textarea::placeholder{color:var(--gray-2)}
+  .cm-count{position:absolute;bottom:12px;right:16px;font-size:11px;font-family:var(--display);font-weight:700;color:var(--gray-2);pointer-events:none}
+  .cm-footer-row{display:flex;justify-content:flex-end}
+  .cm-submit{font-family:var(--display);font-size:13px;font-weight:800;background:linear-gradient(135deg,#e85d3a,#f5a623);color:#fff;border:none;border-radius:20px;padding:10px 24px;cursor:pointer;transition:opacity .15s,transform .12s;box-shadow:0 4px 14px rgba(232,93,58,.25)}
+  .cm-submit:hover{opacity:.9;transform:translateY(-1px)}
+  .cm-list{display:flex;flex-direction:column;gap:14px;clear:both;padding-top:4px}
+  .cm-empty{text-align:center;font-size:14px;color:var(--gray-2);padding:40px 0;font-family:var(--display);font-weight:700}
+  .cm-bubble-wrap{display:flex;flex-direction:column;gap:4px}
+  .cm-bubble-wrap.me{align-items:flex-end}
+  .cm-bubble-wrap.other{align-items:flex-start}
+  .cm-meta{display:flex;align-items:center;gap:6px;padding:0 14px}
+  .cm-bubble-wrap.me .cm-meta{flex-direction:row-reverse}
+  .cm-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;font-family:var(--display);flex-shrink:0}
+  .cm-author{font-family:var(--display);font-size:12px;font-weight:800;color:var(--black)}
+  .cm-time-label{font-size:11px;color:var(--gray-2);font-family:var(--display)}
+  .cm-tag-label{font-family:var(--display);font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px}
+  .tag-label-느낀점{background:var(--c-mint-l);color:var(--c-mint-d)}
+  .tag-label-개선점{background:var(--c-yellow-l);color:var(--c-yellow-d)}
+  .tag-label-다음세션요청{background:var(--c-violet-l);color:var(--c-violet-d)}
+  .tag-label-기타{background:var(--key-l);color:var(--key)}
+  .cm-bubble{max-width:75%;padding:13px 18px;font-size:14px;line-height:1.65;word-break:break-word;box-shadow:var(--shadow);animation:bubbleIn .3s ease both}
+  .cm-bubble-wrap.me .cm-bubble{background:linear-gradient(135deg,#e85d3a,#f5a623);color:#fff;border-radius:18px 18px 4px 18px}
+  .cm-bubble-wrap.other .cm-bubble{background:var(--white);color:var(--black);border:1.5px solid var(--gray-3);border-radius:18px 18px 18px 4px}
+  .cm-del{background:none;border:none;cursor:pointer;font-size:12px;color:var(--gray-2);padding:0 2px}
+  @keyframes bubbleIn{from{opacity:0;transform:translateY(8px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+  .footer{background:var(--bg);border-top:1px solid var(--gray-3);padding:32px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:60px;font-size:13px;color:var(--gray-1)}
+  .fb{font-family:var(--display);font-size:14px;font-weight:900;color:var(--black)}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+  .fu{animation:fadeUp .42s ease both}
+  .fu:nth-child(2){animation-delay:.07s}
+  .fu:nth-child(3){animation-delay:.14s}
+  .fu:nth-child(4){animation-delay:.21s}
+  @media(max-width:680px){
+    .nav,.hero,.tl-wrap,.footer{padding-left:20px;padding-right:20px}
+    .container{padding:0 20px}
+    .hero{padding:36px 20px 32px}
+    .hero h1{font-size:32px;line-height:1.15;margin-bottom:8px}
+    .hero-sub{margin-bottom:16px}
+    .hero-meta{grid-template-columns:repeat(2,1fr);max-width:100%}
+    .meta-item{padding:10px 6px}
+    .meta-item:nth-child(2){border-right:none}
+    .meta-item:nth-child(3){border-top:1px solid var(--gray-3)}
+    .meta-item:nth-child(4){border-top:1px solid var(--gray-3);border-right:none}
+    .tl{flex-direction:column}
+    .tl-seg{border-right:none;border-bottom:1px solid var(--gray-3);padding:12px 16px}
+    .g2,.g3,.trend-grid{grid-template-columns:1fr}
+    .flow-wrap{flex-direction:column}
+    .flow-step{width:100%}
+    .setup-num{width:40px}
+    .nav-session{display:none}
+    .cm-input-row{flex-direction:column;align-items:flex-start}
+    .cm-name{width:100%}
+    .cm-bubble{max-width:88%}
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-brand" href="index.html">🤖 AI Session<span class="nav-badge">M몰팀</span></a>
+  <div class="nav-right">
+    <span class="nav-session">Session 03 · 3주차</span>
+    <a class="nav-link" href="session_02_common.html">← 이전 세션</a>
+    <a class="nav-link nav-next" href="index.html">목록 →</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-blob blob1"></div>
+  <div class="hero-blob blob2"></div>
+  <div class="hero-eyebrow">📚 Session 03 · NotebookLM 7단계 활용</div>
+  <h1>트렌드 자료 올리면<br><span class="acc">보고서·슬라이드 자동 완성</span></h1>
+  <p class="hero-sub">2026 온라인 쇼핑 트렌드 분석 보고 자료를 NotebookLM 7가지 핵심 기능으로 완성해요. 맞춤 설정부터 오디오 오버뷰·슬라이드 생성까지 한 번에! 🚀</p>
+  <div class="hero-tools">
+    <span class="tool-chip main">📚 NotebookLM — 메인</span>
+    <span class="tool-chip sub">✨ Gemini Canvas — 보조</span>
+  </div>
+  <div class="hero-meta">
+    <div class="meta-item"><span class="meta-val">30분</span><span class="meta-key">⏱ 세션 시간</span></div>
+    <div class="meta-item"><span class="meta-val">전 파트</span><span class="meta-key">🤝 대상</span></div>
+    <div class="meta-item"><span class="meta-val">무료</span><span class="meta-key">💚 비용</span></div>
+    <div class="meta-item"><span class="meta-val">초급</span><span class="meta-key">📊 난이도</span></div>
+  </div>
+</header>
+
+<div class="tl-wrap">
+  <div class="tl">
+    <div class="tl-seg"><div class="tl-t">00:00 – 05:00</div><div class="tl-n"><span class="dot dm"></span>NotebookLM 소개 & 실습 소재</div></div>
+    <div class="tl-seg"><div class="tl-t">05:00 – 18:00</div><div class="tl-n"><span class="dot dc"></span>7단계 핵심 기능 라이브 실습</div></div>
+    <div class="tl-seg"><div class="tl-t">18:00 – 27:00</div><div class="tl-n"><span class="dot dy"></span>파트별 개인 실습</div></div>
+    <div class="tl-seg"><div class="tl-t">27:00 – 30:00</div><div class="tl-n"><span class="dot dv"></span>공유 & 마무리</div></div>
+  </div>
+</div>
+
+<main class="container">
+
+  <!-- NotebookLM 소개 -->
+  <section class="section" style="padding-top:40px;padding-bottom:40px">
+    <div class="card fu" style="margin-bottom:0">
+      <div class="card-hd"><span class="ctag ti">📚 NotebookLM by Google</span><a href="https://notebooklm.google.com" target="_blank" rel="noopener" style="margin-left:auto;font-family:var(--display);font-size:11px;font-weight:800;color:var(--c-mint-d);text-decoration:none">notebooklm.google.com →</a></div>
+      <div class="card-ti">내 자료만 읽고 분석해주는 AI 리서치 도구</div>
+      <div class="card-bo">ChatGPT처럼 인터넷 전체를 참고하는 게 아니라, <strong>내가 올린 자료만</strong> 근거로 답변해요. PDF·문서·유튜브 링크·웹페이지를 올리면 AI가 읽고 요약·분석·슬라이드까지 만들어줍니다.</div>
+      <div class="g3" style="margin-top:16px">
+        <div class="mc">
+          <div class="mt">📄 다양한 소스 지원</div>
+          <div class="md2">PDF·Google Docs·웹 URL·유튜브 링크·텍스트 파일 모두 업로드 가능. 최대 50개 소스</div>
+        </div>
+        <div class="mc">
+          <div class="mt">🎯 할루시네이션 최소화</div>
+          <div class="md2">내 자료 안에서만 답변하기 때문에 ChatGPT보다 사실 오류가 적음. 출처도 함께 표시</div>
+        </div>
+        <div class="mc">
+          <div class="mt">🎨 슬라이드·오디오 자동 생성</div>
+          <div class="md2">스튜디오 패널에서 보고용 슬라이드·인포그래픽·팟캐스트 오디오를 버튼 몇 번으로 완성</div>
+        </div>
+      </div>
+      <div class="tip-mint" style="margin-top:14px">💡 구글 계정만 있으면 무료! Gemini·Stitch와 같은 계정으로 바로 로그인 가능해요.</div>
+    </div>
+  </section>
+
+  <!-- PART 01 -->
+  <section class="section">
+    <div class="s-ey">Part 01 · 00:00 – 05:00</div>
+    <h2 class="s-ti">오늘의 실습 소재 — 2026 온라인 쇼핑 트렌드 📊</h2>
+    <p class="s-de">NotebookLM을 배우면서 동시에 실무에 바로 쓸 수 있는 트렌드 인사이트도 얻어가는 세션이에요.</p>
+
+    <div class="card fu">
+      <div class="card-hd"><span class="ctag ti">2026 온라인 쇼핑 핵심 트렌드 5</span></div>
+      <div class="card-ti">오늘 NotebookLM에 넣어서 분석할 내용들</div>
+      <div class="trend-grid">
+        <div class="trend-card">
+          <div class="trend-num">트렌드 01</div>
+          <div class="trend-title">제로클릭 쇼핑</div>
+          <div class="trend-desc">AI가 취향·행동 패턴을 분석해 먼저 제품을 제안. 소비자가 직접 검색하거나 클릭할 필요가 줄어드는 현상. 2025년 AI 트래픽 전년 대비 1,200% 상승</div>
+          <span class="trend-tag">M몰 적용 → AI 추천 고도화</span>
+        </div>
+        <div class="trend-card">
+          <div class="trend-num">트렌드 02</div>
+          <div class="trend-title">픽셀라이프 소비</div>
+          <div class="trend-desc">짧고 빈번한 소비 경험을 즐기는 트렌드. 소용량·소포장 제품 인기. 숏폼 시청 경험률 82.7% (전년 대비 +13.8%p)</div>
+          <span class="trend-tag">M몰 적용 → 소량·체험형 상품 기획</span>
+        </div>
+        <div class="trend-card">
+          <div class="trend-num">트렌드 03</div>
+          <div class="trend-title">프라이스 디코딩</div>
+          <div class="trend-desc">제품 원가·브랜드 가치·유통 마진 등 가격 뒤에 숨은 맥락을 꼼꼼히 분석하고 구매 결정. 가격 투명성 요구 증가</div>
+          <span class="trend-tag">M몰 적용 → 포인트 가치 명확화</span>
+        </div>
+        <div class="trend-card">
+          <div class="trend-num">트렌드 04</div>
+          <div class="trend-title">레디코어 라이프스타일</div>
+          <div class="trend-desc">사전 계획·선제적 학습 중심 소비. 사전 예약·한정판 피켓팅 문화 확산. AI 시대에 더욱 강화된 계획 소비 트렌드</div>
+          <span class="trend-tag">M몰 적용 → 사전 예약 기획전</span>
+        </div>
+        <div class="trend-card">
+          <div class="trend-num">트렌드 05</div>
+          <div class="trend-title">AI 쇼핑 어시스턴트</div>
+          <div class="trend-desc">제품 비교(54.4%)·최저가 탐색(46.2%)에서 AI 효용 높음. 소비자의 AI 쇼핑 활용 급증, 커머스 플랫폼의 AI 통합 필수화</div>
+          <span class="trend-tag">M몰 적용 → AI 검색·추천 강화</span>
+        </div>
+        <div class="trend-card">
+          <div class="trend-num">오픈서베이</div>
+          <div class="trend-title">2026 온라인 쇼핑 리포트</div>
+          <div class="trend-desc">쿠팡·네이버플러스스토어·토스쇼핑 소비자 만족도, AI 쇼핑 현황 조사. 2026.03 발간 (전국 15~69세 2,100명 대상)</div>
+          <span class="trend-tag">실습 소스로 활용</span>
+        </div>
+      </div>
+      <div class="tip">💡 위 내용을 NotebookLM에 넣어서 <strong>M몰 관점의 시사점</strong>을 뽑고, 그걸 슬라이드로 만드는 게 오늘의 목표예요!</div>
+    </div>
+  </section>
+
+  <!-- PART 02 -->
+  <section class="section">
+    <div class="s-ey">Part 02 · 05:00 – 18:00</div>
+    <h2 class="s-ti">NotebookLM 7단계 핵심 기능 라이브 실습 ⚡</h2>
+    <p class="s-de">진행자가 실시간으로 조작합니다. 7가지 기능을 순서대로 따라하면 2026 트렌드 분석 보고 자료가 완성돼요!</p>
+
+    <!-- STEP 1 -->
+    <div class="card fu">
+      <div class="card-hd">
+        <span class="step-badge"><span class="step-num">1</span>맞춤 설정 — Customization</span>
+        <span class="ctime">2분</span>
+      </div>
+      <div class="card-ti">AI에게 전문가 페르소나를 부여하기 🎭</div>
+      <div class="card-bo">단순 요약을 넘어, AI에게 특정 직업과 분석 관점을 부여하면 답변의 깊이가 완전히 달라져요. <strong>채팅 패널의 노트북 구성 아이콘 → 맞춤</strong>에서 설정합니다.</div>
+      <div class="setup-steps">
+        <div class="setup-step">
+          <div class="setup-num">1</div>
+          <div class="setup-body">
+            <div class="setup-title">새 노트북 만들기</div>
+            <div class="setup-desc">notebooklm.google.com 접속 → <strong>새 노트북</strong> 클릭 → 제목: "2026 온라인쇼핑 트렌드 분석"</div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-num">2</div>
+          <div class="setup-body">
+            <div class="setup-title">소스 추가하기</div>
+            <div class="setup-desc">
+              <strong>① 웹 URL</strong> — 오픈서베이 리포트, 아임웹 트렌드 가이드 URL 붙여넣기<br>
+              <strong>② 유튜브 링크</strong> — 트렌드 관련 유튜브 영상 URL 붙여넣기<br>
+              <strong>③ 파일 업로드</strong> — PDF 리포트, 사내 기획서 직접 업로드
+            </div>
+            <span class="setup-path">소스 패널 우측 상단 + 버튼</span>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-num">3</div>
+          <div class="setup-body">
+            <div class="setup-title">맞춤 설정에 전문가 페르소나 입력</div>
+            <div class="setup-desc">채팅 패널 상단 <strong>노트북 구성 아이콘 → 맞춤</strong> 클릭 → 아래 프롬프트 입력</div>
+          </div>
+        </div>
+      </div>
+      <div class="pl" style="margin-top:16px">맞춤 설정 프롬프트</div>
+      <div class="pbx">
+        <span class="psc">채팅 패널 → 노트북 구성 아이콘 → 맞춤에 입력</span>
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt">너는 <em>15년차 온라인 마케팅 및 MD 전문가</em>야. 모든 답변은 단순요약을 넘어 <em>비즈니스 기회, 법적규제, 시장침투 전략</em> 관점에서 항상 현대카드 M몰 관점의 시사점을 포함해줘.</div>
+      </div>
+      <div class="pl" style="margin-top:16px">오늘 실습에 사용할 소스 URL</div>
+      <div class="pbx">
+        <span class="psc">NotebookLM 소스 추가 → 웹 URL에 붙여넣기</span>
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt"><em>소스 1)</em> 오픈서베이 온라인쇼핑 트렌드 리포트<br>
+https://blog.opensurvey.co.kr/trendreport/online_shopping-2026/<br><br>
+<em>소스 2)</em> 아임웹 2026 커머스 트렌드 가이드<br>
+https://imweb.me/blog?idx=439<br><br>
+<em>소스 3)</em> 토스페이먼츠 2026 소비 트렌드<br>
+https://www.tosspayments.com/blog/articles/2026trend</div>
+      </div>
+      <div class="tip-mint">💡 맞춤 설정 후 소스를 올리면 이미 전문가 관점이 적용된 <strong>노트북 가이드</strong>가 자동 생성돼요!</div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="card fu">
+      <div class="card-hd">
+        <span class="step-badge"><span class="step-num">2</span>딥 리서치 — Deep Research</span>
+        <span class="ctime">2분</span>
+      </div>
+      <div class="card-ti">AI가 웹을 직접 탐색해서 자료를 수집해오게 하기 🔍</div>
+      <div class="card-bo">소스를 수동으로 올리는 것을 넘어, AI가 직접 웹을 탐색해서 관련 자료를 찾아오는 자동화 기능이에요. 수천 페이지 분량의 조사를 몇 분 만에 완료해요.</div>
+      <div class="setup-steps">
+        <div class="setup-step">
+          <div class="setup-num">1</div>
+          <div class="setup-body">
+            <div class="setup-title">딥 리서치 선택</div>
+            <div class="setup-desc">채팅 패널 왼쪽에서 <strong>딥 리서치</strong> 선택 → 조사할 주제 입력</div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-num">2</div>
+          <div class="setup-body">
+            <div class="setup-title">조사 범위를 구체적으로 지정</div>
+            <div class="setup-desc">뉴스, IT 전문지, 특정 행사(CES, 한국 이커머스 컨퍼런스 등)의 발표 내용을 포함해달라고 구체적으로 요청할수록 품질이 높아져요</div>
+          </div>
+        </div>
+      </div>
+      <div class="pl" style="margin-top:16px">딥 리서치 요청 예시</div>
+      <div class="pbx">
+        <span class="psc">채팅 패널 → 딥 리서치 선택 후 입력</span>
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt"><em>2026년 국내 온라인 쇼핑 시장 트렌드</em>를 조사해줘.<br>
+오픈서베이·닐슨·한국인터넷진흥원 등의 최신 리포트, 주요 이커머스 플랫폼 발표 자료, 전문가 분석 기사를 중심으로 수집해줘.<br>
+특히 <em>AI 쇼핑·제로클릭·포인트 커머스</em> 관련 내용을 빠짐없이 포함해줘.</div>
+      </div>
+      <div class="tip-mint">💡 딥 리서치 완료 후 수집된 소스가 자동으로 노트북에 추가돼요. 다음 단계에서 이 소스들을 검증합니다!</div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="card fu">
+      <div class="card-hd">
+        <span class="step-badge"><span class="step-num">3</span>소스 검증 — Source Verification</span>
+        <span class="ctime">2분</span>
+      </div>
+      <div class="card-ti">수집된 자료의 신뢰성과 객관성 평가하기 ✅</div>
+      <div class="card-bo">많이 모은 것보다 <strong>좋은 것을 고르는 것</strong>이 중요해요. 수집된 소스가 최신 정보인지, 낙관론·비판론 중 어디에 치우쳐 있는지 AI에게 직접 분석시켜봅니다.</div>
+      <div class="pl" style="margin-top:16px">소스 검증 질문</div>
+      <div class="pbx">
+        <span class="psc">채팅 패널에 입력</span>
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt">수집된 소스들이 <em>2025년 이후의 최신 정보</em>인지 확인해주고, 구체적인 수치나 시장 통계 포함 여부도 확인해서 <em>표로 정리</em>해줘.<br><br>
+선별된 소스들이 <em>제조사의 낙관론과 시장전문가의 비판론</em> 중 어디에 더 치우쳐 있는지 분석해서 비교해서 <em>표로 정리</em>해줘.</div>
+      </div>
+      <div class="tip-yellow">⚠️ 검증 표에서 2024년 이하 자료, 수치 없는 자료는 다음 단계(필터링)에서 제외할 예정이에요!</div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="card fu">
+      <div class="card-hd">
+        <span class="step-badge"><span class="step-num">4</span>소스 필터링 — Source Filtering</span>
+        <span class="ctime">2분</span>
+      </div>
+      <div class="card-ti">검증된 핵심 소스만 골라서 집중 질문하기 🎯</div>
+      <div class="card-bo">방대한 자료 중 검증된 소스만 선택해서 질문하면 훨씬 정교한 인사이트를 얻을 수 있어요. 소스 패널에서 체크박스로 직접 선별할 수 있어요.</div>
+      <div class="setup-steps">
+        <div class="setup-step">
+          <div class="setup-num">1</div>
+          <div class="setup-body">
+            <div class="setup-title">소스 우선순위 정렬</div>
+            <div class="setup-desc">소스 이름 앞에 <strong>!</strong>를 넣으면 1순위, <strong>#</strong>을 넣으면 2순위로 상단에 정렬되어 관리가 쉬워져요</div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-num">2</div>
+          <div class="setup-body">
+            <div class="setup-title">검증된 소스만 선택</div>
+            <div class="setup-desc">모든 소스 체크박스를 해제 → 3단계에서 검증된 우수 소스만 다시 체크 → 해당 소스만 선택된 상태에서 질문 입력</div>
+          </div>
+        </div>
+      </div>
+      <div class="pl" style="margin-top:16px">필터링 후 집중 분석 질문</div>
+      <div class="pbx">
+        <span class="psc">핵심 소스만 선택한 상태에서 채팅 패널에 입력</span>
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt">선택된 소스만을 바탕으로 <em>2026 온라인 쇼핑 트렌드 핵심 5가지</em>를 정리해줘.<br>
+각 트렌드마다: ① 트렌드명 ② 핵심 내용 1~2줄 ③ 관련 수치나 사례 ④ <em>M몰 관점에서의 비즈니스 기회와 법적 리스크</em>를 포함해줘.</div>
+      </div>
+      <div class="tip-mint">💡 전체 소스보다 <strong>검증된 소스 3~5개</strong>에 집중했을 때 더 날카롭고 실용적인 인사이트가 나와요!</div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="card fu">
+      <div class="card-hd">
+        <span class="step-badge"><span class="step-num">5</span>멀티모달 전략 — Multi-modal Strategy</span>
+        <span class="ctime">2분</span>
+      </div>
+      <div class="card-ti">PDF + 유튜브를 합치면 새로운 시야가 생겨요 🎬</div>
+      <div class="card-bo">텍스트(PDF, 웹)뿐만 아니라 <strong>유튜브 영상</strong>을 소스로 추가하면 완전히 다른 관점이 더해져요. PDF는 학술적 분석, 유튜브는 현장의 생생한 목소리를 담고 있어요.</div>
+      <div class="setup-steps">
+        <div class="setup-step">
+          <div class="setup-num">1</div>
+          <div class="setup-body">
+            <div class="setup-title">유튜브 소스 추가</div>
+            <div class="setup-desc">소스 패널 → <strong>+ 버튼 → 유튜브 URL 붙여넣기</strong><br>
+트렌드 관련 유튜브 영상, 전문가 인터뷰, 커머스 컨퍼런스 발표 영상을 추가해보세요</div>
+            <span class="setup-path">유튜브 자막이 있는 영상이어야 분석 가능</span>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-num">2</div>
+          <div class="setup-body">
+            <div class="setup-title">PDF 소스 + 유튜브 소스 함께 선택 후 질문</div>
+            <div class="setup-desc">두 유형의 소스를 모두 체크한 상태에서 아래 프롬프트를 입력하면 관점이 교차된 깊은 분석이 나와요</div>
+          </div>
+        </div>
+      </div>
+      <div class="pl" style="margin-top:16px">멀티모달 통합 분석 질문</div>
+      <div class="pbx">
+        <span class="psc">PDF 소스 + 유튜브 소스 함께 선택 후 채팅 패널에 입력</span>
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt">리서치 보고서의 <em>데이터·통계</em>와 유튜브 리뷰에서 나타나는 <em>소비자 Pain Point</em>를 결합해서<br>
+M몰이 2026년에 실행할 수 있는 <em>새로운 서비스 전략 3가지</em>를 제안해줘.<br>
+각 전략마다 <em>시장침투 가능성과 예상 리스크</em>도 함께 분석해줘.</div>
+      </div>
+      <div class="tip-mint">💡 데이터(PDF) × 현장 목소리(유튜브) 조합이 가장 설득력 있는 보고 자료를 만들어줘요!</div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="card fu">
+      <div class="card-hd">
+        <span class="step-badge"><span class="step-num">6</span>AI 오디오 오버뷰 — Audio Overview</span>
+        <span class="ctime">2분</span>
+      </div>
+      <div class="card-ti">AI 두 명이 M몰의 리스크와 기회를 치열하게 토론해줘요 🎙️</div>
+      <div class="card-bo">분석된 내용을 두 사람의 <strong>팟캐스트 스타일 대화</strong>로 만들어요. 보고 전 최종 검토, 출퇴근 중 청취, 팀원 공유 등 다양하게 활용할 수 있어요.</div>
+      <div class="setup-steps">
+        <div class="setup-step">
+          <div class="setup-num">1</div>
+          <div class="setup-body">
+            <div class="setup-title">스튜디오 패널 열기</div>
+            <div class="setup-desc">오른쪽 <strong>스튜디오</strong> 패널 → <strong>오디오 오버뷰</strong> 선택</div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-num">2</div>
+          <div class="setup-body">
+            <div class="setup-title">&gt; 아이콘 클릭 → 맞춤 설정에 입력</div>
+            <div class="setup-desc">오디오 오버뷰 옆 <strong>&gt; 아이콘</strong>을 클릭 → 아래 프롬프트 입력 후 생성. 2~3분 대기</div>
+          </div>
+        </div>
+      </div>
+      <div class="pl" style="margin-top:16px">오디오 오버뷰 맞춤 프롬프트</div>
+      <div class="pbx">
+        <span class="psc">스튜디오 → 오디오 오버뷰 → &gt; 아이콘 → 맞춤 설정에 입력</span>
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt">한 명은 <em>깐깐한 임원</em>, 한 명은 <em>열정적인 팀장</em> 역할을 맡아<br>
+<em>2026 온라인 쇼핑 트렌드가 M몰에 주는 리스크와 기회</em>에 대해 치열하게 토론해줘.<br>
+특히 <em>AI 쇼핑과 제로클릭 쇼핑 트렌드</em>에서 M몰이 준비해야 할 것과 놓칠 수 있는 위험 요소를 중심으로 논쟁해줘.</div>
+      </div>
+      <div class="tip-mint">💡 완성된 오디오는 공유 링크로 팀원에게 바로 전달하거나, 출퇴근 시간에 귀로 들으며 복습할 수 있어요!</div>
+    </div>
+
+    <!-- STEP 7 -->
+    <div class="card fu">
+      <div class="card-hd">
+        <span class="step-badge"><span class="step-num">7</span>시각화 자료 제작 — Visualization</span>
+        <span class="ctime">3분</span>
+      </div>
+      <div class="card-ti">분석 결과를 슬라이드·인포그래픽으로 자동 완성 🎨</div>
+      <div class="card-bo">6단계까지 쌓인 분석 내용을 바탕으로 <strong>보고용 슬라이드(PPT)</strong>나 <strong>인포그래픽</strong>을 자동 생성해요. 글자가 깨지거나 수정이 필요하면 Gemini Canvas로 가져가 편집할 수 있어요.</div>
+      <div class="setup-steps">
+        <div class="setup-step">
+          <div class="setup-num">1</div>
+          <div class="setup-body">
+            <div class="setup-title">슬라이드 자료 생성</div>
+            <div class="setup-desc">스튜디오 패널 → <strong>슬라이드 자료</strong> 선택 → 아래 프롬프트 입력 → 2~3분 대기 후 PPTX 다운로드</div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-num">2</div>
+          <div class="setup-body">
+            <div class="setup-title">인포그래픽 생성 (보너스)</div>
+            <div class="setup-desc">스튜디오 패널 → <strong>인포그래픽</strong> 선택 → 핵심 수치·일정·체크리스트를 대시보드 형태로 요약 요청</div>
+          </div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-num">3</div>
+          <div class="setup-body">
+            <div class="setup-title">Gemini Canvas로 후편집</div>
+            <div class="setup-desc">슬라이드 텍스트가 깨지거나 수정이 필요하면 → 텍스트 복사 → <strong>Gemini Canvas</strong>로 가져가 수정 가능한 PPT로 변환</div>
+            <span class="setup-path">gemini.google.com → Canvas 모드</span>
+          </div>
+        </div>
+      </div>
+      <div class="pl" style="margin-top:16px">슬라이드 생성 커스텀 프롬프트</div>
+      <div class="pbx">
+        <span class="psc">스튜디오 → 슬라이드 자료 → > 아이콘에 입력</span>
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt">업로드된 자료를 분석하여 <em>경영진 보고용 슬라이드</em>를 작성해줘.<br><br>
+구성 (총 8장):<br>
+1. 표지 — "2026 온라인 쇼핑 트렌드와 M몰 전략 시사점"<br>
+2. 목차<br>
+3~5. 핵심 트렌드 3가지 (트렌드별 1장, 수치·사례 포함)<br>
+6. M몰 관점 시사점 (3가지 트렌드의 M몰 영향 요약)<br>
+7. M몰 대응 전략 제언<br>
+8. 결론<br><br>
+스타일: <em>현대카드 브랜드에 맞는 미니멀하고 프리미엄한 디자인</em><br>
+각 슬라이드: 핵심 메시지 1개 + 데이터·근거 2~3개 포함</div>
+      </div>
+      <div class="tip-mint">💡 슬라이드가 만들어지는 동안 NotebookLM에서 다른 질문을 계속할 수 있어요. 기다리는 시간이 없어요!</div>
+    </div>
+
+    <!-- 워크플로우 -->
+    <div class="card fu">
+      <div class="card-hd"><span class="ctag td">7단계 전체 흐름</span></div>
+      <div class="card-ti">오늘 배운 내용 한 눈에 보기 🔄</div>
+      <div class="flow-wrap">
+        <div class="flow-step">🎭<br>Step 1<br><span style="font-size:10px;color:var(--gray-2)">맞춤 설정</span></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">🔍<br>Step 2<br><span style="font-size:10px;color:var(--gray-2)">딥 리서치</span></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">✅<br>Step 3<br><span style="font-size:10px;color:var(--gray-2)">소스 검증</span></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">🎯<br>Step 4<br><span style="font-size:10px;color:var(--gray-2)">소스 필터링</span></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">🎬<br>Step 5<br><span style="font-size:10px;color:var(--gray-2)">멀티모달</span></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">🎙️<br>Step 6<br><span style="font-size:10px;color:var(--gray-2)">오디오 오버뷰</span></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">🎨<br>Step 7<br><span style="font-size:10px;color:var(--gray-2)">시각화</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PART 03 -->
+  <section class="section">
+    <div class="s-ey">Part 03 · 18:00 – 27:00</div>
+    <h2 class="s-ti">지금 바로 내 업무에 써보기 ✋</h2>
+    <p class="s-de">아래 미션 중 하나를 골라 notebooklm.google.com에서 직접 해보세요. 10분 안에 결과물 하나 완성이 목표!</p>
+
+    <div class="g2">
+      <div class="mc fu">
+        <div class="mn">01</div>
+        <div class="mt">7단계 전체 따라하기</div>
+        <div class="md2">Step 1~7 프롬프트를 그대로 따라하면서 본인만의 2026 트렌드 보고 슬라이드를 완성해보세요!</div>
+      </div>
+      <div class="mc fu">
+        <div class="mn">02</div>
+        <div class="mt">내 자료로 교체해보기</div>
+        <div class="md2">위 URL 대신 직접 갖고 있는 기획서·리포트·회의록을 올려보세요. NotebookLM이 어떻게 읽는지 확인!</div>
+      </div>
+      <div class="mc fu">
+        <div class="mn">03</div>
+        <div class="mt">파트별 맞춤 질문 시도</div>
+        <div class="md2">아래 파트별 질문을 복사해서 입력해보세요. 같은 자료도 질문에 따라 전혀 다른 인사이트가 나와요.</div>
+      </div>
+      <div class="mc fu">
+        <div class="mn">🔥</div>
+        <div class="mt">도전! 오디오 오버뷰 만들기</div>
+        <div class="md2">Step 6 프롬프트로 임원 vs 팀장 토론 오디오를 만들고, 팀원에게 공유 링크를 보내보세요!</div>
+      </div>
+    </div>
+
+    <div style="margin-top:24px">
+      <div class="pl">파트별 맞춤 질문 모음</div>
+      <div class="pbx" style="margin-bottom:10px">
+        <span class="psc">🛍 MD 파트용</span>
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt">2026 트렌드 중 <em>M몰 MD 입장에서 상품 소싱·기획전 구성에 영향을 줄 트렌드</em>를 3가지 골라줘.<br>
+각 트렌드마다 "어떤 카테고리·상품을 강화해야 하는지"를 구체적으로 제안해줘.</div>
+      </div>
+      <div class="pbx" style="margin-bottom:10px">
+        <span class="psc">📣 마케팅 파트용</span>
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt">2026 트렌드를 바탕으로 <em>M몰 마케팅 캠페인 방향</em>을 제안해줘.<br>
+특히 "제로클릭"과 "AI 쇼핑 어시스턴트" 트렌드가 M몰 푸시·배너 마케팅에 어떤 변화를 가져올지 분석해줘.</div>
+      </div>
+      <div class="pbx">
+        <span class="psc">💻 기획·개발 파트용</span>
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt">2026 트렌드 중 <em>M몰 앱·서비스 기능 개선에 반영해야 할 인사이트</em>를 뽑아줘.<br>
+"제로클릭 쇼핑"을 M몰 앱에 적용하기 위한 기능 아이디어를 유저스토리 형식으로 3개 작성해줘.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PART 04 -->
+  <section class="section">
+    <div class="s-ey">Part 04 · 27:00 – 30:00</div>
+    <h2 class="s-ti">공유 & 마무리 🎤</h2>
+    <p class="s-de">만든 슬라이드 또는 오디오 오버뷰를 공유하고, 오늘의 핵심을 정리합니다.</p>
+
+    <div class="card fu">
+      <div class="card-hd"><span class="ctag tw">공유 질문</span><span class="ctime">2분</span></div>
+      <div class="card-ti">1~2명이 결과물 보여주세요 🙋</div>
+      <div class="card-bo">
+        1) 7단계 중 가장 인상적이었던 기능은? 실무에서 바로 쓸 수 있을 것 같은 단계는?<br>
+        2) 트렌드 분석에서 M몰에 특히 중요해 보이는 내용이 있었나요?<br>
+        3) 기존 리서치·보고서 작업 대비 얼마나 시간을 줄일 수 있을 것 같나요?
+      </div>
+    </div>
+
+    <div class="card fu">
+      <div class="card-hd"><span class="ctag tw">오늘 꼭 기억할 것</span><span class="ctime">1분</span></div>
+      <ul class="cl">
+        <li><span class="cb"></span>NotebookLM은 <strong>내 자료만 읽는 AI</strong>. 사내 문서도 안전하게 올릴 수 있고 할루시네이션이 적어요 📄</li>
+        <li><span class="cb"></span><strong>맞춤 설정 → 딥 리서치 → 검증 → 필터링</strong> 순서가 핵심. 많이 모으는 것보다 잘 고르는 것이 중요해요 🎯</li>
+        <li><span class="cb"></span>PDF × 유튜브 <strong>멀티모달 조합</strong>이 가장 설득력 있는 보고 자료를 만들어줘요 🎬</li>
+        <li><span class="cb"></span>슬라이드 자동 생성 기능으로 <strong>리서치 → 보고서 → 슬라이드</strong>를 한 번에 끝낼 수 있어요 🎨</li>
+      </ul>
+    </div>
+
+    <div class="card fu">
+      <div class="card-hd"><span class="ctag tw">다음 세션 예고 👀</span></div>
+      <div class="card-ti">Session 04 — Perplexity로 경쟁사·트렌드 리서치 끝내기</div>
+      <div class="card-bo">NotebookLM이 내 자료를 분석한다면, Perplexity는 실시간 웹 전체를 검색해서 인사이트를 뽑아줘요. 경쟁사 분석·최신 트렌드 조사에 어떻게 쓰는지 배웁니다 🔍</div>
+    </div>
+  </section>
+
+  <!-- 코멘트 -->
+  <section class="section" id="comments">
+    <div class="s-ey">💬 자유롭게 남겨주세요</div>
+    <h2 class="s-ti">이번 세션 어떠셨나요?</h2>
+    <p class="s-de">느낀 점, 개선점, 다음 세션에 다뤄줬으면 하는 것들을 자유롭게 남겨주세요. 익명으로 남길 수 있어요 😊</p>
+    <div class="cm-input-wrap">
+      <div class="cm-input-row">
+        <input class="cm-name" id="cm-name" type="text" placeholder="닉네임 (선택, 익명 가능)" maxlength="12"/>
+        <div class="cm-tag-row">
+          <button class="cm-tag-btn active" data-tag="느낀점" onclick="setTag(this)">✨ 느낀점</button>
+          <button class="cm-tag-btn" data-tag="개선점" onclick="setTag(this)">🔧 개선점</button>
+          <button class="cm-tag-btn" data-tag="다음세션요청" onclick="setTag(this)">🙋 다음 세션 요청</button>
+          <button class="cm-tag-btn" data-tag="기타" onclick="setTag(this)">💭 기타</button>
+        </div>
+      </div>
+      <div class="cm-box-wrap">
+        <textarea class="cm-textarea" id="cm-text" placeholder="여기에 자유롭게 작성해주세요..." maxlength="300" rows="3" oninput="updateCount(this)"></textarea>
+        <span class="cm-count" id="cm-count">0 / 300</span>
+      </div>
+      <div class="cm-footer-row"><button class="cm-submit" onclick="submitComment()">보내기 ↗</button></div>
+    </div>
+    <div class="cm-list" id="cm-list"></div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <span class="fb">🤖 M몰팀 AI Session</span>
+  <span>Session 03 · NotebookLM 7단계로 트렌드 보고 자료 뚝딱 만들기</span>
+</footer>
+
+<script>
+const SESSION_KEY='mmall_comments_session_03';
+const COLORS=[{bg:'#fdf0ec',text:'#e85d3a'},{bg:'#e6faf6',text:'#006b54'},{bg:'#fef7e6',text:'#7a4f00'},{bg:'#f0eeff',text:'#3a1faa'},{bg:'#fdeef1',text:'#7a1828'},{bg:'#f7f4ef',text:'#6b6560'}];
+let selectedTag='느낀점';
+function setTag(btn){document.querySelectorAll('.cm-tag-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');selectedTag=btn.dataset.tag}
+function updateCount(el){document.getElementById('cm-count').textContent=el.value.length+' / 300'}
+function getComments(){try{return JSON.parse(localStorage.getItem(SESSION_KEY)||'[]')}catch{return[]}}
+function saveComments(list){localStorage.setItem(SESSION_KEY,JSON.stringify(list))}
+function colorForName(name){let hash=0;for(let c of name)hash=(hash*31+c.charCodeAt(0))%COLORS.length;return COLORS[Math.abs(hash)]}
+function timeStr(ts){const d=new Date(ts),now=new Date(),diff=Math.floor((now-d)/60000);if(diff<1)return'방금 전';if(diff<60)return diff+'분 전';if(diff<1440)return Math.floor(diff/60)+'시간 전';return(d.getMonth()+1)+'/'+d.getDate()}
+function tagEmoji(tag){return{느낀점:'✨',개선점:'🔧',다음세션요청:'🙋',기타:'💭'}[tag]||'💭'}
+function renderBubble(item,isMe){const name=item.name||'익명';const col=colorForName(name);const initial=name.charAt(0).toUpperCase();const side=isMe?'me':'other';return`<div class="cm-bubble-wrap ${side}"><div class="cm-meta"><div class="cm-avatar" style="background:${col.bg};color:${col.text}">${initial}</div><span class="cm-author">${name}</span><span class="cm-tag-label tag-label-${item.tag}">${tagEmoji(item.tag)} ${item.tag}</span><span class="cm-time-label">${timeStr(item.ts)}</span>${isMe?`<button class="cm-del" onclick="delComment('${item.id}')">✕</button>`:''}</div><div class="cm-bubble">${item.text.replace(/\n/g,'<br>')}</div></div>`}
+function renderAll(){const list=getComments();const el=document.getElementById('cm-list');if(!list.length){el.innerHTML='<div class="cm-empty">아직 코멘트가 없어요. 첫 번째로 남겨보세요! 🎉</div>';return}const myId=localStorage.getItem('mmall_my_id');el.innerHTML=list.map(item=>renderBubble(item,item.authorId===myId)).join('')}
+function submitComment(){const text=document.getElementById('cm-text').value.trim();if(!text){document.getElementById('cm-text').focus();return}const name=document.getElementById('cm-name').value.trim()||'익명';let myId=localStorage.getItem('mmall_my_id');if(!myId){myId='u_'+Date.now()+Math.random().toString(36).slice(2,6);localStorage.setItem('mmall_my_id',myId)}const item={id:Date.now().toString(),authorId:myId,name,tag:selectedTag,text,ts:Date.now()};const list=getComments();list.push(item);saveComments(list);document.getElementById('cm-text').value='';document.getElementById('cm-count').textContent='0 / 300';renderAll();document.getElementById('cm-list').lastElementChild?.scrollIntoView({behavior:'smooth',block:'end'})}
+function delComment(id){if(!confirm('이 코멘트를 삭제할까요?'))return;saveComments(getComments().filter(c=>c.id!==id));renderAll()}
+function cp(btn){const b=btn.closest('.pbx');const e=b.querySelector('.pt');const fallbackCopy=t=>{const ta=document.createElement('textarea');ta.value=t;ta.style.cssText='position:fixed;top:-9999px;left:-9999px;opacity:0';document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand('copy');return true}catch{return false}finally{document.body.removeChild(ta)}};const text=e?e.innerText:'';if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(text).then(()=>{btn.textContent='copied ✓';btn.classList.add('copied');setTimeout(()=>{btn.textContent='copy';btn.classList.remove('copied')},2000)}).catch(()=>{if(fallbackCopy(text)){btn.textContent='copied ✓';btn.classList.add('copied');setTimeout(()=>{btn.textContent='copy';btn.classList.remove('copied')},2000)}})}else{if(fallbackCopy(text)){btn.textContent='copied ✓';btn.classList.add('copied');setTimeout(()=>{btn.textContent='copy';btn.classList.remove('copied')},2000)}}}
+document.addEventListener('DOMContentLoaded',()=>{renderAll();document.getElementById('cm-text').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();submitComment()}})});
+</script>
+</body>
+</html>
