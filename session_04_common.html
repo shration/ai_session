@@ -572,29 +572,40 @@ ollama run gemma4:e2b<br><br>
 ollama run gemma4:27b</div>
       </div>
 
-      <div class="pl" style="margin-top:16px">방법 3 — LM Studio (GUI 앱, Mac·Windows)</div>
+      <div class="pl" style="margin-top:16px">방법 3 — PC에서 Ollama로 다운로드해서 사용하기</div>
       <div class="setup-steps">
         <div class="setup-step">
           <div class="setup-num">1</div>
           <div class="setup-body">
-            <div class="setup-title">LM Studio 설치</div>
-            <div class="setup-desc">lmstudio.ai에서 Mac·Windows 버전 다운로드 후 설치</div>
+            <div class="setup-title">Ollama 설치</div>
+            <div class="setup-desc">ollama.com에서 <strong>Mac 또는 Windows 버전</strong>을 다운로드해 설치합니다.</div>
+            <span class="setup-path">Mac · Windows · Linux 지원</span>
           </div>
         </div>
         <div class="setup-step">
           <div class="setup-num">2</div>
           <div class="setup-body">
-            <div class="setup-title">Gemma 4 모델 검색·다운로드</div>
-            <div class="setup-desc">앱 내 검색창에 <strong>"gemma4"</strong> 입력 → 원하는 크기 선택 → Download</div>
+            <div class="setup-title">터미널에서 Gemma 모델 다운로드</div>
+            <div class="setup-desc">터미널 또는 명령 프롬프트를 열고 <strong>ollama run gemma4:e2b</strong>를 입력하면 모델 다운로드 후 바로 실행됩니다.</div>
           </div>
         </div>
         <div class="setup-step">
           <div class="setup-num">3</div>
           <div class="setup-body">
-            <div class="setup-title">ChatGPT처럼 사용</div>
-            <div class="setup-desc">Chat 탭에서 ChatGPT처럼 대화하면 돼요. 완전 오프라인으로 동작!</div>
+            <div class="setup-title">PC에서 로컬 AI로 사용</div>
+            <div class="setup-desc">다운로드가 끝나면 인터넷 연결 없이도 PC에서 대화형으로 사용할 수 있습니다. 사양이 낮으면 E2B, 여유가 있으면 E4B 이상을 권장합니다.</div>
           </div>
         </div>
+      </div>
+      <div class="pbx" style="margin-top:12px">
+        <span class="psc">PC에서 Ollama 실행 예시</span>
+        <button class="copy-btn" onclick="cp(this)">copy</button>
+        <div class="pt"><em># 가장 가벼운 모델 실행</em><br>
+ollama run gemma4:e2b<br><br>
+<em># 노트북·PC 사양이 괜찮을 때</em><br>
+ollama run gemma4:e4b<br><br>
+<em># 설치된 모델 목록 확인</em><br>
+ollama list</div>
       </div>
       <div class="tip">💡 <strong>어떤 폰·스펙에 맞는지 모르겠다면?</strong> RAM 8GB 이상이면 E4B, 6GB면 E2B를 써보세요. 갤럭시 S24 이상, 아이폰 15 Pro 이상이면 E4B도 쾌적하게 실행돼요!</div>
     </div>
