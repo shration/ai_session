@@ -2,7 +2,7 @@
   "meta": {
     "title": "클로드가 떠먹여주는 AI 실무활용법",
     "total": 6,
-    "updated": "2025-03-18"
+    "updated": "2026-04-24"
   },
   "phases": [
     {
@@ -32,10 +32,11 @@
           "part": "common",
           "partLabel": "공통",
           "title": "Stitch로 디자인 시안·프로토 페이지 뚝딱 만들기",
-          "desc": "텍스트 설명 한 줄 → 배너·앱 화면 시안 즉시 생성 / Ideate 모드로 방향성 탐색 / Redesign 모드로 기존 화면 개선 / 프로토타입 연결",
+          "desc": "텍스트 설명 한 줄 → 배너·앱 화면 시안 즉시 생성 / 프로토타입 페이지 제작 / Canva AI로 마무리",
           "goal": "텍스트 설명만으로 기획전 배너·앱 화면 레퍼런스를 즉시 만들 수 있다",
           "tools": [
-            "Stitch"
+            "Stitch",
+            "Canva AI"
           ],
           "mainTool": "Stitch",
           "level": "입문",
@@ -65,8 +66,8 @@
           ],
           "mainTool": "NotebookLM · Obsidian",
           "level": "초급",
-          "file": "",
-          "status": "upcoming",
+          "file": "session_03_common.html",
+          "status": "done",
           "duration": "30분",
           "cost": "무료"
         },
@@ -75,16 +76,16 @@
           "part": "common",
           "partLabel": "공통",
           "title": "Perplexity로 경쟁사·트렌드 리서치 끝내기",
-          "desc": "실시간 웹 검색 기반 경쟁사 분석 / 포인트몰·커머스 트렌드 리포트 즉석 생성 / 출처 검증법",
-          "goal": "실시간 웹 기반으로 경쟁사·트렌드를 빠르게 조사하고 리포트를 만들 수 있다",
+          "desc": "Perplexity와 NotebookLM 최신 비교 / 소스 설정·Spaces·알림 기반 자동 브리핑 / 고급 검색 연산자 / M몰 경쟁사·트렌드 리서치 실습",
+          "goal": "Perplexity로 최신 시장·경쟁사 정보를 빠르게 탐색하고, NotebookLM과 역할을 구분해 리서치 업무에 활용할 수 있다",
           "tools": [
             "Perplexity",
-            "Gemini"
+            "NotebookLM"
           ],
           "mainTool": "Perplexity",
           "level": "초급",
-          "file": "",
-          "status": "upcoming",
+          "file": "session_04_common.html",
+          "status": "done",
           "duration": "30분",
           "cost": "무료"
         }
@@ -99,16 +100,15 @@
           "id": "05",
           "part": "common",
           "partLabel": "공통",
-          "title": "Claude로 바이브 코딩하고 GitHub으로 배포하기",
-          "desc": "코딩 없이 말로 웹페이지 생성 / 수정·보완 반복 실습 / GitHub Pages로 URL 만들어 공개",
-          "goal": "자연어 지시만으로 웹페이지를 만들고 누구나 접근할 수 있는 URL로 배포할 수 있다",
+          "title": "Claude 디자인과 GPT Image로 실무형 디자인 만들기",
+          "desc": "Claude로 디자인 방향·카피·구성안 정리 / GPT Image로 포스터·배너·시각 자료 생성 / 실무용 이미지 수정 요청법",
+          "goal": "Claude로 디자인 기획을 구조화하고 GPT Image로 실무형 시각 자료를 제작·수정할 수 있다",
           "tools": [
             "Claude",
-            "v0",
-            "GitHub Pages"
+            "GPT Image"
           ],
-          "mainTool": "Claude · GitHub",
-          "level": "중급",
+          "mainTool": "Claude · GPT Image",
+          "level": "초급",
           "file": "",
           "status": "upcoming",
           "duration": "30분",
